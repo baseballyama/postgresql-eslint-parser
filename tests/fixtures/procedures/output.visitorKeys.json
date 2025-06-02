@@ -1,0 +1,19 @@
+{
+  "String": [],
+  "names": ["0", "1"],
+  "A_Const": [],
+  "FunctionParameter": ["argType", "defexpr"],
+  "List": ["items"],
+  "DefElem": ["arg"],
+  "CreateFunctionStmt": ["funcname", "parameters", "returnType", "options"],
+  "LineComment": [],
+  "Keyword": [],
+  "Identifier": [],
+  "Punctuator": [],
+  "Operator": [],
+  "Numeric": [],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
+  "SQLParseError": [],
+  "SQLProcedure": []
+}

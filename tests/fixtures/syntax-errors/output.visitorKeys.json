@@ -1,0 +1,12 @@
+{
+  "LineComment": [],
+  "Keyword": [],
+  "Operator": [],
+  "Identifier": [],
+  "String": [],
+  "Punctuator": [],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
+  "SQLParseError": [],
+  "SQLProcedure": []
+}
