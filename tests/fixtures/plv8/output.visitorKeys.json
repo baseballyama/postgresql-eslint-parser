@@ -1,0 +1,19 @@
+{
+  "String": [],
+  "names": ["0"],
+  "List": ["items"],
+  "DefElem": ["arg"],
+  "Boolean": [],
+  "CreateFunctionStmt": ["funcname", "returnType", "options"],
+  "FunctionParameter": ["argType"],
+  "LineComment": [],
+  "Keyword": [],
+  "Identifier": [],
+  "Punctuator": [],
+  "Operator": [],
+  "Numeric": [],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
+  "SQLParseError": [],
+  "SQLProcedure": []
+}
