@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.3
+
+### Patch Changes
+
+- [#8](https://github.com/baseballyama/postgresql-eslint-parser/pull/8) [`bf26fca`](https://github.com/baseballyama/postgresql-eslint-parser/commit/bf26fca3e25364f7da9d0f5a919549e57c8f9391) Thanks [@baseballyama](https://github.com/baseballyama)! - fix: remove unnecessary console
+
 ## 0.1.2
 
 ### Patch Changes
