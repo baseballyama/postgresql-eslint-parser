@@ -49,6 +49,7 @@ export const parseForESLint = (code: string): ParseResult => {
     };
 
     errorNode.parent = program;
+    program.body = [errorNode];
     const visitorKeys = buildVisitorKeys(program);
 
     return {
