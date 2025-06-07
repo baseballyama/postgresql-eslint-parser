@@ -1,4 +1,5 @@
 {
+  "SQLParseError": [],
   "LineComment": [],
   "Keyword": [],
   "Operator": [],
@@ -7,6 +8,5 @@
   "Punctuator": [],
   "Program": ["body", "tokens", "comments"],
   "SQLStatement": ["statement"],
-  "SQLParseError": [],
   "SQLProcedure": []
 }

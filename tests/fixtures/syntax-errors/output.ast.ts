@@ -13,7 +13,24 @@ export default {
       column: 50,
     },
   },
-  body: [],
+  body: [
+    {
+      type: "SQLParseError",
+      range: [0, 104],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 2,
+          column: 50,
+        },
+      },
+      error: 'syntax error at or near "AND"',
+      raw: "-- This SQL has intentional syntax errors for testing\nSELECT * FROM users WHERE id = AND name = 'test'; ",
+    },
+  ],
   tokens: [
     {
       type: "LineComment",
