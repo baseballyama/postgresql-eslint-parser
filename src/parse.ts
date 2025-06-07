@@ -39,7 +39,6 @@ export const parseForESLint = (code: string): ParseResult => {
       scopeManager: null,
     };
   } catch (err) {
-    console.error(err);
     const errorNode: SQLParseError = {
       type: "SQLParseError",
       range: program.range,
