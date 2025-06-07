@@ -1,4 +1,4 @@
-import { parseQuerySync } from "libpg-query";
+import libpgQuery from "libpg-query";
 
 import type { Program, SQLParseError } from "./ast.ts";
 import { manipulate } from "./manipulate.ts";
@@ -23,7 +23,7 @@ export const parseForESLint = (code: string): ParseResult => {
   };
 
   try {
-    const pgAst = parseQuerySync(code) as RawPostgreSQLAst;
+    const pgAst = libpgQuery.parseQuerySync(code) as RawPostgreSQLAst;
     const ast = manipulate(pgAst, tokens, lineMap);
     program.body = ast;
 
