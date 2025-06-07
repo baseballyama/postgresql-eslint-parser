@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.2
+
+### Patch Changes
+
+- [#7](https://github.com/baseballyama/postgresql-eslint-parser/pull/7) [`ce3089f`](https://github.com/baseballyama/postgresql-eslint-parser/commit/ce3089f56bb97cdcde4dc87ca646ddd5b420b2d1) Thanks [@baseballyama](https://github.com/baseballyama)! - fix: change import style of libpg-query
+
 ## 0.1.1
 
 ### Patch Changes
