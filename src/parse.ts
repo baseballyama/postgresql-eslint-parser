@@ -23,7 +23,7 @@ export const parseForESLint = (code: string): ParseResult => {
   };
 
   try {
-    const pgAst = libpgQuery.parseQuerySync(code) as RawPostgreSQLAst;
+    const pgAst = libpgQuery.parseSync(code) as RawPostgreSQLAst;
     const ast = manipulate(pgAst, tokens, lineMap);
     program.body = ast;
 
