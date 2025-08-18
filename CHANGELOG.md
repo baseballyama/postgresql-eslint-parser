@@ -1,5 +1,13 @@
 # postgresql-eslint-parser
 
+## 0.1.5
+
+### Patch Changes
+
+- [#52](https://github.com/baseballyama/postgresql-eslint-parser/pull/52) [`ef7e638`](https://github.com/baseballyama/postgresql-eslint-parser/commit/ef7e6380e0fd49ee9a680e15b781e95338394b6a) Thanks [@baseballyama](https://github.com/baseballyama)! - fix: call `loadModule` of `libpg-query`
+
+- [#54](https://github.com/baseballyama/postgresql-eslint-parser/pull/54) [`894330e`](https://github.com/baseballyama/postgresql-eslint-parser/commit/894330e0876a7a35932968db1930d1cdda50181d) Thanks [@baseballyama](https://github.com/baseballyama)! - chore!: drop Node18 support
+
 ## 0.1.4
 
 ### Patch Changes
