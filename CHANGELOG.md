@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.4
+
+### Patch Changes
+
+- [#50](https://github.com/baseballyama/postgresql-eslint-parser/pull/50) [`1f6b288`](https://github.com/baseballyama/postgresql-eslint-parser/commit/1f6b2883938df9cc629e03b4ccbaac481470b035) Thanks [@baseballyama](https://github.com/baseballyama)! - chore: update dependencies
+
 ## 0.1.3
 
 ### Patch Changes
