@@ -31,7 +31,7 @@
     "pnpm": ">=10.14.0"
   },
   "scripts": {
-    "reinstall": "rm -rf node_modules && rm pnpm-lock.yaml && pnpm install && pnpm dedupe",
+    "reinstall": "rm -rf node_modules && rm -f pnpm-lock.yaml && pnpm install && pnpm dedupe",
     "build": "pnpm clean && pnpm build:js && pnpm build:types",
     "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
     "build:js": "rolldown --config rolldown.config.js",
