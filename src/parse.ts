@@ -1,4 +1,5 @@
 import libpgQuery from "libpg-query";
+libpgQuery.loadModule();
 
 import type { Program, SQLParseError } from "./ast.ts";
 import { manipulate } from "./manipulate.ts";
