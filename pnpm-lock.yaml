@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       libpg-query:
-        specifier: 17.1.0
-        version: 17.1.0(encoding@0.1.13)
+        specifier: 17.1.1
+        version: 17.1.1(encoding@0.1.13)
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.5.1
@@ -1255,8 +1255,8 @@ packages:
       '@types/node': '>=18'
       typescript: '>=5.0.4'
 
-  libpg-query@17.1.0:
-    resolution: {integrity: sha512-PsQ6SOGNEn4Qsv71jd1i90DcTajBuHN2RCE5L7tXi/WmOoOTZItxC9s5vHrfnlnG+Lg6NPTVpfG/WJHWXqzZrg==}
+  libpg-query@17.1.1:
+    resolution: {integrity: sha512-ay0SG9LFeleHOO3pqfmovR/Msi1/P26l8NNYFdAqAaE5HRoeqkqQg73FEaNEGC1AkHYX2n3lPmpfq8Uzf99MnQ==}
 
   locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
@@ -3039,7 +3039,7 @@ snapshots:
       zod: 3.25.76
       zod-validation-error: 3.5.3(zod@3.25.76)
 
-  libpg-query@17.1.0(encoding@0.1.13):
+  libpg-query@17.1.1(encoding@0.1.13):
     dependencies:
       '@emnapi/runtime': 0.43.1
       '@launchql/protobufjs': 7.2.6
