@@ -67,9 +67,6 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "libpg-query": "17.1.1"
-  },
-  "peerDependencies": {
-    "libpg-query": "17.1.1"
+    "@libpg-query/parser": "^17.6.3"
   }
 }
