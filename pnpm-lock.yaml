@@ -35,7 +35,7 @@ importers:
         version: 3.6.2
       publint:
         specifier: ^0.3.12
-        version: 0.3.14
+        version: 0.3.15
       rolldown:
         specifier: ^1.0.0-beta.33
         version: 1.0.0-beta.43
@@ -1222,8 +1222,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  publint@0.3.14:
-    resolution: {integrity: sha512-14/VNBvWsrBeqWNDw8c/DK5ERcZBUwL1rnkVx18cQnF3zadr3GfoYtvD8mxi1dhkWpaPHp8kfi92MDbjMeW3qw==}
+  publint@0.3.15:
+    resolution: {integrity: sha512-xPbRAPW+vqdiaKy5sVVY0uFAu3LaviaPO3pZ9FaRx59l9+U/RKR1OEbLhkug87cwiVKxPXyB4txsv5cad67u+A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2577,7 +2577,7 @@ snapshots:
 
   prettier@3.6.2: {}
 
-  publint@0.3.14:
+  publint@0.3.15:
     dependencies:
       '@publint/pack': 0.1.2
       package-manager-detector: 1.5.0
