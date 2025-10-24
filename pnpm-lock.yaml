@@ -26,7 +26,7 @@ importers:
         version: 3.2.4(vitest@3.2.4(@types/node@24.8.1)(jiti@2.6.1))
       knip:
         specifier: ^5.62.0
-        version: 5.66.1(@types/node@24.8.1)(typescript@5.9.3)
+        version: 5.66.2(@types/node@24.8.1)(typescript@5.9.3)
       oxlint:
         specifier: ^1.12.0
         version: 1.23.0
@@ -1047,8 +1047,8 @@ packages:
   jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
 
-  knip@5.66.1:
-    resolution: {integrity: sha512-Ad3VUPIk9GZYovKuwKtGMheupek7IoPGaDEBAvnCYLKJXnwmqNLyXqMp+l5r3OOpFVjF7DdkFIZFVrXESDNylQ==}
+  knip@5.66.2:
+    resolution: {integrity: sha512-5wvsdc17C5bMxjuGfN9KVS/tW5KIvzP1RClfpTMdLYm8IXIsfWsiHlFkTvZIca9skwoVDyTyXmbRq4w1Poim+A==}
     engines: {node: '>=18.18.0'}
     hasBin: true
     peerDependencies:
@@ -2409,7 +2409,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  knip@5.66.1(@types/node@24.8.1)(typescript@5.9.3):
+  knip@5.66.2(@types/node@24.8.1)(typescript@5.9.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@types/node': 24.8.1
