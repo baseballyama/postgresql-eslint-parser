@@ -6,6 +6,7 @@ const config = {
   oxlint: {},
   vitest: {},
   ignore: ["tests/fixtures/**/*"],
+  ignoreDependencies: ["@libpg-query/parser"],
 } as const satisfies KnipConfig;
 
 export default config;

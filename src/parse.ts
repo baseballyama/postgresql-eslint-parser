@@ -1,8 +1,6 @@
-import libpgQuery from "libpg-query";
-libpgQuery.loadModule();
-
 import type { Program, SQLParseError } from "./ast.ts";
 import { manipulate } from "./manipulate.ts";
+import { parseSync } from "./pg-query-sync.ts";
 import { tokenizeSQL } from "./tokenize.ts";
 import type { ParseResult, RawPostgreSQLAst } from "./types.ts";
 import { createLineMap } from "./utils.ts";
@@ -24,7 +22,7 @@ export const parseForESLint = (code: string): ParseResult => {
   };
 
   try {
-    const pgAst = libpgQuery.parseSync(code) as RawPostgreSQLAst;
+    const pgAst = parseSync(code) as unknown as RawPostgreSQLAst;
     const ast = manipulate(pgAst, tokens, lineMap);
     program.body = ast;
 
