@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.7
+
+### Patch Changes
+
+- [#126](https://github.com/baseballyama/postgresql-eslint-parser/pull/126) [`0d0cffb`](https://github.com/baseballyama/postgresql-eslint-parser/commit/0d0cffb2427e4becd0fb114af9cf8e3a7a6835ae) Thanks [@baseballyama](https://github.com/baseballyama)! - chore: support npm trusted publishing
+
 ## 0.1.6
 
 ### Patch Changes
