@@ -5,8 +5,7 @@ on:
     branches:
       - main
 
-permissions:
-  {}
+permissions: {}
 
 jobs:
   release:
