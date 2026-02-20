@@ -6,9 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  {}
 
 jobs:
   release:
@@ -21,21 +19,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js 24
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "24"
-          cache: "pnpm"
-
-      - name: prebuild
+          node-version: 24
+      - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: build
-        run: pnpm build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -48,3 +43,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
