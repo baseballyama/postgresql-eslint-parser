@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.6
+
+### Patch Changes
+
+- [#123](https://github.com/baseballyama/postgresql-eslint-parser/pull/123) [`4e21e52`](https://github.com/baseballyama/postgresql-eslint-parser/commit/4e21e52c25dfeda79f3e65a40cd6ccba0044cb95) Thanks [@baseballyama](https://github.com/baseballyama)! - Fix synchronous parsing by loading the WASM binary synchronously via `new WebAssembly.Module()` + `new WebAssembly.Instance()`, removing the need for the async `loadModule()` call that was incompatible with ESLint's synchronous parser API.
+
 ## 0.1.5
 
 ### Patch Changes
