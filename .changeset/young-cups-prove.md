@@ -2,4 +2,4 @@
 "postgresql-eslint-parser": patch
 ---
 
-fix: support npm trusted publishing
+chore: support npm trusted publishing
