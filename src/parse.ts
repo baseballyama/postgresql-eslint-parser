@@ -8,7 +8,7 @@ import { buildVisitorKeys } from "./visitorKeys.ts";
 
 export const parseForESLint = (code: string): ParseResult => {
   const lineMap = createLineMap(code);
-  const tokens = tokenizeSQL(code);
+  const { tokens, comments } = tokenizeSQL(code);
   const program: Program = {
     type: "Program",
     range: [0, code.length],
@@ -18,7 +18,7 @@ export const parseForESLint = (code: string): ParseResult => {
     },
     body: [],
     tokens,
-    comments: [],
+    comments,
   };
 
   try {

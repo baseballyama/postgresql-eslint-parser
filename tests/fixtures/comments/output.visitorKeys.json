@@ -11,10 +11,13 @@
     "targetList",
     "fromClause"
   ],
+  "String": [],
   "Keyword": [],
   "Operator": [],
   "Identifier": [],
   "Punctuator": [],
+  "Line": [],
+  "Block": [],
   "Program": [
     "body",
     "tokens",

@@ -1,28 +1,63 @@
 {
   "Unknown": [],
   "String": [],
-  "names": ["0"],
+  "names": [
+    "0"
+  ],
   "Constraint": [],
-  "ColumnDef": ["typeName", "constraints"],
-  "A_Const": ["ival"],
+  "ColumnDef": [
+    "typeName",
+    "constraints"
+  ],
+  "A_Const": [
+    "ival"
+  ],
   "SQLValueFunction": [],
-  "CreateStmt": ["relation", "tableElts"],
-  "AlterTableCmd": ["def"],
-  "AlterTableStmt": ["relation", "cmds"],
-  "RenameStmt": ["relation"],
+  "CreateStmt": [
+    "relation",
+    "tableElts"
+  ],
+  "AlterTableCmd": [
+    "def"
+  ],
+  "AlterTableStmt": [
+    "relation",
+    "cmds"
+  ],
+  "RenameStmt": [
+    "relation"
+  ],
   "IndexElem": [],
-  "IndexStmt": ["relation", "indexParams"],
-  "List": ["items"],
-  "DropStmt": ["objects"],
-  "CreateEnumStmt": ["typeName", "vals"],
-  "AlterEnumStmt": ["typeName"],
-  "LineComment": [],
+  "IndexStmt": [
+    "relation",
+    "indexParams"
+  ],
+  "List": [
+    "items"
+  ],
+  "DropStmt": [
+    "objects"
+  ],
+  "CreateEnumStmt": [
+    "typeName",
+    "vals"
+  ],
+  "AlterEnumStmt": [
+    "typeName"
+  ],
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
   "Numeric": [],
-  "Program": ["body", "tokens", "comments"],
-  "SQLStatement": ["statement"],
+  "Line": [],
+  "Program": [
+    "body",
+    "tokens",
+    "comments"
+  ],
+  "SQLStatement": [
+    "statement"
+  ],
   "SQLParseError": [],
   "SQLProcedure": []
 }

@@ -22,6 +22,13 @@ export interface ESLintToken {
   value: string;
 }
 
+export interface ESLintComment {
+  type: "Line" | "Block";
+  loc: SourceLocation;
+  range: [number, number];
+  value: string;
+}
+
 export interface ParseResult {
   ast: Program;
   visitorKeys: Record<string, string[]>;
