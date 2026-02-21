@@ -1,52 +1,138 @@
 {
   "CreateSchemaStmt": [],
   "Unknown": [],
-  "A_Const": ["sval"],
-  "VariableSetStmt": ["args"],
+  "A_Const": [
+    "sval"
+  ],
+  "VariableSetStmt": [
+    "args"
+  ],
   "String": [],
-  "names": ["0"],
+  "names": [
+    "0"
+  ],
   "Constraint": [],
-  "ColumnDef": ["typeName", "constraints"],
-  "FuncCall": ["funcname"],
-  "ColumnRef": ["fields"],
-  "List": ["items"],
-  "A_Expr": ["name", "lexpr", "rexpr"],
-  "NullTest": ["arg"],
-  "CreateStmt": ["relation", "tableElts"],
+  "ColumnDef": [
+    "typeName",
+    "constraints"
+  ],
+  "FuncCall": [
+    "funcname"
+  ],
+  "ColumnRef": [
+    "fields"
+  ],
+  "List": [
+    "items"
+  ],
+  "A_Expr": [
+    "name",
+    "lexpr",
+    "rexpr"
+  ],
+  "NullTest": [
+    "arg"
+  ],
+  "CreateStmt": [
+    "relation",
+    "tableElts"
+  ],
   "RangeVar": [],
-  "lowerdatums": ["0", "upperdatums"],
+  "lowerdatums": [
+    "0",
+    "upperdatums"
+  ],
   "CreateExtensionStmt": [],
-  "DefElem": ["arg"],
-  "CreateForeignServerStmt": ["options"],
-  "CreateUserMappingStmt": ["user", "options"],
-  "relation": ["tableElts"],
-  "CreateForeignTableStmt": ["base", "options"],
-  "ResTarget": ["val"],
-  "SelectStmt": ["targetList", "fromClause", "groupClause"],
-  "ViewStmt": ["view", "query"],
+  "DefElem": [
+    "arg"
+  ],
+  "CreateForeignServerStmt": [
+    "options"
+  ],
+  "CreateUserMappingStmt": [
+    "user",
+    "options"
+  ],
+  "relation": [
+    "tableElts"
+  ],
+  "CreateForeignTableStmt": [
+    "base",
+    "options"
+  ],
+  "ResTarget": [
+    "val"
+  ],
+  "SelectStmt": [
+    "targetList",
+    "fromClause",
+    "groupClause"
+  ],
+  "ViewStmt": [
+    "view",
+    "query"
+  ],
   "rel": [],
-  "CreateTableAsStmt": ["query", "into"],
+  "CreateTableAsStmt": [
+    "query",
+    "into"
+  ],
   "IndexElem": [],
-  "IndexStmt": ["relation", "indexParams"],
+  "IndexStmt": [
+    "relation",
+    "indexParams"
+  ],
   "AlterTableCmd": [],
-  "AlterTableStmt": ["relation", "cmds"],
+  "AlterTableStmt": [
+    "relation",
+    "cmds"
+  ],
   "RoleSpec": [],
-  "TypeCast": ["arg", "typeName"],
-  "CreatePolicyStmt": ["table", "roles", "qual"],
+  "TypeCast": [
+    "arg",
+    "typeName"
+  ],
+  "CreatePolicyStmt": [
+    "table",
+    "roles",
+    "qual"
+  ],
   "AccessPriv": [],
-  "GrantStmt": ["objects", "privileges", "grantees"],
-  "CreateDomainStmt": ["domainname", "typeName", "constraints"],
-  "CompositeTypeStmt": ["typevar", "coldeflist"],
-  "TypeName": ["names"],
-  "CreateRangeStmt": ["typeName", "params"],
-  "LineComment": [],
+  "GrantStmt": [
+    "objects",
+    "privileges",
+    "grantees"
+  ],
+  "CreateDomainStmt": [
+    "domainname",
+    "typeName",
+    "constraints"
+  ],
+  "CompositeTypeStmt": [
+    "typevar",
+    "coldeflist"
+  ],
+  "TypeName": [
+    "names"
+  ],
+  "CreateRangeStmt": [
+    "typeName",
+    "params"
+  ],
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
   "Numeric": [],
   "Operator": [],
-  "Program": ["body", "tokens", "comments"],
-  "SQLStatement": ["statement"],
+  "Line": [],
+  "Program": [
+    "body",
+    "tokens",
+    "comments"
+  ],
+  "SQLStatement": [
+    "statement"
+  ],
   "SQLParseError": [],
   "SQLProcedure": []
 }

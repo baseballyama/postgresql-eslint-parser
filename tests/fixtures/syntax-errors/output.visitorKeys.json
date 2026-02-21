@@ -1,12 +1,18 @@
 {
   "SQLParseError": [],
-  "LineComment": [],
   "Keyword": [],
   "Operator": [],
   "Identifier": [],
   "String": [],
   "Punctuator": [],
-  "Program": ["body", "tokens", "comments"],
-  "SQLStatement": ["statement"],
+  "Line": [],
+  "Program": [
+    "body",
+    "tokens",
+    "comments"
+  ],
+  "SQLStatement": [
+    "statement"
+  ],
   "SQLProcedure": []
 }
