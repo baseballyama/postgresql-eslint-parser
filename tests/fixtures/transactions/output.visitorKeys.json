@@ -2,69 +2,29 @@
   "TransactionStmt": [],
   "Unknown": [],
   "ResTarget": [],
-  "A_Const": [
-    "sval"
-  ],
-  "List": [
-    "items"
-  ],
-  "SelectStmt": [
-    "valuesLists"
-  ],
-  "InsertStmt": [
-    "relation",
-    "cols",
-    "selectStmt"
-  ],
+  "A_Const": ["sval"],
+  "List": ["items"],
+  "SelectStmt": ["valuesLists"],
+  "InsertStmt": ["relation", "cols", "selectStmt"],
   "String": [],
-  "ColumnRef": [
-    "fields"
-  ],
-  "FuncCall": [
-    "funcname"
-  ],
+  "ColumnRef": ["fields"],
+  "FuncCall": ["funcname"],
   "RangeVar": [],
-  "A_Expr": [
-    "name",
-    "lexpr",
-    "rexpr"
-  ],
-  "JoinExpr": [
-    "larg",
-    "rarg",
-    "quals"
-  ],
-  "DefElem": [
-    "arg"
-  ],
-  "DoStmt": [
-    "args"
-  ],
-  "UpdateStmt": [
-    "relation",
-    "targetList",
-    "whereClause"
-  ],
-  "VariableSetStmt": [
-    "args"
-  ],
-  "LockStmt": [
-    "relations"
-  ],
+  "A_Expr": ["name", "lexpr", "rexpr"],
+  "JoinExpr": ["larg", "rarg", "quals"],
+  "DefElem": ["arg"],
+  "DoStmt": ["args"],
+  "UpdateStmt": ["relation", "targetList", "whereClause"],
+  "VariableSetStmt": ["args"],
+  "LockStmt": ["relations"],
   "Keyword": [],
   "Punctuator": [],
   "Identifier": [],
   "Numeric": [],
   "Operator": [],
   "Line": [],
-  "Program": [
-    "body",
-    "tokens",
-    "comments"
-  ],
-  "SQLStatement": [
-    "statement"
-  ],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
   "SQLParseError": [],
   "SQLProcedure": []
 }

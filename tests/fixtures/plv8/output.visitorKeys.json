@@ -1,37 +1,19 @@
 {
   "String": [],
-  "names": [
-    "0"
-  ],
-  "List": [
-    "items"
-  ],
-  "DefElem": [
-    "arg"
-  ],
+  "names": ["0"],
+  "List": ["items"],
+  "DefElem": ["arg"],
   "Boolean": [],
-  "CreateFunctionStmt": [
-    "funcname",
-    "returnType",
-    "options"
-  ],
-  "FunctionParameter": [
-    "argType"
-  ],
+  "CreateFunctionStmt": ["funcname", "returnType", "options"],
+  "FunctionParameter": ["argType"],
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
   "Operator": [],
   "Numeric": [],
   "Line": [],
-  "Program": [
-    "body",
-    "tokens",
-    "comments"
-  ],
-  "SQLStatement": [
-    "statement"
-  ],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
   "SQLParseError": [],
   "SQLProcedure": []
 }

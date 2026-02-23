@@ -1,44 +1,21 @@
 {
   "String": [],
-  "names": [
-    "0"
-  ],
-  "List": [
-    "items"
-  ],
-  "DefElem": [
-    "arg"
-  ],
-  "CreateFunctionStmt": [
-    "funcname",
-    "returnType",
-    "options"
-  ],
+  "names": ["0"],
+  "List": ["items"],
+  "DefElem": ["arg"],
+  "CreateFunctionStmt": ["funcname", "returnType", "options"],
   "Unknown": [],
-  "CreateTrigStmt": [
-    "relation",
-    "funcname"
-  ],
-  "ColumnRef": [
-    "fields"
-  ],
-  "NullTest": [
-    "arg"
-  ],
+  "CreateTrigStmt": ["relation", "funcname"],
+  "ColumnRef": ["fields"],
+  "NullTest": ["arg"],
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
   "Operator": [],
   "Numeric": [],
   "Line": [],
-  "Program": [
-    "body",
-    "tokens",
-    "comments"
-  ],
-  "SQLStatement": [
-    "statement"
-  ],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
   "SQLParseError": [],
   "SQLProcedure": []
 }
