@@ -1205,21 +1205,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- PLV8 JavaScript functions test",
-      range: [0, 33],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 33,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [34, 40],
@@ -3353,5 +3338,21 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " PLV8 JavaScript functions test",
+      range: [0, 33],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 33,
+        },
+      },
+    },
+  ],
 } satisfies Program;

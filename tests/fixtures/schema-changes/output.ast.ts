@@ -3980,36 +3980,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Schema changes test",
-      range: [0, 22],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 22,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Create schema",
-      range: [23, 39],
-      loc: {
-        start: {
-          line: 2,
-          column: 0,
-        },
-        end: {
-          line: 2,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [40, 46],
@@ -4220,21 +4190,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Set search path",
-      range: [119, 137],
-      loc: {
-        start: {
-          line: 6,
-          column: 0,
-        },
-        end: {
-          line: 6,
-          column: 18,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SET",
       range: [138, 141],
@@ -4336,21 +4291,6 @@ export default {
         end: {
           line: 7,
           column: 37,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Create table with various constraints",
-      range: [177, 217],
-      loc: {
-        start: {
-          line: 9,
-          column: 0,
-        },
-        end: {
-          line: 9,
-          column: 40,
         },
       },
     },
@@ -5780,21 +5720,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Partitioning",
-      range: [753, 768],
-      loc: {
-        start: {
-          line: 24,
-          column: 0,
-        },
-        end: {
-          line: 24,
-          column: 15,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [769, 775],
@@ -6421,21 +6346,6 @@ export default {
         end: {
           line: 29,
           column: 49,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Foreign data wrapper setup",
-      range: [1029, 1058],
-      loc: {
-        start: {
-          line: 31,
-          column: 0,
-        },
-        end: {
-          line: 31,
-          column: 29,
         },
       },
     },
@@ -7471,21 +7381,6 @@ export default {
         end: {
           line: 47,
           column: 60,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Views and materialized views",
-      range: [1541, 1572],
-      loc: {
-        start: {
-          line: 49,
-          column: 0,
-        },
-        end: {
-          line: 49,
-          column: 31,
         },
       },
     },
@@ -8825,21 +8720,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Indexes on materialized view",
-      range: [2086, 2117],
-      loc: {
-        start: {
-          line: 68,
-          column: 0,
-        },
-        end: {
-          line: 68,
-          column: 31,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [2118, 2124],
@@ -9166,21 +9046,6 @@ export default {
         end: {
           line: 70,
           column: 80,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Row Level Security",
-      range: [2277, 2298],
-      loc: {
-        start: {
-          line: 72,
-          column: 0,
-        },
-        end: {
-          line: 72,
-          column: 21,
         },
       },
     },
@@ -9676,21 +9541,6 @@ export default {
         end: {
           line: 77,
           column: 66,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Grant permissions",
-      range: [2513, 2533],
-      loc: {
-        start: {
-          line: 79,
-          column: 0,
-        },
-        end: {
-          line: 79,
-          column: 20,
         },
       },
     },
@@ -10205,21 +10055,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Domain types",
-      range: [2736, 2751],
-      loc: {
-        start: {
-          line: 84,
-          column: 0,
-        },
-        end: {
-          line: 84,
-          column: 15,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [2752, 2758],
@@ -10685,21 +10520,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Composite types",
-      range: [2940, 2958],
-      loc: {
-        start: {
-          line: 91,
-          column: 0,
-        },
-        end: {
-          line: 91,
-          column: 18,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [2959, 2965],
@@ -11045,21 +10865,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Range types",
-      range: [3087, 3101],
-      loc: {
-        start: {
-          line: 100,
-          column: 0,
-        },
-        end: {
-          line: 100,
-          column: 14,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [3102, 3108],
@@ -11315,5 +11120,201 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Schema changes test",
+      range: [0, 22],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 22,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Create schema",
+      range: [23, 39],
+      loc: {
+        start: {
+          line: 2,
+          column: 0,
+        },
+        end: {
+          line: 2,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Set search path",
+      range: [119, 137],
+      loc: {
+        start: {
+          line: 6,
+          column: 0,
+        },
+        end: {
+          line: 6,
+          column: 18,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Create table with various constraints",
+      range: [177, 217],
+      loc: {
+        start: {
+          line: 9,
+          column: 0,
+        },
+        end: {
+          line: 9,
+          column: 40,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Partitioning",
+      range: [753, 768],
+      loc: {
+        start: {
+          line: 24,
+          column: 0,
+        },
+        end: {
+          line: 24,
+          column: 15,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Foreign data wrapper setup",
+      range: [1029, 1058],
+      loc: {
+        start: {
+          line: 31,
+          column: 0,
+        },
+        end: {
+          line: 31,
+          column: 29,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Views and materialized views",
+      range: [1541, 1572],
+      loc: {
+        start: {
+          line: 49,
+          column: 0,
+        },
+        end: {
+          line: 49,
+          column: 31,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Indexes on materialized view",
+      range: [2086, 2117],
+      loc: {
+        start: {
+          line: 68,
+          column: 0,
+        },
+        end: {
+          line: 68,
+          column: 31,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Row Level Security",
+      range: [2277, 2298],
+      loc: {
+        start: {
+          line: 72,
+          column: 0,
+        },
+        end: {
+          line: 72,
+          column: 21,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Grant permissions",
+      range: [2513, 2533],
+      loc: {
+        start: {
+          line: 79,
+          column: 0,
+        },
+        end: {
+          line: 79,
+          column: 20,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Domain types",
+      range: [2736, 2751],
+      loc: {
+        start: {
+          line: 84,
+          column: 0,
+        },
+        end: {
+          line: 84,
+          column: 15,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Composite types",
+      range: [2940, 2958],
+      loc: {
+        start: {
+          line: 91,
+          column: 0,
+        },
+        end: {
+          line: 91,
+          column: 18,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Range types",
+      range: [3087, 3101],
+      loc: {
+        start: {
+          line: 100,
+          column: 0,
+        },
+        end: {
+          line: 100,
+          column: 14,
+        },
+      },
+    },
+  ],
 } satisfies Program;

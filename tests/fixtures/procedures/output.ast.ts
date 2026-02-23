@@ -1113,21 +1113,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Stored procedures and functions test",
-      range: [0, 39],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 39,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [40, 46],
@@ -2763,21 +2748,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Recursive function",
-      range: [783, 804],
-      loc: {
-        start: {
-          line: 36,
-          column: 0,
-        },
-        end: {
-          line: 36,
-          column: 21,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [805, 811],
@@ -3374,21 +3344,6 @@ export default {
         end: {
           line: 46,
           column: 20,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Function with multiple return types",
-      range: [1003, 1041],
-      loc: {
-        start: {
-          line: 48,
-          column: 0,
-        },
-        end: {
-          line: 48,
-          column: 38,
         },
       },
     },
@@ -4173,5 +4128,51 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Stored procedures and functions test",
+      range: [0, 39],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 39,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Recursive function",
+      range: [783, 804],
+      loc: {
+        start: {
+          line: 36,
+          column: 0,
+        },
+        end: {
+          line: 36,
+          column: 21,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Function with multiple return types",
+      range: [1003, 1041],
+      loc: {
+        start: {
+          line: 48,
+          column: 0,
+        },
+        end: {
+          line: 48,
+          column: 38,
+        },
+      },
+    },
+  ],
 } satisfies Program;

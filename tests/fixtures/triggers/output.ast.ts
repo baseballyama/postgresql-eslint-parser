@@ -849,21 +849,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Triggers test",
-      range: [0, 16],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [17, 23],
@@ -1505,21 +1490,6 @@ export default {
         end: {
           line: 13,
           column: 46,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Audit trigger",
-      range: [296, 312],
-      loc: {
-        start: {
-          line: 15,
-          column: 0,
-        },
-        end: {
-          line: 15,
-          column: 16,
         },
       },
     },
@@ -4059,21 +4029,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Conditional trigger",
-      range: [1256, 1278],
-      loc: {
-        start: {
-          line: 41,
-          column: 0,
-        },
-        end: {
-          line: 41,
-          column: 22,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [1279, 1285],
@@ -5409,21 +5364,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- INSTEAD OF trigger for views",
-      range: [1831, 1862],
-      loc: {
-        start: {
-          line: 64,
-          column: 0,
-        },
-        end: {
-          line: 64,
-          column: 31,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [1863, 1869],
@@ -6429,5 +6369,66 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Triggers test",
+      range: [0, 16],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Audit trigger",
+      range: [296, 312],
+      loc: {
+        start: {
+          line: 15,
+          column: 0,
+        },
+        end: {
+          line: 15,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Conditional trigger",
+      range: [1256, 1278],
+      loc: {
+        start: {
+          line: 41,
+          column: 0,
+        },
+        end: {
+          line: 41,
+          column: 22,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " INSTEAD OF trigger for views",
+      range: [1831, 1862],
+      loc: {
+        start: {
+          line: 64,
+          column: 0,
+        },
+        end: {
+          line: 64,
+          column: 31,
+        },
+      },
+    },
+  ],
 } satisfies Program;

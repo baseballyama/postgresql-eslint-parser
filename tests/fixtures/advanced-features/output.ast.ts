@@ -6976,36 +6976,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Advanced PostgreSQL features test",
-      range: [0, 36],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 36,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Extensions",
-      range: [37, 50],
-      loc: {
-        start: {
-          line: 2,
-          column: 0,
-        },
-        end: {
-          line: 2,
-          column: 13,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [51, 57],
@@ -7527,21 +7497,6 @@ export default {
         end: {
           line: 7,
           column: 41,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- UUID usage",
-      range: [261, 274],
-      loc: {
-        start: {
-          line: 9,
-          column: 0,
-        },
-        end: {
-          line: 9,
-          column: 13,
         },
       },
     },
@@ -8247,21 +8202,6 @@ export default {
         end: {
           line: 17,
           column: 2,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- HSTORE operations",
-      range: [512, 532],
-      loc: {
-        start: {
-          line: 19,
-          column: 0,
-        },
-        end: {
-          line: 19,
-          column: 20,
         },
       },
     },
@@ -9346,21 +9286,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- ltree for hierarchical data",
-      range: [994, 1024],
-      loc: {
-        start: {
-          line: 28,
-          column: 0,
-        },
-        end: {
-          line: 28,
-          column: 30,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [1025, 1031],
@@ -10291,21 +10216,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- ltree queries",
-      range: [1392, 1408],
-      loc: {
-        start: {
-          line: 42,
-          column: 0,
-        },
-        end: {
-          line: 42,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SELECT",
       range: [1409, 1415],
@@ -10557,21 +10467,6 @@ export default {
         end: {
           line: 44,
           column: 63,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Full-text search with pg_trgm",
-      range: [1529, 1561],
-      loc: {
-        start: {
-          line: 46,
-          column: 0,
-        },
-        end: {
-          line: 46,
-          column: 32,
         },
       },
     },
@@ -11082,21 +10977,6 @@ export default {
         end: {
           line: 52,
           column: 18,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- PostGIS spatial queries",
-      range: [1744, 1770],
-      loc: {
-        start: {
-          line: 54,
-          column: 0,
-        },
-        end: {
-          line: 54,
-          column: 26,
         },
       },
     },
@@ -11911,36 +11791,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- within 1km",
-      range: [1999, 2012],
-      loc: {
-        start: {
-          line: 62,
-          column: 48,
-        },
-        end: {
-          line: 62,
-          column: 61,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- JSON and JSONB operations",
-      range: [2014, 2042],
-      loc: {
-        start: {
-          line: 64,
-          column: 0,
-        },
-        end: {
-          line: 64,
-          column: 28,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [2043, 2049],
@@ -12648,21 +12498,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- JSONB queries",
-      range: [2443, 2459],
-      loc: {
-        start: {
-          line: 75,
-          column: 0,
-        },
-        end: {
-          line: 75,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SELECT",
       range: [2460, 2466],
@@ -13098,21 +12933,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Array operations",
-      range: [2656, 2675],
-      loc: {
-        start: {
-          line: 84,
-          column: 0,
-        },
-        end: {
-          line: 84,
-          column: 19,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SELECT",
       range: [2676, 2682],
@@ -13469,21 +13289,6 @@ export default {
         end: {
           line: 90,
           column: 22,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Advanced window functions",
-      range: [2803, 2831],
-      loc: {
-        start: {
-          line: 92,
-          column: 0,
-        },
-        end: {
-          line: 92,
-          column: 28,
         },
       },
     },
@@ -15018,21 +14823,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- LATERAL joins",
-      range: [3563, 3579],
-      loc: {
-        start: {
-          line: 113,
-          column: 0,
-        },
-        end: {
-          line: 113,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SELECT",
       range: [3580, 3586],
@@ -15678,21 +15468,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Exclusion constraints",
-      range: [3791, 3815],
-      loc: {
-        start: {
-          line: 124,
-          column: 0,
-        },
-        end: {
-          line: 124,
-          column: 24,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "ALTER",
       range: [3816, 3821],
@@ -16053,21 +15828,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Deferrable constraints",
-      range: [3957, 3982],
-      loc: {
-        start: {
-          line: 128,
-          column: 0,
-        },
-        end: {
-          line: 128,
-          column: 25,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "ALTER",
       range: [3983, 3988],
@@ -16368,5 +16128,246 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Advanced PostgreSQL features test",
+      range: [0, 36],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 36,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Extensions",
+      range: [37, 50],
+      loc: {
+        start: {
+          line: 2,
+          column: 0,
+        },
+        end: {
+          line: 2,
+          column: 13,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " UUID usage",
+      range: [261, 274],
+      loc: {
+        start: {
+          line: 9,
+          column: 0,
+        },
+        end: {
+          line: 9,
+          column: 13,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " HSTORE operations",
+      range: [512, 532],
+      loc: {
+        start: {
+          line: 19,
+          column: 0,
+        },
+        end: {
+          line: 19,
+          column: 20,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " ltree for hierarchical data",
+      range: [994, 1024],
+      loc: {
+        start: {
+          line: 28,
+          column: 0,
+        },
+        end: {
+          line: 28,
+          column: 30,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " ltree queries",
+      range: [1392, 1408],
+      loc: {
+        start: {
+          line: 42,
+          column: 0,
+        },
+        end: {
+          line: 42,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Full-text search with pg_trgm",
+      range: [1529, 1561],
+      loc: {
+        start: {
+          line: 46,
+          column: 0,
+        },
+        end: {
+          line: 46,
+          column: 32,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " PostGIS spatial queries",
+      range: [1744, 1770],
+      loc: {
+        start: {
+          line: 54,
+          column: 0,
+        },
+        end: {
+          line: 54,
+          column: 26,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " within 1km",
+      range: [1999, 2012],
+      loc: {
+        start: {
+          line: 62,
+          column: 48,
+        },
+        end: {
+          line: 62,
+          column: 61,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " JSON and JSONB operations",
+      range: [2014, 2042],
+      loc: {
+        start: {
+          line: 64,
+          column: 0,
+        },
+        end: {
+          line: 64,
+          column: 28,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " JSONB queries",
+      range: [2443, 2459],
+      loc: {
+        start: {
+          line: 75,
+          column: 0,
+        },
+        end: {
+          line: 75,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Array operations",
+      range: [2656, 2675],
+      loc: {
+        start: {
+          line: 84,
+          column: 0,
+        },
+        end: {
+          line: 84,
+          column: 19,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Advanced window functions",
+      range: [2803, 2831],
+      loc: {
+        start: {
+          line: 92,
+          column: 0,
+        },
+        end: {
+          line: 92,
+          column: 28,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " LATERAL joins",
+      range: [3563, 3579],
+      loc: {
+        start: {
+          line: 113,
+          column: 0,
+        },
+        end: {
+          line: 113,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Exclusion constraints",
+      range: [3791, 3815],
+      loc: {
+        start: {
+          line: 124,
+          column: 0,
+        },
+        end: {
+          line: 124,
+          column: 24,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Deferrable constraints",
+      range: [3957, 3982],
+      loc: {
+        start: {
+          line: 128,
+          column: 0,
+        },
+        end: {
+          line: 128,
+          column: 25,
+        },
+      },
+    },
+  ],
 } satisfies Program;

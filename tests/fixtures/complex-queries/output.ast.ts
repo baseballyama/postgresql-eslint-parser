@@ -5290,21 +5290,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Complex queries test",
-      range: [0, 23],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 23,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "WITH",
       range: [24, 28],
@@ -7465,21 +7450,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Recursive CTE",
-      range: [794, 810],
-      loc: {
-        start: {
-          line: 31,
-          column: 0,
-        },
-        end: {
-          line: 31,
-          column: 16,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "WITH",
       range: [811, 815],
@@ -7551,21 +7521,6 @@ export default {
         end: {
           line: 32,
           column: 38,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Base case",
-      range: [854, 866],
-      loc: {
-        start: {
-          line: 33,
-          column: 4,
-        },
-        end: {
-          line: 33,
-          column: 16,
         },
       },
     },
@@ -7896,21 +7851,6 @@ export default {
         end: {
           line: 38,
           column: 13,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Recursive case",
-      range: [1000, 1017],
-      loc: {
-        start: {
-          line: 40,
-          column: 4,
-        },
-        end: {
-          line: 40,
-          column: 21,
         },
       },
     },
@@ -8721,21 +8661,6 @@ export default {
         end: {
           line: 46,
           column: 47,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Window functions and analytics",
-      range: [1250, 1283],
-      loc: {
-        start: {
-          line: 48,
-          column: 0,
-        },
-        end: {
-          line: 48,
-          column: 33,
         },
       },
     },
@@ -10146,21 +10071,6 @@ export default {
         end: {
           line: 60,
           column: 53,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Complex EXISTS and NOT EXISTS",
-      range: [1899, 1931],
-      loc: {
-        start: {
-          line: 62,
-          column: 0,
-        },
-        end: {
-          line: 62,
-          column: 32,
         },
       },
     },
@@ -11590,5 +11500,96 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Complex queries test",
+      range: [0, 23],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 23,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Recursive CTE",
+      range: [794, 810],
+      loc: {
+        start: {
+          line: 31,
+          column: 0,
+        },
+        end: {
+          line: 31,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Base case",
+      range: [854, 866],
+      loc: {
+        start: {
+          line: 33,
+          column: 4,
+        },
+        end: {
+          line: 33,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Recursive case",
+      range: [1000, 1017],
+      loc: {
+        start: {
+          line: 40,
+          column: 4,
+        },
+        end: {
+          line: 40,
+          column: 21,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Window functions and analytics",
+      range: [1250, 1283],
+      loc: {
+        start: {
+          line: 48,
+          column: 0,
+        },
+        end: {
+          line: 48,
+          column: 33,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Complex EXISTS and NOT EXISTS",
+      range: [1899, 1931],
+      loc: {
+        start: {
+          line: 62,
+          column: 0,
+        },
+        end: {
+          line: 62,
+          column: 32,
+        },
+      },
+    },
+  ],
 } satisfies Program;

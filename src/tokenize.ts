@@ -1,5 +1,5 @@
 import type { SourceLocation } from "./ast.ts";
-import type { ESLintToken } from "./types.ts";
+import type { ESLintComment, ESLintToken } from "./types.ts";
 import { createLineMap, type LineMap } from "./utils.ts";
 
 const calculateLocationFromOffset = (
@@ -342,9 +342,12 @@ const getTokenType = (value: string): string => {
   return "Identifier";
 };
 
-export const tokenizeSQL = (code: string): ESLintToken[] => {
+export const tokenizeSQL = (
+  code: string,
+): { tokens: ESLintToken[]; comments: ESLintComment[] } => {
   const lineMap = createLineMap(code);
   const tokens: ESLintToken[] = [];
+  const comments: ESLintComment[] = [];
 
   let i = 0;
   const length = code.length;
@@ -366,15 +369,15 @@ export const tokenizeSQL = (code: string): ESLintToken[] => {
       while (i < length && code[i] !== "\n") {
         i++;
       }
-      const value = code.slice(start, i);
+      const rawValue = code.slice(start, i);
       const { range, loc } = calculateLocationFromOffset(
         lineMap,
         start,
-        value.length,
+        rawValue.length,
       );
-      tokens.push({
-        type: "LineComment",
-        value,
+      comments.push({
+        type: "Line",
+        value: rawValue.slice(2), // strip leading "--"
         range,
         loc,
       });
@@ -389,15 +392,15 @@ export const tokenizeSQL = (code: string): ESLintToken[] => {
         i++;
       }
       i += 2;
-      const value = code.slice(start, i);
+      const rawValue = code.slice(start, i);
       const { range, loc } = calculateLocationFromOffset(
         lineMap,
         start,
-        value.length,
+        rawValue.length,
       );
-      tokens.push({
-        type: "BlockComment",
-        value,
+      comments.push({
+        type: "Block",
+        value: rawValue.slice(2, -2), // strip leading "/*" and trailing "*/"
         range,
         loc,
       });
@@ -524,5 +527,5 @@ export const tokenizeSQL = (code: string): ESLintToken[] => {
     i++;
   }
 
-  return tokens;
+  return { tokens, comments };
 };

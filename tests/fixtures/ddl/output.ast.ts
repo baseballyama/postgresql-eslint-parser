@@ -957,21 +957,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- DDL operations test",
-      range: [0, 22],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 22,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "CREATE",
       range: [23, 29],
@@ -2562,5 +2547,21 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " DDL operations test",
+      range: [0, 22],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 22,
+        },
+      },
+    },
+  ],
 } satisfies Program;

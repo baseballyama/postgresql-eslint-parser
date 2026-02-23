@@ -33,21 +33,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- This SQL has intentional syntax errors for testing",
-      range: [0, 53],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 53,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SELECT",
       range: [54, 60],
@@ -228,5 +213,21 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " This SQL has intentional syntax errors for testing",
+      range: [0, 53],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 53,
+        },
+      },
+    },
+  ],
 } satisfies Program;

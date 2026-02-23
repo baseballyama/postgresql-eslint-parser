@@ -3328,21 +3328,6 @@ export default {
   ],
   tokens: [
     {
-      type: "LineComment",
-      value: "-- Transaction control test",
-      range: [0, 27],
-      loc: {
-        start: {
-          line: 1,
-          column: 0,
-        },
-        end: {
-          line: 1,
-          column: 27,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "BEGIN",
       range: [28, 33],
@@ -4123,21 +4108,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- This might fail",
-      range: [311, 329],
-      loc: {
-        start: {
-          line: 16,
-          column: 0,
-        },
-        end: {
-          line: 16,
-          column: 18,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "INSERT",
       range: [330, 336],
@@ -4783,36 +4753,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- If something went wrong, rollback to savepoint",
-      range: [503, 552],
-      loc: {
-        start: {
-          line: 23,
-          column: 0,
-        },
-        end: {
-          line: 23,
-          column: 49,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- ROLLBACK TO SAVEPOINT order_created;",
-      range: [553, 592],
-      loc: {
-        start: {
-          line: 24,
-          column: 0,
-        },
-        end: {
-          line: 24,
-          column: 39,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "COMMIT",
       range: [594, 600],
@@ -4839,21 +4779,6 @@ export default {
         end: {
           line: 26,
           column: 7,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Transaction with error handling in plpgsql",
-      range: [603, 648],
-      loc: {
-        start: {
-          line: 28,
-          column: 0,
-        },
-        end: {
-          line: 28,
-          column: 45,
         },
       },
     },
@@ -5034,21 +4959,6 @@ export default {
         end: {
           line: 34,
           column: 5,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Start transaction block",
-      range: [736, 762],
-      loc: {
-        start: {
-          line: 35,
-          column: 4,
-        },
-        end: {
-          line: 35,
-          column: 30,
         },
       },
     },
@@ -5784,21 +5694,6 @@ export default {
         end: {
           line: 43,
           column: 35,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Simulate error",
-      range: [1085, 1102],
-      loc: {
-        start: {
-          line: 45,
-          column: 8,
-        },
-        end: {
-          line: 45,
-          column: 25,
         },
       },
     },
@@ -6673,21 +6568,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Transaction is automatically rolled back",
-      range: [1571, 1614],
-      loc: {
-        start: {
-          line: 59,
-          column: 12,
-        },
-        end: {
-          line: 59,
-          column: 55,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "RAISE",
       range: [1627, 1632],
@@ -6774,21 +6654,6 @@ export default {
         end: {
           line: 62,
           column: 7,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Isolation levels",
-      range: [1652, 1671],
-      loc: {
-        start: {
-          line: 64,
-          column: 0,
-        },
-        end: {
-          line: 64,
-          column: 19,
         },
       },
     },
@@ -7348,21 +7213,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Read-only transaction",
-      range: [1870, 1894],
-      loc: {
-        start: {
-          line: 71,
-          column: 0,
-        },
-        end: {
-          line: 71,
-          column: 24,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "BEGIN",
       range: [1895, 1900],
@@ -7689,21 +7539,6 @@ export default {
         end: {
           line: 75,
           column: 7,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Deferrable transaction",
-      range: [1995, 2020],
-      loc: {
-        start: {
-          line: 77,
-          column: 0,
-        },
-        end: {
-          line: 77,
-          column: 25,
         },
       },
     },
@@ -8428,21 +8263,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Prepared transactions (2PC)",
-      range: [2230, 2260],
-      loc: {
-        start: {
-          line: 85,
-          column: 0,
-        },
-        end: {
-          line: 85,
-          column: 30,
-        },
-      },
-    },
-    {
       type: "Identifier",
       value: "PREPARE",
       range: [2261, 2268],
@@ -8499,81 +8319,6 @@ export default {
         end: {
           line: 86,
           column: 39,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Later...",
-      range: [2302, 2313],
-      loc: {
-        start: {
-          line: 88,
-          column: 0,
-        },
-        end: {
-          line: 88,
-          column: 11,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- COMMIT PREPARED 'transfer_funds_1';",
-      range: [2314, 2352],
-      loc: {
-        start: {
-          line: 89,
-          column: 0,
-        },
-        end: {
-          line: 89,
-          column: 38,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- or",
-      range: [2353, 2358],
-      loc: {
-        start: {
-          line: 90,
-          column: 0,
-        },
-        end: {
-          line: 90,
-          column: 5,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- ROLLBACK PREPARED 'transfer_funds_1';",
-      range: [2359, 2399],
-      loc: {
-        start: {
-          line: 91,
-          column: 0,
-        },
-        end: {
-          line: 91,
-          column: 40,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Advisory locks",
-      range: [2401, 2418],
-      loc: {
-        start: {
-          line: 93,
-          column: 0,
-        },
-        end: {
-          line: 93,
-          column: 17,
         },
       },
     },
@@ -8664,21 +8409,6 @@ export default {
         end: {
           line: 94,
           column: 31,
-        },
-      },
-    },
-    {
-      type: "LineComment",
-      value: "-- Critical section",
-      range: [2452, 2471],
-      loc: {
-        start: {
-          line: 96,
-          column: 0,
-        },
-        end: {
-          line: 96,
-          column: 19,
         },
       },
     },
@@ -9163,21 +8893,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Lock timeout",
-      range: [2629, 2644],
-      loc: {
-        start: {
-          line: 107,
-          column: 0,
-        },
-        end: {
-          line: 107,
-          column: 15,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "SET",
       range: [2645, 2648],
@@ -9388,21 +9103,6 @@ export default {
       },
     },
     {
-      type: "LineComment",
-      value: "-- Do some work",
-      range: [2722, 2737],
-      loc: {
-        start: {
-          line: 112,
-          column: 4,
-        },
-        end: {
-          line: 112,
-          column: 19,
-        },
-      },
-    },
-    {
       type: "Keyword",
       value: "UPDATE",
       range: [2742, 2748],
@@ -9598,5 +9298,306 @@ export default {
       },
     },
   ],
-  comments: [],
+  comments: [
+    {
+      type: "Line",
+      value: " Transaction control test",
+      range: [0, 27],
+      loc: {
+        start: {
+          line: 1,
+          column: 0,
+        },
+        end: {
+          line: 1,
+          column: 27,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " This might fail",
+      range: [311, 329],
+      loc: {
+        start: {
+          line: 16,
+          column: 0,
+        },
+        end: {
+          line: 16,
+          column: 18,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " If something went wrong, rollback to savepoint",
+      range: [503, 552],
+      loc: {
+        start: {
+          line: 23,
+          column: 0,
+        },
+        end: {
+          line: 23,
+          column: 49,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " ROLLBACK TO SAVEPOINT order_created;",
+      range: [553, 592],
+      loc: {
+        start: {
+          line: 24,
+          column: 0,
+        },
+        end: {
+          line: 24,
+          column: 39,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Transaction with error handling in plpgsql",
+      range: [603, 648],
+      loc: {
+        start: {
+          line: 28,
+          column: 0,
+        },
+        end: {
+          line: 28,
+          column: 45,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Start transaction block",
+      range: [736, 762],
+      loc: {
+        start: {
+          line: 35,
+          column: 4,
+        },
+        end: {
+          line: 35,
+          column: 30,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Simulate error",
+      range: [1085, 1102],
+      loc: {
+        start: {
+          line: 45,
+          column: 8,
+        },
+        end: {
+          line: 45,
+          column: 25,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Transaction is automatically rolled back",
+      range: [1571, 1614],
+      loc: {
+        start: {
+          line: 59,
+          column: 12,
+        },
+        end: {
+          line: 59,
+          column: 55,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Isolation levels",
+      range: [1652, 1671],
+      loc: {
+        start: {
+          line: 64,
+          column: 0,
+        },
+        end: {
+          line: 64,
+          column: 19,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Read-only transaction",
+      range: [1870, 1894],
+      loc: {
+        start: {
+          line: 71,
+          column: 0,
+        },
+        end: {
+          line: 71,
+          column: 24,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Deferrable transaction",
+      range: [1995, 2020],
+      loc: {
+        start: {
+          line: 77,
+          column: 0,
+        },
+        end: {
+          line: 77,
+          column: 25,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Prepared transactions (2PC)",
+      range: [2230, 2260],
+      loc: {
+        start: {
+          line: 85,
+          column: 0,
+        },
+        end: {
+          line: 85,
+          column: 30,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Later...",
+      range: [2302, 2313],
+      loc: {
+        start: {
+          line: 88,
+          column: 0,
+        },
+        end: {
+          line: 88,
+          column: 11,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " COMMIT PREPARED 'transfer_funds_1';",
+      range: [2314, 2352],
+      loc: {
+        start: {
+          line: 89,
+          column: 0,
+        },
+        end: {
+          line: 89,
+          column: 38,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " or",
+      range: [2353, 2358],
+      loc: {
+        start: {
+          line: 90,
+          column: 0,
+        },
+        end: {
+          line: 90,
+          column: 5,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " ROLLBACK PREPARED 'transfer_funds_1';",
+      range: [2359, 2399],
+      loc: {
+        start: {
+          line: 91,
+          column: 0,
+        },
+        end: {
+          line: 91,
+          column: 40,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Advisory locks",
+      range: [2401, 2418],
+      loc: {
+        start: {
+          line: 93,
+          column: 0,
+        },
+        end: {
+          line: 93,
+          column: 17,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Critical section",
+      range: [2452, 2471],
+      loc: {
+        start: {
+          line: 96,
+          column: 0,
+        },
+        end: {
+          line: 96,
+          column: 19,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Lock timeout",
+      range: [2629, 2644],
+      loc: {
+        start: {
+          line: 107,
+          column: 0,
+        },
+        end: {
+          line: 107,
+          column: 15,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " Do some work",
+      range: [2722, 2737],
+      loc: {
+        start: {
+          line: 112,
+          column: 4,
+        },
+        end: {
+          line: 112,
+          column: 19,
+        },
+      },
+    },
+  ],
 } satisfies Program;
