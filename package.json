@@ -63,7 +63,7 @@
     "prettier": "^3.8.1",
     "publint": "^0.3.17",
     "rolldown": "1.0.0-rc.11",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.0",
     "vitest": "^4.0.18"
   },
   "dependencies": {
