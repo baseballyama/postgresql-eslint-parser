@@ -19,7 +19,7 @@ const calculateLocationFromOffset = (
   };
 };
 
-const SQL_KEYWORDS = [
+const SQL_KEYWORDS_SET = new Set([
   // basic
   "SELECT",
   "INSERT",
@@ -117,7 +117,7 @@ const SQL_KEYWORDS = [
   "USING",
   "ON",
 
-  // aggregate
+  // aggregate / window
   "COUNT",
   "SUM",
   "AVG",
@@ -134,7 +134,7 @@ const SQL_KEYWORDS = [
   "CURRENT",
   "ROW",
 
-  // procedure
+  // procedure / PL/pgSQL
   "FUNCTION",
   "PROCEDURE",
   "RETURNS",
@@ -152,7 +152,6 @@ const SQL_KEYWORDS = [
   "CALLED",
   "INPUT",
   "COST",
-  "ROWS",
   "PARALLEL",
   "SAFE",
   "RESTRICTED",
@@ -182,7 +181,6 @@ const SQL_KEYWORDS = [
   "THEN",
   "ELSE",
   "ELSIF",
-  "CASE",
   "FOUND",
   "ROW_COUNT",
   "RESULT_OID",
@@ -203,7 +201,6 @@ const SQL_KEYWORDS = [
   "BLOCK",
 
   // transaction
-  "BEGIN",
   "COMMIT",
   "ROLLBACK",
   "SAVEPOINT",
@@ -220,7 +217,6 @@ const SQL_KEYWORDS = [
   "CONNECT",
   "TEMPORARY",
   "TEMP",
-  "EXECUTE",
   "TRIGGER",
   "RULE",
   "EVENT",
@@ -236,7 +232,6 @@ const SQL_KEYWORDS = [
   "COLLATE",
   "COLLATION",
   "CONCURRENTLY",
-  "CROSS",
   "CURRENT_CATALOG",
   "CURRENT_DATE",
   "CURRENT_ROLE",
@@ -247,100 +242,30 @@ const SQL_KEYWORDS = [
   "DEALLOCATE",
   "DEFERRABLE",
   "DEFERRED",
-  "DO",
-  "ELSE",
-  "END",
-  "EXCEPT",
   "FETCH",
-  "FOR",
-  "FOREIGN",
   "FREEZE",
-  "FULL",
-  "GROUP",
-  "HAVING",
-  "ILIKE",
-  "IN",
-  "INNER",
-  "INTERSECT",
-  "IS",
-  "JOIN",
-  "LEFT",
-  "LIKE",
   "LOCALTIME",
   "LOCALTIMESTAMP",
-  "NATURAL",
-  "NOT",
-  "NOTNULL",
-  "NULL",
-  "OFFSET",
   "ONLY",
-  "OR",
-  "ORDER",
-  "OUTER",
   "OVERLAPS",
   "PLACING",
   "SESSION_USER",
   "SET",
-  "SIMILAR",
-  "SOME",
   "SYMMETRIC",
   "SYSTEM_USER",
   "TABLESAMPLE",
-  "THEN",
   "TO",
   "TRAILING",
-  "UNIQUE",
   "USER",
   "VERBOSE",
-  "WHEN",
   "WHERE",
-  "WINDOW",
   "WITH",
-];
+]);
 
-const SQL_KEYWORDS_SET = new Set(
-  SQL_KEYWORDS.map((keyword) => keyword.toUpperCase()),
-);
+const NUMERIC_PATTERN = /^\d+(\.\d+)?([eE][+-]?\d+)?$/;
 
-const getTokenType = (value: string): string => {
-  const trimmedValue = value.trim();
-  const upperValue = trimmedValue.toUpperCase();
-
-  // keyword
-  if (SQL_KEYWORDS_SET.has(upperValue)) {
-    return "Keyword";
-  }
-
-  // numeric literal
-  if (/^\d+(\.\d+)?([eE][+-]?\d+)?$/.test(trimmedValue)) {
-    return "Numeric";
-  }
-
-  // string literal
-  if (
-    /^'([^'\\]|\\.)*'$/.test(trimmedValue) ||
-    /^"([^"\\]|\\.)*"$/.test(trimmedValue)
-  ) {
-    return "String";
-  }
-
-  // identifier
-  if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(trimmedValue)) {
-    return "Identifier";
-  }
-
-  // operator
-  if (/^(=|<>|!=|<=|>=|<|>|\+|-|\*|\/|%|\|\||&&|::)$/.test(trimmedValue)) {
-    return "Operator";
-  }
-
-  // punctuation
-  if (/^[(),;.]$/.test(trimmedValue)) {
-    return "Punctuator";
-  }
-
-  return "Identifier";
-};
+const isKeyword = (value: string): boolean =>
+  SQL_KEYWORDS_SET.has(value.toUpperCase());
 
 export const tokenizeSQL = (
   code: string,
@@ -484,13 +409,13 @@ export const tokenizeSQL = (
     // identifier, keyword, numeric
     if (/[a-zA-Z_0-9]/.test(char)) {
       const start = i;
+      let type: string;
 
-      // numeric
       if (/\d/.test(char)) {
+        // numeric literal — integer / decimal / scientific
         while (i < length && code[i] && /[\d.]/.test(code[i]!)) {
           i++;
         }
-        // support scientific notation
         if (i < length && code[i] && /[eE]/.test(code[i]!)) {
           i++;
           if (i < length && code[i] && /[+-]/.test(code[i]!)) {
@@ -500,11 +425,19 @@ export const tokenizeSQL = (
             i++;
           }
         }
+        // The scanner is permissive (e.g. it will swallow `1..2` or `1e`),
+        // so validate the final lexeme before committing to "Numeric".
+        // Malformed numerics fall through to "Identifier" to preserve the
+        // pre-refactor classification.
+        type = NUMERIC_PATTERN.test(code.slice(start, i))
+          ? "Numeric"
+          : "Identifier";
       } else {
         // identifier or keyword
         while (i < length && code[i] && /[a-zA-Z0-9_]/.test(code[i]!)) {
           i++;
         }
+        type = isKeyword(code.slice(start, i)) ? "Keyword" : "Identifier";
       }
 
       const value = code.slice(start, i);
@@ -513,7 +446,6 @@ export const tokenizeSQL = (
         start,
         value.length,
       );
-      const type = getTokenType(value);
       tokens.push({
         type,
         value,

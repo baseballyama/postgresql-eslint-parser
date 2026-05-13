@@ -21,22 +21,10 @@ export const parseForESLint = (code: string): ParseResult => {
     comments,
   };
 
+  let body: Program["body"];
   try {
     const pgAst = parseSync(code) as unknown as RawPostgreSQLAst;
-    const ast = manipulate(pgAst, tokens, lineMap);
-    program.body = ast;
-
-    for (const stmt of ast) {
-      stmt.parent = program;
-    }
-
-    const visitorKeys = buildVisitorKeys(program);
-
-    return {
-      ast: program,
-      visitorKeys,
-      scopeManager: null,
-    };
+    body = manipulate(pgAst, tokens, lineMap);
   } catch (err) {
     const errorNode: SQLParseError = {
       type: "SQLParseError",
@@ -45,17 +33,19 @@ export const parseForESLint = (code: string): ParseResult => {
       error: err instanceof Error ? err.message : "Unknown SQL parsing error",
       raw: code,
     };
-
-    errorNode.parent = program;
-    program.body = [errorNode];
-    const visitorKeys = buildVisitorKeys(program);
-
-    return {
-      ast: program,
-      visitorKeys,
-      scopeManager: null,
-    };
+    body = [errorNode];
   }
+
+  program.body = body;
+  for (const node of body) {
+    node.parent = program;
+  }
+
+  return {
+    ast: program,
+    visitorKeys: buildVisitorKeys(program),
+    scopeManager: null,
+  };
 };
 
 export const parse = (code: string): Program => {
