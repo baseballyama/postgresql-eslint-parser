@@ -76,10 +76,10 @@ SELECT id FROM users;
 /* eslint-enable some-rule */
 ```
 
-| SQL comment | ESLint comment node |
-| --- | --- |
-| `-- ...`     | `{ type: "Line",  value: "..." }` (without the leading `--`) |
-| `/* ... */`  | `{ type: "Block", value: "..." }` (without the `/*` / `*/` delimiters) |
+| SQL comment | ESLint comment node                                                    |
+| ----------- | ---------------------------------------------------------------------- |
+| `-- ...`    | `{ type: "Line",  value: "..." }` (without the leading `--`)           |
+| `/* ... */` | `{ type: "Block", value: "..." }` (without the `/*` / `*/` delimiters) |
 
 ## Features
 
@@ -119,7 +119,7 @@ interface SQLParseError {
   range: [number, number];
   loc: SourceLocation;
   error: string; // human-readable error message from libpg-query
-  raw: string;   // the original source code
+  raw: string; // the original source code
 }
 ```
 
