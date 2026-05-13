@@ -77,3 +77,30 @@ describe("parseForESLint - source location accuracy", () => {
     });
   });
 });
+
+describe("parseForESLint - token classification", () => {
+  const tokenValuesByType = (code: string): Record<string, string[]> => {
+    const { ast } = parseForESLint(code);
+    const grouped: Record<string, string[]> = {};
+    for (const token of ast.tokens ?? []) {
+      const t = token as { type: string; value: string };
+      (grouped[t.type] ??= []).push(t.value);
+    }
+    return grouped;
+  };
+
+  it("classifies well-formed integers, decimals, and exponents as Numeric", () => {
+    // `SELECT` keeps the syntax parseable so we also exercise the AST path.
+    const tokens = tokenValuesByType("SELECT 1, 1.5, 2e10, 3.5E-2");
+    expect(tokens["Numeric"]).toEqual(["1", "1.5", "2e10", "3.5E-2"]);
+  });
+
+  it("falls back to Identifier for malformed numeric-looking lexemes", () => {
+    // The scanner is permissive enough to swallow `1..2` and `1e`, but neither
+    // matches the numeric grammar so they must not be tagged as Numeric. This
+    // mirrors the pre-refactor `getTokenType` fall-through.
+    const tokens = tokenValuesByType("1..2 1e");
+    expect(tokens["Numeric"] ?? []).toEqual([]);
+    expect(tokens["Identifier"]).toEqual(["1..2", "1e"]);
+  });
+});

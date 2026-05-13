@@ -262,6 +262,8 @@ const SQL_KEYWORDS_SET = new Set([
   "WITH",
 ]);
 
+const NUMERIC_PATTERN = /^\d+(\.\d+)?([eE][+-]?\d+)?$/;
+
 const isKeyword = (value: string): boolean =>
   SQL_KEYWORDS_SET.has(value.toUpperCase());
 
@@ -423,7 +425,13 @@ export const tokenizeSQL = (
             i++;
           }
         }
-        type = "Numeric";
+        // The scanner is permissive (e.g. it will swallow `1..2` or `1e`),
+        // so validate the final lexeme before committing to "Numeric".
+        // Malformed numerics fall through to "Identifier" to preserve the
+        // pre-refactor classification.
+        type = NUMERIC_PATTERN.test(code.slice(start, i))
+          ? "Numeric"
+          : "Identifier";
       } else {
         // identifier or keyword
         while (i < length && code[i] && /[a-zA-Z0-9_]/.test(code[i]!)) {
