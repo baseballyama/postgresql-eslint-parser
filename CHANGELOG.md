@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.1.10
+
+### Patch Changes
+
+- [#151](https://github.com/baseballyama/postgresql-eslint-parser/pull/151) [`8ccbd78`](https://github.com/baseballyama/postgresql-eslint-parser/commit/8ccbd782d652d3eb9122e7c3186d9474072edd70) Thanks [@renovate](https://github.com/apps/renovate)! - fix: resolve `@libpg-query/parser` WASM import/export letters dynamically so future rebuilds (e.g. v17.6.10) don't silently corrupt memory
+
 ## 0.1.9
 
 ### Patch Changes
