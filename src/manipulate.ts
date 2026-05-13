@@ -1,6 +1,6 @@
 import type { Program, SourceLocation } from "./ast.ts";
 import type { ESLintToken, RawPostgreSQLAst } from "./types.ts";
-import type { LineMap } from "./utils.ts";
+import { createByteToCharOffset, type LineMap } from "./utils.ts";
 
 const specialKeys = ["parent", "type", "range", "loc"];
 
@@ -91,6 +91,7 @@ const addTypes = (node: Record<string, unknown>): void => {
 const buildAddLocation = (
   locationMap: Record<number, Location>,
   lineMap: LineMap,
+  byteToChar: (byteOffset: number) => number,
 ) => {
   const getParentLocation = (
     obj: Record<string, unknown>,
@@ -153,8 +154,13 @@ const buildAddLocation = (
       }
     }
 
-    const location =
+    const rawLocation =
       typeof node["location"] === "number" ? node["location"] : null;
+    // libpg-query reports `location` as a UTF-8 byte offset, but the rest of
+    // the pipeline (tokens, line map, node ranges) operates on JS string
+    // (UTF-16) offsets. Convert here so downstream lookups line up when the
+    // source contains multi-byte characters.
+    const location = rawLocation == null ? null : byteToChar(rawLocation);
     if (location != null) {
       delete node["location"];
       const locationInfo = locationMap[location];
@@ -266,7 +272,8 @@ export const manipulate = (
 ): Program["body"] => {
   const startEndMap = buildStartEndMap(tokens);
   const result: unknown[] = [];
-  const addLocation = buildAddLocation(startEndMap, lineMap);
+  const byteToChar = createByteToCharOffset(lineMap.code);
+  const addLocation = buildAddLocation(startEndMap, lineMap, byteToChar);
 
   for (const stmt of pgAst.stmts) {
     const stmtNode = structuredClone(stmt.stmt);
