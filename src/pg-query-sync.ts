@@ -13,11 +13,61 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
 // ---------------------------------------------------------------------------
-// Resolve the WASM binary path from the installed package
+// Resolve the WASM binary and Emscripten JS shim from the installed package.
+//
+// The shim is parsed at startup to recover the minified letter-to-symbol
+// mappings Emscripten generates for both imports and exports. Hard-coding the
+// letters would break on every WASM rebuild of `@libpg-query/parser`, since
+// Emscripten reassigns them when the underlying symbol set changes.
 // ---------------------------------------------------------------------------
 const require_ = createRequire(import.meta.url);
 const indexPath = require_.resolve("@libpg-query/parser");
-const wasmPath = join(dirname(indexPath), "libpg-query.wasm");
+const pkgDir = dirname(indexPath);
+const wasmPath = join(pkgDir, "libpg-query.wasm");
+const shimPath = join(pkgDir, "libpg-query.js");
+const shimSource = readFileSync(shimPath, "utf8");
+
+const importLetterBySymbol = parseImportLetters(shimSource);
+const exportLetterBySymbol = parseExportLetters(shimSource);
+
+function parseImportLetters(src: string): Record<string, string> {
+  const match = src.match(/wasmImports\s*=\s*\{([^}]*)\}/);
+  if (!match) throw new Error("Could not locate wasmImports in libpg-query.js");
+  const out: Record<string, string> = {};
+  for (const part of match[1]!.split(",")) {
+    const m = part.match(/^\s*([A-Za-z]+)\s*:\s*([A-Za-z0-9_$]+)\s*$/);
+    if (m) out[m[2]!] = m[1]!;
+  }
+  return out;
+}
+
+function parseExportLetters(src: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  // Variable assignments: `wasmMemory=wasmExports["v"]` or `_malloc=wasmExports["y"]`.
+  const assignRe =
+    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*wasmExports\["([A-Za-z])"\]/g;
+  for (let m; (m = assignRe.exec(src)); ) out[m[1]!] = m[2]!;
+  // Constructor call: `wasmExports["w"]()` runs C/C++ static ctors.
+  const ctorMatch = src.match(/wasmExports\["([A-Za-z])"\]\s*\(\s*\)/);
+  if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
+  return out;
+}
+
+function importLetter(symbol: string): string {
+  const letter = importLetterBySymbol[symbol];
+  if (!letter) {
+    throw new Error(`Unknown libpg-query import symbol: ${symbol}`);
+  }
+  return letter;
+}
+
+function exportLetter(symbol: string): string {
+  const letter = exportLetterBySymbol[symbol];
+  if (!letter) {
+    throw new Error(`Unknown libpg-query export symbol: ${symbol}`);
+  }
+  return letter;
+}
 
 // ---------------------------------------------------------------------------
 // Memory views – updated whenever WebAssembly.Memory grows
@@ -335,33 +385,40 @@ function fdWrite(
 }
 
 // ---------------------------------------------------------------------------
-// Build the import object matching the Emscripten-generated WASM
+// Build the import object matching the Emscripten-generated WASM. Letter keys
+// are resolved from the shim so a rebuild of `@libpg-query/parser` that
+// reshuffles them does not silently corrupt memory.
 // ---------------------------------------------------------------------------
-const wasmImports = {
-  a: {
-    a: invoke_iii,
-    b: invoke_ii,
-    c: assertFail,
-    d: invoke_iiii,
-    e: invoke_vi,
-    f: invoke_v,
-    g: invoke_i,
-    h: invoke_iiiii,
-    i: invoke_vii,
-    j: invoke_viiii,
-    k: invoke_viii,
-    l: invoke_iiiiii,
-    m: fdWrite,
-    n: invoke_ji,
-    o: exitFn,
-    p: emscriptenThrowLongjmp,
-    q: emscriptenResizeHeap,
-    r: fdRead,
-    s: fdSeek,
-    t: fdClose,
-    u: abortJs,
-  },
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type WasmFn = (...args: any[]) => any;
+const envImports: Record<string, WasmFn> = {};
+const importBindings: Array<[string, WasmFn]> = [
+  ["invoke_i", invoke_i],
+  ["invoke_ii", invoke_ii],
+  ["invoke_iii", invoke_iii],
+  ["invoke_iiii", invoke_iiii],
+  ["invoke_iiiii", invoke_iiiii],
+  ["invoke_iiiiii", invoke_iiiiii],
+  ["invoke_v", invoke_v],
+  ["invoke_vi", invoke_vi],
+  ["invoke_vii", invoke_vii],
+  ["invoke_viii", invoke_viii],
+  ["invoke_viiii", invoke_viiii],
+  ["invoke_ji", invoke_ji],
+  ["___assert_fail", assertFail],
+  ["__abort_js", abortJs],
+  ["__emscripten_throw_longjmp", emscriptenThrowLongjmp],
+  ["_emscripten_resize_heap", emscriptenResizeHeap],
+  ["_exit", exitFn],
+  ["_fd_close", fdClose],
+  ["_fd_read", fdRead],
+  ["_fd_seek", fdSeek],
+  ["_fd_write", fdWrite],
+];
+for (const [symbol, fn] of importBindings) {
+  envImports[importLetter(symbol)] = fn;
+}
+const wasmImports = { a: envImports };
 
 // ---------------------------------------------------------------------------
 // Synchronous WASM compilation & instantiation
@@ -371,22 +428,25 @@ const wasmModule = new WebAssembly.Module(wasmBinary);
 const wasmInstance = new WebAssembly.Instance(wasmModule, wasmImports);
 const wasmExports = wasmInstance.exports;
 
+const getExport = <T>(symbol: string): T =>
+  wasmExports[exportLetter(symbol)] as T;
+
 // Bind memory & table
-wasmMemory = wasmExports["v"] as WebAssembly.Memory;
-wasmTable = wasmExports["z"] as WebAssembly.Table;
+wasmMemory = getExport<WebAssembly.Memory>("wasmMemory");
+wasmTable = getExport<WebAssembly.Table>("wasmTable");
 updateMemoryViews();
 
 // Bind exported functions
-const wasmParseQuery = wasmExports["x"] as (ptr: number) => number;
-const wasmMalloc = wasmExports["y"] as (size: number) => number;
-const wasmFree = wasmExports["A"] as (ptr: number) => void;
-const wasmFreeString = wasmExports["K"] as (ptr: number) => void;
-setThrew = wasmExports["L"] as (flag: number, value: number) => void;
-stackRestore = wasmExports["M"] as (val: number) => void;
-stackSave = wasmExports["N"] as () => number;
+const wasmParseQuery = getExport<(ptr: number) => number>("_wasm_parse_query");
+const wasmMalloc = getExport<(size: number) => number>("_malloc");
+const wasmFree = getExport<(ptr: number) => void>("_free");
+const wasmFreeString = getExport<(ptr: number) => void>("_wasm_free_string");
+setThrew = getExport<(flag: number, value: number) => void>("_setThrew");
+stackRestore = getExport<(val: number) => void>("__emscripten_stack_restore");
+stackSave = getExport<() => number>("_emscripten_stack_get_current");
 
 // Run C/C++ static constructors
-(wasmExports["w"] as () => void)();
+getExport<() => void>("__wasm_call_ctors")();
 
 // ---------------------------------------------------------------------------
 // Public API
