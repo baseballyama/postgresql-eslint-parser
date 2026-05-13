@@ -114,10 +114,12 @@ All AST node type definitions (e.g. `Program`, `SQLStatementNode`, `SelectStmt`,
 When the input cannot be parsed, `parseForESLint` does **not** throw. Instead, `program.body` contains a single `SQLParseError` node:
 
 ```ts
+import type { Ast } from "postgresql-eslint-parser";
+
 interface SQLParseError {
   type: "SQLParseError";
   range: [number, number];
-  loc: SourceLocation;
+  loc: Ast.SourceLocation;
   error: string; // human-readable error message from libpg-query
   raw: string; // the original source code
 }
