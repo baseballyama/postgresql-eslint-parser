@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createLineMap } from "./utils.js";
+import { createByteToCharOffset, createLineMap } from "./utils.js";
 
 describe("utils", () => {
   describe("createLineMap", () => {
@@ -146,6 +146,41 @@ describe("utils", () => {
           expect(position.column).toBeGreaterThanOrEqual(0);
         }
       }
+    });
+  });
+
+  describe("createByteToCharOffset", () => {
+    it("returns identity for ASCII-only source", () => {
+      const convert = createByteToCharOffset("SELECT * FROM users");
+      expect(convert(0)).toBe(0);
+      expect(convert(7)).toBe(7);
+      expect(convert(19)).toBe(19);
+    });
+
+    it("converts byte offsets to char offsets when multi-byte chars precede", () => {
+      const code = "-- 日本語\nSELECT 1";
+      const convert = createByteToCharOffset(code);
+      // `1` is at JS char offset 14, but libpg-query reports byte offset 20
+      expect(convert(20)).toBe(14);
+      // `S` is at JS char offset 7, byte offset 13
+      expect(convert(13)).toBe(7);
+    });
+
+    it("handles surrogate pairs", () => {
+      const code = "-- 😀\nSELECT 1";
+      const convert = createByteToCharOffset(code);
+      // '😀' occupies 4 UTF-8 bytes and 2 UTF-16 code units (surrogate pair).
+      // JS code-unit layout: 0='-' 1='-' 2=' ' 3,4='😀' 5='\n' 6='S' ... 13='1'
+      // UTF-8 byte layout:    0='-' 1='-' 2=' ' 3..6='😀' 7='\n' 8='S' ... 15='1'
+      expect(convert(15)).toBe(13);
+      // The first byte of the surrogate pair maps to the high surrogate index.
+      expect(convert(3)).toBe(3);
+    });
+
+    it("clamps byte offsets beyond the source length", () => {
+      const code = "日本語";
+      const convert = createByteToCharOffset(code);
+      expect(convert(100)).toBe(code.length);
     });
   });
 
