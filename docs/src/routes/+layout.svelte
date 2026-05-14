@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>postgresql-eslint-parser · field manual</title>
+  <title>postgresql-eslint-parser</title>
 </svelte:head>
 
 <div class="app">
@@ -19,23 +19,23 @@
   <footer class="foot">
     <div class="shell foot-grid">
       <div class="foot-col">
-        <div class="eyebrow">Colophon</div>
+        <div class="foot-title">postgresql-eslint-parser</div>
         <p class="foot-blurb">
-          A PostgreSQL parser that hands ESLint a real ESTree, so SQL can be
-          linted the same way the rest of your codebase already is.
+          A PostgreSQL parser that gives ESLint a real ESTree, so SQL files
+          can be linted the same way as the rest of your codebase.
         </p>
       </div>
       <div class="foot-col">
-        <div class="eyebrow">Index</div>
-        <ul class="foot-list">
-          <li><a href="{base}/">Overview</a></li>
-          <li><a href="{base}/docs">Manual</a></li>
+        <div class="foot-heading">Project</div>
+        <ul>
+          <li><a href="{base}/">Home</a></li>
+          <li><a href="{base}/docs">Documentation</a></li>
           <li><a href="{base}/playground">Playground</a></li>
         </ul>
       </div>
       <div class="foot-col">
-        <div class="eyebrow">Distribution</div>
-        <ul class="foot-list">
+        <div class="foot-heading">Resources</div>
+        <ul>
           <li>
             <a
               href="https://www.npmjs.com/package/postgresql-eslint-parser"
@@ -59,19 +59,12 @@
           </li>
         </ul>
       </div>
-      <div class="foot-col">
-        <div class="eyebrow">Engine</div>
-        <p class="foot-mono mono">
-          libpg-query · PostgreSQL 17
-          <br />ESM · Node ≥ 22
-        </p>
-      </div>
     </div>
-    <div class="shell foot-mark">
-      <span class="mono small muted">
-        © {new Date().getFullYear()} · postgresql-eslint-parser · printed in
-        TypeScript on a bed of WebAssembly.
-      </span>
+    <div class="shell foot-foot">
+      <span class="muted"
+        >© {new Date().getFullYear()} postgresql-eslint-parser contributors</span
+      >
+      <span class="muted">Built on libpg-query · PostgreSQL 17</span>
     </div>
   </footer>
 </div>
@@ -86,61 +79,69 @@
     flex: 1;
   }
   .foot {
-    margin-top: 6rem;
-    padding: 3rem 0 2rem;
+    margin-top: 5rem;
+    padding: 2.5rem 0 1.5rem;
     border-top: 1px solid var(--rule);
-    background:
-      linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+    background: var(--bg-soft);
   }
   .foot-grid {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    grid-template-columns: 1.6fr 1fr 1fr;
     gap: 2rem;
-    padding-top: 1rem;
     padding-bottom: 2rem;
   }
-  .foot-col {
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-  .foot-blurb {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-variation-settings: "opsz" 36;
-    font-size: 1rem;
-    color: var(--ink-muted);
-    line-height: 1.5;
-    max-width: 28ch;
-  }
-  .foot-list {
+  .foot-col ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0.6rem 0 0;
     display: grid;
-    gap: 0.35rem;
-    font-size: 0.85rem;
+    gap: 0.4rem;
   }
-  .foot-list a {
-    color: var(--ink-muted);
+  .foot-col li {
+    font-size: 0.9rem;
+  }
+  .foot-col a {
+    color: var(--fg-muted);
     border-bottom-color: transparent;
   }
-  .foot-list a:hover {
-    color: var(--amber);
+  .foot-col a:hover {
+    color: var(--brand);
   }
-  .foot-mono {
+  .foot-title {
+    font-weight: 700;
+    color: var(--fg-strong);
+    margin-bottom: 0.4rem;
+  }
+  .foot-blurb {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    max-width: 36ch;
+  }
+  .foot-heading {
     font-size: 0.78rem;
-    color: var(--ink-muted);
-    line-height: 1.65;
+    font-weight: 700;
+    color: var(--fg-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
-  .foot-mark {
-    border-top: 1px solid var(--rule-faint);
+  .foot-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
     padding-top: 1.2rem;
-    margin-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.82rem;
   }
-  .small { font-size: 0.7rem; }
-  .muted { color: var(--ink-faint); letter-spacing: 0.06em; }
-  @media (max-width: 760px) {
-    .foot-grid { grid-template-columns: 1fr 1fr; }
+  .muted {
+    color: var(--fg-faint);
+  }
+  @media (max-width: 720px) {
+    .foot-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .foot-foot {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
   }
 </style>

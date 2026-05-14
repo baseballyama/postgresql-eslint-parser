@@ -1,12 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0a0c12"/>
-  <text
-    x="16" y="22"
-    text-anchor="middle"
-    font-family="ui-monospace, 'JetBrains Mono', monospace"
-    font-size="16"
-    font-weight="700"
-    fill="#f4b942"
-  >pg</text>
-  <circle cx="24" cy="8" r="2.5" fill="#e57452"/>
+  <rect width="32" height="32" rx="6" fill="#4b32c3"/>
+  <path d="M16 5 6 10v12l10 5 10-5V10L16 5Z" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+  <text x="16" y="20" text-anchor="middle" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="9" font-weight="700" fill="#fff" letter-spacing="0.5">pg</text>
 </svg>

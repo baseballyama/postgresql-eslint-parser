@@ -28,61 +28,58 @@
   let view: EditorView | null = null;
 
   const highlight = HighlightStyle.define([
-    { tag: t.keyword, color: "var(--amber)", fontWeight: "500" },
-    { tag: [t.string, t.special(t.string)], color: "var(--phosphor)" },
-    { tag: t.number, color: "var(--terracotta)" },
-    { tag: [t.bool, t.null], color: "var(--plum)" },
-    { tag: t.comment, color: "var(--ink-faint)", fontStyle: "italic" },
-    { tag: t.operator, color: "var(--pg-blue)" },
-    { tag: t.punctuation, color: "var(--ink-muted)" },
-    { tag: t.variableName, color: "var(--ink-strong)" },
-    { tag: t.typeName, color: "var(--pg-blue)" },
-    { tag: t.function(t.variableName), color: "var(--amber)" },
+    { tag: t.keyword, color: "var(--kw)", fontWeight: "600" },
+    { tag: [t.string, t.special(t.string)], color: "var(--str)" },
+    { tag: t.number, color: "var(--num)" },
+    { tag: [t.bool, t.null], color: "var(--kw)" },
+    { tag: t.comment, color: "var(--com)", fontStyle: "italic" },
+    { tag: t.operator, color: "var(--punc)" },
+    { tag: t.punctuation, color: "var(--punc)" },
+    { tag: t.variableName, color: "var(--fg-strong)" },
+    { tag: t.typeName, color: "var(--typ)" },
+    { tag: t.function(t.variableName), color: "var(--typ)" },
   ]);
 
-  const theme = EditorView.theme(
-    {
-      "&": {
-        backgroundColor: "transparent",
-        color: "var(--ink)",
-        height: "100%",
-        fontSize: "0.86rem",
-      },
-      ".cm-content": {
-        fontFamily: "var(--font-mono)",
-        caretColor: "var(--amber)",
-        padding: "1.2rem 0",
-      },
-      ".cm-line": { padding: "0 1rem" },
-      ".cm-gutters": {
-        backgroundColor: "transparent",
-        border: "none",
-        color: "var(--ink-faint)",
-        fontFamily: "var(--font-mono)",
-        fontSize: "0.72rem",
-        paddingRight: "0.6rem",
-      },
-      ".cm-activeLine": { backgroundColor: "rgba(244,185,66,0.04)" },
-      ".cm-activeLineGutter": {
-        backgroundColor: "transparent",
-        color: "var(--amber)",
-      },
-      ".cm-selectionBackground, ::selection": {
-        backgroundColor: "rgba(244,185,66,0.25) !important",
-      },
-      ".cm-cursor": { borderLeftColor: "var(--amber)" },
-      "&.cm-focused": { outline: "none" },
-      "&.cm-focused .cm-selectionBackground": {
-        backgroundColor: "rgba(244,185,66,0.28) !important",
-      },
-      ".cm-matchingBracket, .cm-nonmatchingBracket": {
-        backgroundColor: "rgba(107,155,214,0.12)",
-        outline: "none",
-        color: "var(--amber)",
-      },
+  const theme = EditorView.theme({
+    "&": {
+      backgroundColor: "transparent",
+      color: "var(--fg)",
+      height: "100%",
+      fontSize: "0.86rem",
     },
-    { dark: true },
-  );
+    ".cm-content": {
+      fontFamily: "var(--font-mono)",
+      caretColor: "var(--brand)",
+      padding: "0.9rem 0",
+    },
+    ".cm-line": { padding: "0 1rem" },
+    ".cm-gutters": {
+      backgroundColor: "transparent",
+      border: "none",
+      color: "var(--fg-faint)",
+      fontFamily: "var(--font-mono)",
+      fontSize: "0.72rem",
+      paddingRight: "0.6rem",
+    },
+    ".cm-activeLine": { backgroundColor: "var(--brand-tint)" },
+    ".cm-activeLineGutter": {
+      backgroundColor: "transparent",
+      color: "var(--brand)",
+    },
+    ".cm-selectionBackground, ::selection": {
+      backgroundColor: "var(--brand-soft) !important",
+    },
+    ".cm-cursor": { borderLeftColor: "var(--brand)" },
+    "&.cm-focused": { outline: "none" },
+    "&.cm-focused .cm-selectionBackground": {
+      backgroundColor: "var(--brand-soft) !important",
+    },
+    ".cm-matchingBracket, .cm-nonmatchingBracket": {
+      backgroundColor: "var(--bg-soft)",
+      outline: "none",
+      color: "var(--brand)",
+    },
+  });
 
   onMount(() => {
     const initial = untrack(() => value);

@@ -7,7 +7,7 @@
 
   const examples: { name: string; sql: string }[] = [
     {
-      name: "select · join · cte",
+      name: "SELECT · JOIN · CTE",
       sql: `-- recent buyers
 WITH recent AS (
   SELECT id, email, created_at
@@ -24,7 +24,7 @@ ORDER BY orders DESC NULLS LAST
 LIMIT 50;`,
     },
     {
-      name: "create table",
+      name: "CREATE TABLE",
       sql: `CREATE TABLE IF NOT EXISTS orders (
   id         bigserial PRIMARY KEY,
   user_id    bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -37,7 +37,7 @@ LIMIT 50;`,
 CREATE INDEX orders_user_created_idx ON orders (user_id, created_at DESC);`,
     },
     {
-      name: "window function",
+      name: "Window function",
       sql: `SELECT
   user_id,
   amount,
@@ -46,14 +46,14 @@ CREATE INDEX orders_user_created_idx ON orders (user_id, created_at DESC);`,
 FROM payments;`,
     },
     {
-      name: "insert · returning",
+      name: "INSERT · RETURNING",
       sql: `INSERT INTO sessions (user_id, expires_at, token)
 VALUES ($1, now() + INTERVAL '30 days', encode(gen_random_bytes(32), 'hex'))
 ON CONFLICT (token) DO NOTHING
 RETURNING id, expires_at;`,
     },
     {
-      name: "broken sql",
+      name: "Broken SQL",
       sql: `SELECT FROM WHERE`,
     },
   ];
@@ -134,7 +134,6 @@ RETURNING id, expires_at;`,
       ? JSON.stringify(result.body, null, 2)
       : JSON.stringify(result.body);
   });
-
 </script>
 
 <svelte:head>
@@ -143,24 +142,20 @@ RETURNING id, expires_at;`,
 
 <section class="head">
   <div class="shell">
-    <div class="eyebrow">02 · Playground · live AST inspector</div>
-    <h1 class="display">
-      Paste SQL, <em>watch</em> the AST.
-    </h1>
+    <h1>Playground</h1>
     <p class="lede">
-      The actual parser, running in your browser via WebAssembly. Every
-      token, comment and statement node — exactly the way ESLint will see
-      them when this parser is plugged into your config.
+      The actual parser, running in your browser via WebAssembly. Edit the SQL
+      on the left to see the ESTree-shaped AST update on the right.
     </p>
   </div>
 </section>
 
 <section class="examples">
   <div class="shell ex-row">
-    <div class="ex-label mono">examples ▸</div>
+    <span class="ex-label">Examples</span>
     {#each examples as ex (ex.name)}
       <button
-        class="ex-btn mono"
+        class="ex-btn"
         class:active={code === ex.sql}
         onclick={() => pickExample(ex.sql)}
       >
@@ -172,35 +167,31 @@ RETURNING id, expires_at;`,
 
 <section class="lab">
   <div class="lab-grid">
-    <!-- editor pane -->
     <div class="pane">
       <header class="pane-head">
-        <span class="pane-no mono">A</span>
-        <span class="pane-title">Source · PostgreSQL</span>
+        <span class="pane-title">SQL Source</span>
         <span class="pane-tag mono">.sql</span>
       </header>
       <div class="pane-body editor-wrap">
         <Editor value={code} onchange={onChange} />
       </div>
-      <footer class="pane-foot mono">
+      <footer class="pane-foot">
         <span class={working ? "live working" : "live"}>
           <span class="dot"></span>
-          {working ? "parsing…" : "live"}
+          {working ? "parsing…" : "ready"}
         </span>
-        <span class="muted">cmd-z to undo · type to reparse</span>
+        <span class="muted">type to re-parse</span>
       </footer>
     </div>
 
-    <!-- output pane -->
     <div class="pane">
       <header class="pane-head">
-        <span class="pane-no mono">B</span>
         <span class="pane-title">Output</span>
         <div class="view-toggle" role="tablist" aria-label="Output view">
           <button
             role="tab"
             class:active={view === "ast"}
-            onclick={() => (view = "ast")}>AST tree</button
+            onclick={() => (view = "ast")}>AST</button
           >
           <button
             role="tab"
@@ -214,24 +205,20 @@ RETURNING id, expires_at;`,
           >
         </div>
         {#if view === "json"}
-          <label class="pretty mono">
+          <label class="pretty">
             <input type="checkbox" bind:checked={prettify} />
-            pretty
+            <span>Pretty</span>
           </label>
         {/if}
       </header>
 
       <div class="pane-body output">
         {#if !ready}
-          <div class="empty">
-            <div class="empty-spinner mono">loading WebAssembly · libpg-query</div>
-            <div class="ascii-rule" aria-hidden="true">
-              ─────────────────────────────────
-            </div>
-          </div>
-        {:else if result?.error}
+          <div class="empty">Loading parser…</div>
+        {/if}
+        {#if result?.error}
           <div class="errpane">
-            <div class="err-no mono">SYNTAX ERROR</div>
+            <div class="err-label">Syntax error</div>
             <pre class="err-msg">{result.error}</pre>
           </div>
         {/if}
@@ -253,10 +240,10 @@ RETURNING id, expires_at;`,
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>type</th>
-                    <th>value</th>
-                    <th>range</th>
-                    <th>loc</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Range</th>
+                    <th>Loc</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -268,11 +255,11 @@ RETURNING id, expires_at;`,
                       loc: { start: { line: number; column: number }; end: { line: number; column: number } };
                     }}
                     <tr>
-                      <td class="tok-i mono">{i}</td>
+                      <td class="muted">{i}</td>
                       <td><span class="tok-type">{t.type}</span></td>
-                      <td class="tok-val mono">{t.value}</td>
-                      <td class="mono muted">[{t.range[0]}, {t.range[1]}]</td>
-                      <td class="mono muted">
+                      <td class="tok-val">{t.value}</td>
+                      <td class="muted">[{t.range[0]}, {t.range[1]}]</td>
+                      <td class="muted">
                         {t.loc.start.line}:{t.loc.start.column}
                       </td>
                     </tr>
@@ -280,88 +267,76 @@ RETURNING id, expires_at;`,
                 </tbody>
               </table>
             {:else}
-              <div class="empty muted mono">no tokens</div>
+              <div class="empty">No tokens.</div>
             {/if}
           </div>
         {/if}
       </div>
 
-      <footer class="pane-foot mono">
-        <span class="muted">
-          ESTree-compatible · ranges and loc on every node
-        </span>
+      <footer class="pane-foot">
+        <span class="muted">ESTree-compatible · ranges and loc on every node</span>
       </footer>
     </div>
   </div>
 </section>
 
 <style>
-  /* ─────────────── HEADER ─────────────── */
   .head {
-    padding: 2.5rem 0 2rem;
+    padding: 2.5rem 0 1.2rem;
   }
-  .display {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(2.4rem, 6vw, 4.4rem);
-    line-height: 0.98;
-    color: var(--ink-strong);
-    margin: 0.6rem 0 1rem;
-    font-variation-settings: "opsz" 144, "SOFT" 80;
+  .head h1 {
+    font-size: 2.4rem;
   }
-  .display em { color: var(--terracotta); }
   .lede {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-variation-settings: "opsz" 24;
-    font-size: 1.05rem;
-    line-height: 1.55;
-    color: var(--ink-muted);
-    max-width: 42ch;
+    margin-top: 0.6rem;
+    color: var(--fg-muted);
+    max-width: 44rem;
   }
 
-  /* ─────────────── EXAMPLES ─────────────── */
+  /* Examples */
   .examples {
-    padding: 1rem 0 1.4rem;
-    border-top: 1px solid var(--rule);
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--rule);
-    background: rgba(0,0,0,0.18);
   }
   .ex-row {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
   }
   .ex-label {
-    color: var(--ink-faint);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    color: var(--fg-faint);
     text-transform: uppercase;
-    margin-right: 0.8rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-right: 0.7rem;
   }
   .ex-btn {
-    font-size: 0.75rem;
-    color: var(--ink-muted);
-    padding: 0.4rem 0.7rem;
-    border: 1px solid var(--rule-strong);
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--rule);
     border-radius: 999px;
-    letter-spacing: 0.04em;
-    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    background: var(--bg);
+    transition:
+      color 0.12s ease,
+      border-color 0.12s ease,
+      background 0.12s ease;
   }
   .ex-btn:hover {
-    color: var(--ink-strong);
-    border-color: var(--pg-blue);
+    color: var(--fg-strong);
+    border-color: var(--brand);
   }
   .ex-btn.active {
-    color: #1a1306;
-    background: var(--amber);
-    border-color: var(--amber);
+    color: #fff;
+    background: var(--brand);
+    border-color: var(--brand);
   }
 
-  /* ─────────────── LAB ─────────────── */
+  /* Lab */
   .lab {
-    padding: 1.5rem 0 4rem;
+    padding: 1.5rem 0 3rem;
   }
   .lab-grid {
     max-width: var(--max-w);
@@ -369,82 +344,74 @@ RETURNING id, expires_at;`,
     padding: 0 var(--gutter);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--rule-strong);
-    border: 1px solid var(--rule-strong);
-    border-radius: 3px;
-    overflow: hidden;
+    gap: 1rem;
     min-height: 64vh;
   }
   .pane {
     display: grid;
     grid-template-rows: auto 1fr auto;
     background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
     min-height: 0;
   }
   .pane-head {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.55rem 0.9rem;
+    gap: 0.6rem;
+    padding: 0.55rem 0.85rem;
     border-bottom: 1px solid var(--rule);
-    background: var(--bg-elevated);
-  }
-  .pane-no {
-    background: var(--amber);
-    color: #1a1306;
-    font-size: 0.7rem;
-    font-weight: 600;
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 2px;
-    display: inline-grid;
-    place-items: center;
+    background: var(--bg-soft);
   }
   .pane-title {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--ink-strong);
-    font-variation-settings: "opsz" 18;
+    font-weight: 700;
+    color: var(--fg-strong);
+    font-size: 0.92rem;
   }
   .pane-tag {
     font-size: 0.7rem;
-    color: var(--ink-faint);
-    letter-spacing: 0.1em;
+    color: var(--fg-faint);
     margin-left: auto;
+    letter-spacing: 0.06em;
   }
   .view-toggle {
     margin-left: auto;
     display: inline-flex;
-    border: 1px solid var(--rule-strong);
-    border-radius: 2px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
     overflow: hidden;
+    background: var(--bg);
   }
   .view-toggle button {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    padding: 0.32rem 0.7rem;
-    color: var(--ink-muted);
-    border-right: 1px solid var(--rule-strong);
-    letter-spacing: 0.04em;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.65rem;
+    color: var(--fg-muted);
+    font-weight: 600;
+    border-right: 1px solid var(--rule);
   }
-  .view-toggle button:last-child { border-right: none; }
-  .view-toggle button:hover { color: var(--ink-strong); }
+  .view-toggle button:last-child {
+    border-right: none;
+  }
+  .view-toggle button:hover {
+    color: var(--fg-strong);
+  }
   .view-toggle button.active {
-    background: var(--surface-2);
-    color: var(--amber);
+    background: var(--brand-tint);
+    color: var(--brand);
   }
   .pretty {
     margin-left: 0.6rem;
-    font-size: 0.7rem;
-    color: var(--ink-muted);
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--fg-muted);
     cursor: pointer;
   }
-  .pretty input { accent-color: var(--amber); }
+  .pretty input {
+    accent-color: var(--brand);
+  }
 
   .pane-body {
     min-height: 0;
@@ -453,11 +420,11 @@ RETURNING id, expires_at;`,
   }
   .editor-wrap {
     height: 100%;
-    background: var(--bg-deep);
+    background: var(--bg-code);
   }
   .output {
     overflow: auto;
-    padding: 1.1rem 1.2rem;
+    padding: 1rem 1.1rem;
     background: var(--bg);
   }
 
@@ -465,44 +432,39 @@ RETURNING id, expires_at;`,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.45rem 0.9rem;
+    padding: 0.4rem 0.85rem;
     border-top: 1px solid var(--rule);
-    font-size: 0.7rem;
-    color: var(--ink-faint);
-    letter-spacing: 0.05em;
-    background: var(--bg-elevated);
+    font-size: 0.78rem;
+    background: var(--bg-soft);
+    color: var(--fg-muted);
   }
   .live {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    color: var(--phosphor);
+    color: var(--str);
+    font-weight: 600;
   }
   .live .dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--phosphor);
-    box-shadow: 0 0 0 4px rgba(158,237,138,0.18);
-    animation: pulse 1.6s ease-in-out infinite;
+    background: currentColor;
   }
-  .live.working { color: var(--amber); }
-  .live.working .dot {
-    background: var(--amber);
-    box-shadow: 0 0 0 4px rgba(244,185,66,0.18);
+  .live.working {
+    color: var(--brand);
   }
-  @keyframes pulse {
-    50% { opacity: 0.5; }
+  .muted {
+    color: var(--fg-faint);
   }
-  .muted { color: var(--ink-faint); }
 
-  /* ─────────────── OUTPUT VIEWS ─────────────── */
+  /* Output views */
   .json {
     margin: 0;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     line-height: 1.55;
-    color: var(--ink);
+    color: var(--fg);
     white-space: pre;
   }
   .ast {
@@ -510,92 +472,81 @@ RETURNING id, expires_at;`,
     line-height: 1.65;
   }
   .errpane {
-    background: rgba(229,116,82,0.06);
-    border: 1px solid rgba(229,116,82,0.3);
-    padding: 0.9rem 1rem;
-    border-radius: 3px;
-    margin-bottom: 1.2rem;
+    background: var(--err-bg);
+    border: 1px solid var(--err-border);
+    border-left: 3px solid var(--num);
+    padding: 0.7rem 0.9rem;
+    border-radius: 5px;
+    margin-bottom: 0.9rem;
   }
-  .err-no {
-    color: var(--terracotta);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    margin-bottom: 0.3rem;
+  .err-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--num);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
   }
   .err-msg {
     margin: 0;
-    color: var(--ink);
+    color: var(--fg);
     font-family: var(--font-mono);
     font-size: 0.82rem;
     white-space: pre-wrap;
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   .empty {
-    color: var(--ink-faint);
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
-    padding: 2rem 0;
+    color: var(--fg-faint);
+    font-size: 0.85rem;
+    padding: 1.5rem 0;
     text-align: center;
-  }
-  .empty-spinner {
-    color: var(--amber);
-    margin-bottom: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    animation: dim 1.6s ease-in-out infinite alternate;
-  }
-  @keyframes dim {
-    from { opacity: 0.5; }
-    to { opacity: 1; }
   }
 
   .tok-table {
     border-collapse: collapse;
     width: 100%;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
   }
   .tok-table th,
   .tok-table td {
     text-align: left;
-    padding: 0.32rem 0.6rem;
+    padding: 0.3rem 0.55rem;
     border-bottom: 1px solid var(--rule);
   }
   .tok-table th {
-    color: var(--ink-faint);
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.18em;
+    color: var(--fg-faint);
+    font-size: 0.7rem;
     text-transform: uppercase;
-    font-weight: 500;
-    background: var(--bg-elevated);
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    background: var(--bg-soft);
     position: sticky;
     top: -1.1rem;
   }
-  .tok-i { color: var(--ink-faint); font-size: 0.72rem; }
   .tok-type {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     padding: 0.05rem 0.4rem;
-    border-radius: 2px;
-    background: rgba(107,155,214,0.1);
-    color: var(--pg-blue);
-    border: 1px solid rgba(107,155,214,0.2);
-    letter-spacing: 0.04em;
+    border-radius: 3px;
+    background: var(--brand-tint);
+    color: var(--brand);
+    border: 1px solid var(--brand-soft);
   }
   .tok-val {
-    color: var(--phosphor);
-    font-size: 0.78rem;
+    color: var(--str);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     white-space: pre;
   }
 
-  /* ─────────────── RESPONSIVE ─────────────── */
   @media (max-width: 980px) {
     .lab-grid {
       grid-template-columns: 1fr;
       min-height: auto;
     }
-    .pane { min-height: 44vh; }
+    .pane {
+      min-height: 44vh;
+    }
   }
 </style>

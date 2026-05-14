@@ -88,7 +88,7 @@
     font-family: var(--font-mono);
     font-size: 0.83rem;
     line-height: 1.6;
-    color: var(--ink);
+    color: var(--fg);
   }
   .toggle {
     display: inline-flex;
@@ -99,39 +99,40 @@
     text-align: left;
     border-radius: 2px;
   }
-  .toggle:hover .key { color: var(--amber); }
+  .toggle:hover .key { color: var(--brand); }
   .chev {
-    color: var(--ink-faint);
+    color: var(--fg-faint);
     width: 0.9rem;
     display: inline-block;
     font-size: 0.7rem;
   }
-  .branch.open > .toggle > .chev { color: var(--pg-blue); }
+  .branch.open > .toggle > .chev { color: var(--brand); }
   .key {
-    color: var(--pg-blue);
-    font-weight: 500;
+    color: var(--typ);
+    font-weight: 600;
   }
   .colon {
-    color: var(--ink-faint);
+    color: var(--fg-faint);
     margin-right: 0.2rem;
   }
   .type-pill {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     padding: 0.05rem 0.45rem;
-    border-radius: 2px;
-    background: rgba(244, 185, 66, 0.08);
-    color: var(--amber);
-    border: 1px solid rgba(244, 185, 66, 0.2);
-    letter-spacing: 0.04em;
+    border-radius: 3px;
+    background: var(--brand-tint);
+    color: var(--brand);
+    border: 1px solid var(--brand-soft);
+    letter-spacing: 0.02em;
+    font-weight: 600;
   }
   .type-pill[data-kind="array"] {
-    background: rgba(200, 155, 217, 0.08);
-    color: var(--plum);
-    border-color: rgba(200, 155, 217, 0.22);
+    background: var(--bg-soft);
+    color: var(--fg-muted);
+    border-color: var(--rule);
   }
   .preview {
-    color: var(--ink-faint);
+    color: var(--fg-faint);
     font-size: 0.75rem;
     margin-left: 0.2rem;
   }
@@ -144,20 +145,20 @@
     position: relative;
   }
   .val[data-kind="string"] {
-    color: var(--phosphor);
+    color: var(--str);
   }
   .val[data-kind="number"] {
-    color: var(--terracotta);
+    color: var(--num);
   }
   .val[data-kind="boolean"] {
-    color: var(--plum);
+    color: var(--brand);
   }
   .val[data-kind="null"] {
-    color: var(--ink-faint);
+    color: var(--fg-faint);
     font-style: italic;
   }
   .quote {
-    color: var(--ink-faint);
+    color: var(--fg-faint);
     opacity: 0.6;
   }
   .leaf {
