@@ -1,5 +1,34 @@
 # postgresql-eslint-parser
 
+## 0.3.0
+
+### Minor Changes
+
+- [#178](https://github.com/baseballyama/postgresql-eslint-parser/pull/178) [`d1ec5de`](https://github.com/baseballyama/postgresql-eslint-parser/commit/d1ec5def2268e275fc351f6153894bb22e16bfd9) Thanks [@baseballyama](https://github.com/baseballyama)! - Expose `CREATE FUNCTION` / `CREATE PROCEDURE` bodies written in another
+  language as an `EmbeddedCode` node on the enclosing `CreateFunctionStmt`. The
+  node carries the source text, the absolute range/loc inside the original SQL,
+  the lower-cased `LANGUAGE` clause name, and whether the body was dollar-
+  quoted or single-quoted.
+
+  The parser deliberately does not parse the inner language itself — `language`
+  is exposed as a free-form `string` so any PL (plv8, plpgsql, plpython3u,
+  plperl, plrust, …) flows through without a parser change. Bodies written as
+  the C-style two-argument form (`AS 'libname', 'symbol'`) are intentionally
+  skipped because they are not source code. `EmbeddedCode` is registered in the
+  visitor keys, and `buildVisitorKeys` now unions keys across every node of the
+  same type so optional fields (like `embeddedCode`) are reported even when the
+  first encountered statement omits them.
+
+- [#179](https://github.com/baseballyama/postgresql-eslint-parser/pull/179) [`eb64b4e`](https://github.com/baseballyama/postgresql-eslint-parser/commit/eb64b4ee5e5e3d7da9dac0d6fd44b054a909d299) Thanks [@baseballyama](https://github.com/baseballyama)! - Add `extractEmbeddedCode(program)` — a low-level helper that returns every
+  `EmbeddedCode` node in source order. Intended as the building block for
+  tooling that maps PL function bodies onto something else (an ESLint
+  processor's virtual files, a CI audit, a documentation generator, …) without
+  re-walking the AST manually.
+
+- [#180](https://github.com/baseballyama/postgresql-eslint-parser/pull/180) [`777a910`](https://github.com/baseballyama/postgresql-eslint-parser/commit/777a910cef97744f4e5414e6c02b81de3d84bf9e) Thanks [@baseballyama](https://github.com/baseballyama)! - Add `createPlProcessor` (exported from the new `postgresql-eslint-parser/processor` subpath) — a generic ESLint processor that emits one virtual file per PL function body so ESLint can lint each body with whatever parser and rules the user has configured for that language. The processor itself is language-agnostic: it takes a `{ languages: Record<string, string> }` map from `LANGUAGE` name to virtual-file extension. Plug in `.js` for plv8, `.py` for plpython3u, `.plpgsql` for plpgsql, etc.
+
+  `preprocess` returns blocks named `0.<ext>`, `1.<ext>`, … so user configs can target them with patterns like `**/*.sql/*.js`. `postprocess` maps message line/column back to the SQL coordinate system. Fix ranges are translated only for dollar-quoted bodies; single-quoted bodies (with `''` escapes) drop fixes to avoid reporting incorrect ranges. `unknown: "error"` flips the default skip behaviour so unhandled languages fail loudly.
+
 ## 0.2.0
 
 ### Minor Changes
