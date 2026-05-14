@@ -129,6 +129,7 @@ export default [
 - **Tokens & comments** — generated for syntax highlighting, rule authoring, and ESLint directive support.
 - **Graceful syntax error handling** — invalid SQL is returned as a `SQLParseError` node inside `Program.body` instead of throwing, so other tooling can still inspect the source.
 - **Typed AST** — full TypeScript declarations are shipped alongside the JS bundle.
+- **Embedded PL bodies** — `CREATE FUNCTION` / `CREATE PROCEDURE` bodies are exposed as `EmbeddedCode` nodes, and a generic ESLint processor (`postgresql-eslint-parser/processor`) lints each body with whatever parser you configure (plv8, plpgsql, plpython3u, …).
 
 ## API
 
