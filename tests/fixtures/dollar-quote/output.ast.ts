@@ -154,6 +154,23 @@ export default {
           column: 11,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source: "\nBEGIN\n  SELECT 1;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [46, 70],
+        loc: {
+          start: {
+            line: 1,
+            column: 46,
+          },
+          end: {
+            line: 5,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -293,6 +310,23 @@ export default {
         end: {
           line: 11,
           column: 15,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source: "\nBEGIN\n  SELECT 'hello $$ world';\nEND;\n",
+        quoteStyle: "dollar",
+        range: [144, 183],
+        loc: {
+          start: {
+            line: 7,
+            column: 52,
+          },
+          end: {
+            line: 11,
+            column: 0,
+          },
         },
       },
     },

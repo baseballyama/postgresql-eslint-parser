@@ -217,6 +217,23 @@ export default {
           column: 33,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plv8",
+        source: '\n    return "Hello from PLV8!";\n',
+        quoteStyle: "dollar",
+        range: [91, 123],
+        loc: {
+          start: {
+            line: 2,
+            column: 57,
+          },
+          end: {
+            line: 4,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -435,6 +452,24 @@ export default {
         end: {
           line: 12,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plv8",
+        source:
+          "\n    var obj = JSON.parse(input_json);\n    obj.processed = true;\n    obj.timestamp = new Date().toISOString();\n    return JSON.stringify(obj);\n",
+        quoteStyle: "dollar",
+        range: [237, 380],
+        loc: {
+          start: {
+            line: 7,
+            column: 18,
+          },
+          end: {
+            line: 12,
+            column: 0,
+          },
         },
       },
     },
@@ -902,6 +937,24 @@ export default {
           column: 33,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plv8",
+        source:
+          "\n    function toRadians(degrees) {\n        return degrees * (Math.PI / 180);\n    }\n    \n    var R = 6371; // Earth's radius in kilometers\n    var dLat = toRadians(lat2 - lat1);\n    var dLon = toRadians(lon2 - lon1);\n    \n    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +\n            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *\n            Math.sin(dLon/2) * Math.sin(dLon/2);\n    \n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));\n    var distance = R * c;\n    \n    return distance;\n",
+        quoteStyle: "dollar",
+        range: [512, 1015],
+        loc: {
+          start: {
+            line: 15,
+            column: 19,
+          },
+          end: {
+            line: 32,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -1059,6 +1112,24 @@ export default {
           column: 11,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plv8",
+        source:
+          "\n    var result = plv8.execute('SELECT status, COUNT(*) as count FROM users GROUP BY status');\n    var stats = {};\n    \n    for (var i = 0; i < result.length; i++) {\n        stats[result[i].status] = result[i].count;\n    }\n    \n    return JSON.stringify({\n        total_users: result.reduce(function(sum, row) { return sum + row.count; }, 0),\n        by_status: stats,\n        generated_at: new Date().toISOString()\n    });\n",
+        quoteStyle: "dollar",
+        range: [1142, 1566],
+        loc: {
+          start: {
+            line: 36,
+            column: 18,
+          },
+          end: {
+            line: 49,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -1199,6 +1270,24 @@ export default {
         end: {
           line: 68,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plv8",
+        source:
+          "\n    var audit_data = {\n        table_name: TG_TABLE_NAME,\n        operation: TG_OP,\n        timestamp: new Date().toISOString(),\n        old_data: OLD,\n        new_data: NEW\n    };\n    \n    plv8.execute(\n        'INSERT INTO audit_log (data) VALUES ($1)',\n        [JSON.stringify(audit_data)]\n    );\n    \n    return null;\n",
+        quoteStyle: "dollar",
+        range: [1674, 1997],
+        loc: {
+          start: {
+            line: 53,
+            column: 21,
+          },
+          end: {
+            line: 68,
+            column: 0,
+          },
         },
       },
     },

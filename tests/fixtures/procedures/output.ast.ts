@@ -248,6 +248,24 @@ export default {
           column: 11,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nDECLARE\n    user_count INTEGER;\nBEGIN\n    IF status_filter IS NULL THEN\n        SELECT COUNT(*) INTO user_count FROM users;\n    ELSE\n        SELECT COUNT(*) INTO user_count FROM users WHERE status = status_filter;\n    END IF;\n    \n    RETURN user_count;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [139, 399],
+        loc: {
+          start: {
+            line: 3,
+            column: 21,
+          },
+          end: {
+            line: 15,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -485,6 +503,24 @@ export default {
           column: 19,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    UPDATE users \n    SET status = new_status, \n        updated_at = CURRENT_TIMESTAMP \n    WHERE id = user_id;\n    \n    IF NOT FOUND THEN\n        RAISE EXCEPTION 'User with id % not found', user_id;\n    END IF;\n    \n    COMMIT;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [537, 778],
+        loc: {
+          start: {
+            line: 21,
+            column: 22,
+          },
+          end: {
+            line: 34,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateFunctionStmt",
@@ -703,6 +739,24 @@ export default {
         end: {
           line: 46,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    IF n <= 1 THEN\n        RETURN 1;\n    ELSE\n        RETURN n * factorial(n - 1);\n    END IF;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [874, 981],
+        loc: {
+          start: {
+            line: 38,
+            column: 21,
+          },
+          end: {
+            line: 46,
+            column: 0,
+          },
         },
       },
     },
@@ -1107,6 +1161,24 @@ export default {
         end: {
           line: 57,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    RETURN QUERY\n    SELECT u.full_name, u.email, u.status\n    FROM users u\n    WHERE u.id = user_id;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [1164, 1278],
+        loc: {
+          start: {
+            line: 50,
+            column: 64,
+          },
+          end: {
+            line: 57,
+            column: 0,
+          },
         },
       },
     },

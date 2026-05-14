@@ -7,6 +7,7 @@ const BASE_VISITOR_KEYS: Record<string, string[]> = {
   SQLStatement: ["statement"],
   SQLParseError: [],
   SQLProcedure: [],
+  EmbeddedCode: [],
 };
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
@@ -21,27 +22,32 @@ export const buildVisitorKeys = (ast: Program): Record<string, string[]> => {
     visitedNodes.add(node);
 
     const type = typeof node["type"] === "string" ? node["type"] : "Unknown";
-    const isNewType = !(type in visitorKeys);
-    const childKeys: string[] = isNewType ? [] : visitorKeys[type]!;
+    // Union keys across every node of the same type so that optional fields
+    // (e.g. `embeddedCode` on CreateFunctionStmt) are still picked up when
+    // the first instance happens to omit them.
+    const childKeys: string[] = visitorKeys[type] ?? [];
+    if (!(type in visitorKeys)) visitorKeys[type] = childKeys;
+
+    const addKey = (key: string) => {
+      if (!childKeys.includes(key)) childKeys.push(key);
+    };
 
     for (const [key, value] of Object.entries(node)) {
       if (SKIP_KEYS.has(key)) continue;
 
       if (Array.isArray(value)) {
         const containsObject = value.some(isObject);
-        if (isNewType && (containsObject || value.length > 0)) {
-          childKeys.push(key);
+        if (containsObject || value.length > 0) {
+          addKey(key);
         }
         if (containsObject) {
           for (const item of value) traverseNode(item);
         }
       } else if (isObject(value)) {
-        if (isNewType) childKeys.push(key);
+        addKey(key);
         traverseNode(value);
       }
     }
-
-    if (isNewType) visitorKeys[type] = childKeys;
   };
 
   traverseNode(ast);

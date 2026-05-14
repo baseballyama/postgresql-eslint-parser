@@ -1,16 +1,23 @@
 {
+  "Program": ["body", "tokens", "comments"],
+  "CreateFunctionStmt": [
+    "funcname",
+    "returnType",
+    "options",
+    "embeddedCode",
+    "parameters"
+  ],
   "String": [],
-  "names": ["0"],
-  "List": ["items"],
+  "names": ["0", "1"],
   "DefElem": ["arg"],
+  "List": ["items"],
   "Boolean": [],
-  "CreateFunctionStmt": ["funcname", "returnType", "options"],
+  "EmbeddedCode": [],
   "FunctionParameter": ["argType"],
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
   "Line": [],
-  "Program": ["body", "tokens", "comments"],
   "SQLStatement": ["statement"],
   "SQLParseError": [],
   "SQLProcedure": []

@@ -1,4 +1,5 @@
 import type { Program, SQLParseError } from "./ast.ts";
+import { attachEmbeddedCode } from "./embeddedCode.ts";
 import { manipulate } from "./manipulate.ts";
 import { parseSync } from "./pg-query-sync.ts";
 import { tokenizeSQL } from "./tokenize.ts";
@@ -40,6 +41,11 @@ export const parseForESLint = (code: string): ParseResult => {
   for (const node of body) {
     node.parent = program;
   }
+
+  // Attach EmbeddedCode to CreateFunctionStmt / CreateProcedureStmt nodes
+  // (PL function bodies). Done after parent links so EmbeddedCode.parent can
+  // point at its enclosing statement.
+  attachEmbeddedCode(program, tokens, lineMap);
 
   return {
     ast: program,
