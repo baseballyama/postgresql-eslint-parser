@@ -17,11 +17,6 @@ const isArray = (value: unknown): value is unknown[] => {
   return Array.isArray(value);
 };
 
-const createDefaultLocation = (): Location => ({
-  start: { position: 0, line: 1, column: 0 },
-  end: { position: 0, line: 1, column: 0 },
-});
-
 const createLocationFromPosition = (
   position: number,
   lineMap: LineMap,
@@ -234,10 +229,14 @@ const buildAddLocation = (
       }
     }
 
-    return {
-      minLocation: minLocation ?? createDefaultLocation(),
-      maxLocation: maxLocation ?? createDefaultLocation(),
-    };
+    // Return whatever locations were actually observed in this subtree
+    // (or null when nothing was found). The previous default of
+    // {position: 0} was bubbling into ancestors via `updateCurrentMinMax`
+    // and dragging their `range[0]` down to 0 whenever any descendant
+    // lacked its own `location` — most visibly for the `selectStmt`
+    // wrapped inside an `InsertStmt`. `updateCurrentMinMax` already
+    // treats null as a no-op, so this is the right contract.
+    return { minLocation, maxLocation };
   };
 
   return addLocation;

@@ -386,11 +386,11 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 184],
+      range: [36, 184],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 2,
+          column: 13,
         },
         end: {
           line: 6,
@@ -482,11 +482,11 @@ export default {
             },
           },
           behavior: "DROP_RESTRICT",
-          range: [0, 238],
+          range: [218, 238],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 10,
+              column: 11,
             },
             end: {
               line: 10,
@@ -612,11 +612,11 @@ export default {
             },
           },
           behavior: "DROP_RESTRICT",
-          range: [0, 286],
+          range: [251, 286],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 11,
+              column: 11,
             },
             end: {
               line: 11,
