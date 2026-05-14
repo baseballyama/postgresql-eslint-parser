@@ -1046,11 +1046,11 @@ export default {
                     },
                   },
                 },
-                range: [0, 270],
+                range: [228, 270],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 9,
+                    column: 9,
                   },
                   end: {
                     line: 10,
@@ -1250,11 +1250,11 @@ export default {
             ],
             limitOption: "LIMIT_OPTION_DEFAULT",
             op: "SETOP_NONE",
-            range: [0, 329],
+            range: [65, 329],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 8,
               },
               end: {
                 line: 12,
@@ -2121,11 +2121,11 @@ export default {
               limitOption: "LIMIT_OPTION_DEFAULT",
               op: "SETOP_NONE",
               type: "targetList",
-              range: [0, 966],
+              range: [878, 966],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 34,
+                  column: 11,
                 },
                 end: {
                   line: 36,
@@ -2779,11 +2779,11 @@ export default {
                       },
                     },
                   },
-                  range: [0, 1195],
+                  range: [1126, 1195],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 43,
+                      column: 9,
                     },
                     end: {
                       line: 44,
@@ -2795,11 +2795,11 @@ export default {
               limitOption: "LIMIT_OPTION_DEFAULT",
               op: "SETOP_NONE",
               type: "targetList",
-              range: [0, 1195],
+              range: [1029, 1195],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 41,
+                  column: 11,
                 },
                 end: {
                   line: 44,
@@ -2807,11 +2807,11 @@ export default {
                 },
               },
             },
-            range: [0, 1195],
+            range: [878, 1195],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 34,
+                column: 11,
               },
               end: {
                 line: 44,
@@ -4772,11 +4772,11 @@ export default {
                   },
                   limitOption: "LIMIT_OPTION_DEFAULT",
                   op: "SETOP_NONE",
-                  range: [0, 2202],
+                  range: [2122, 2202],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 71,
+                      column: 11,
                     },
                     end: {
                       line: 73,
@@ -5076,11 +5076,11 @@ export default {
                       },
                     },
                   },
-                  range: [0, 2311],
+                  range: [2256, 2311],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 77,
+                      column: 9,
                     },
                     end: {
                       line: 78,
@@ -5210,11 +5210,11 @@ export default {
                       },
                     },
                   ],
-                  range: [0, 2350],
+                  range: [2343, 2350],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 79,
+                      column: 28,
                     },
                     end: {
                       line: 79,
@@ -5236,11 +5236,11 @@ export default {
               },
               limitOption: "LIMIT_OPTION_DEFAULT",
               op: "SETOP_NONE",
-              range: [0, 2350],
+              range: [2239, 2350],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 76,
+                  column: 20,
                 },
                 end: {
                   line: 79,

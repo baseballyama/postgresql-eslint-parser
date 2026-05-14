@@ -206,11 +206,11 @@ export default {
           },
         },
       ],
-      range: [0, 156],
+      range: [81, 156],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 2,
+          column: 47,
         },
         end: {
           line: 4,
@@ -305,11 +305,11 @@ export default {
             },
           },
           mode: "FUNC_PARAM_DEFAULT",
-          range: [0, 217],
+          range: [213, 217],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 6,
+              column: 54,
             },
             end: {
               line: 6,
@@ -543,11 +543,11 @@ export default {
             },
           },
           mode: "FUNC_PARAM_DEFAULT",
-          range: [0, 455],
+          range: [450, 455],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 14,
+              column: 51,
             },
             end: {
               line: 14,
@@ -604,11 +604,11 @@ export default {
             },
           },
           mode: "FUNC_PARAM_DEFAULT",
-          range: [0, 467],
+          range: [462, 467],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 14,
+              column: 63,
             },
             end: {
               line: 14,
@@ -665,11 +665,11 @@ export default {
             },
           },
           mode: "FUNC_PARAM_DEFAULT",
-          range: [0, 479],
+          range: [474, 479],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 14,
+              column: 75,
             },
             end: {
               line: 14,
@@ -726,11 +726,11 @@ export default {
             },
           },
           mode: "FUNC_PARAM_DEFAULT",
-          range: [0, 491],
+          range: [486, 491],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 14,
+              column: 87,
             },
             end: {
               line: 14,

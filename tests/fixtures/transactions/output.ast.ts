@@ -152,11 +152,11 @@ export default {
                 },
               },
             ],
-            range: [0, 130],
+            range: [90, 130],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 5,
+                column: 8,
               },
               end: {
                 line: 5,
@@ -167,11 +167,11 @@ export default {
         ],
         limitOption: "LIMIT_OPTION_DEFAULT",
         op: "SETOP_NONE",
-        range: [0, 130],
+        range: [90, 130],
         loc: {
           start: {
-            line: 1,
-            column: 0,
+            line: 5,
+            column: 8,
           },
           end: {
             line: 5,
@@ -500,11 +500,11 @@ export default {
         },
         limitOption: "LIMIT_OPTION_DEFAULT",
         op: "SETOP_NONE",
-        range: [0, 282],
+        range: [221, 282],
         loc: {
           start: {
-            line: 1,
-            column: 0,
+            line: 10,
+            column: 7,
           },
           end: {
             line: 12,
@@ -946,11 +946,11 @@ export default {
                 },
               },
             },
-            range: [0, 462],
+            range: [424, 462],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 19,
+                column: 5,
               },
               end: {
                 line: 20,
@@ -1056,11 +1056,11 @@ export default {
         },
         limitOption: "LIMIT_OPTION_DEFAULT",
         op: "SETOP_NONE",
-        range: [0, 500],
+        range: [401, 500],
         loc: {
           start: {
-            line: 1,
-            column: 0,
+            line: 18,
+            column: 7,
           },
           end: {
             line: 21,
@@ -2350,11 +2350,11 @@ export default {
               },
             },
           },
-          range: [0, 2180],
+          range: [2138, 2180],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 9,
             },
             end: {
               line: 81,

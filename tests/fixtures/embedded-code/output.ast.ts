@@ -143,11 +143,11 @@ export default {
           },
         },
       ],
-      range: [0, 142],
+      range: [84, 142],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 2,
+          column: 34,
         },
         end: {
           line: 4,
