@@ -1,0 +1,22 @@
+{
+  "String": [],
+  "ColumnRef": ["fields"],
+  "ResTarget": ["val"],
+  "RangeVar": [],
+  "SelectStmt": ["targetList", "fromClause"],
+  "Unknown": [],
+  "A_Const": ["sval"],
+  "List": ["items"],
+  "InsertStmt": ["relation", "cols", "selectStmt"],
+  "A_Expr": ["name", "lexpr", "rexpr"],
+  "UpdateStmt": ["relation", "targetList", "whereClause"],
+  "Keyword": [],
+  "Identifier": [],
+  "Punctuator": [],
+  "Operator": [],
+  "Numeric": [],
+  "Program": ["body", "tokens", "comments"],
+  "SQLStatement": ["statement"],
+  "SQLParseError": [],
+  "SQLProcedure": []
+}

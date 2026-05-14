@@ -34,15 +34,15 @@ export default {
       type: "CreateSchemaStmt",
       schemaname: "reporting",
       if_not_exists: true,
-      range: [0, 0],
+      range: [78, 116],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 3,
+          column: 38,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 4,
+          column: 37,
         },
       },
     },
@@ -86,11 +86,11 @@ export default {
           },
         },
       ],
-      range: [0, 174],
+      range: [117, 174],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 4,
+          column: 38,
         },
         end: {
           line: 7,
@@ -1032,15 +1032,15 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 747],
+      range: [175, 750],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 7,
+          column: 37,
         },
         end: {
-          line: 21,
-          column: 65,
+          line: 22,
+          column: 1,
         },
       },
     },
@@ -1135,15 +1135,15 @@ export default {
         },
       },
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 895],
+      range: [751, 896],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 22,
+          column: 2,
         },
         end: {
           line: 26,
-          column: 47,
+          column: 48,
         },
       },
     },
@@ -1238,15 +1238,15 @@ export default {
         },
       },
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 1025],
+      range: [897, 1026],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 26,
+          column: 49,
         },
         end: {
           line: 29,
-          column: 47,
+          column: 48,
         },
       },
     },
@@ -1254,15 +1254,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "postgres_fdw",
       if_not_exists: true,
-      range: [0, 0],
+      range: [1027, 1102],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 29,
+          column: 49,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 32,
+          column: 43,
         },
       },
     },
@@ -1365,15 +1365,15 @@ export default {
           },
         },
       ],
-      range: [0, 1225],
+      range: [1103, 1240],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 32,
+          column: 44,
         },
         end: {
           line: 36,
-          column: 58,
+          column: 73,
         },
       },
     },
@@ -1458,15 +1458,15 @@ export default {
           },
         },
       ],
-      range: [0, 1338],
+      range: [1241, 1357],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 36,
+          column: 74,
         },
         end: {
           line: 40,
-          column: 37,
+          column: 56,
         },
       },
     },
@@ -1726,15 +1726,15 @@ export default {
           },
         },
       ],
-      range: [0, 1520],
+      range: [1358, 1538],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 40,
+          column: 57,
         },
         end: {
           line: 47,
-          column: 41,
+          column: 59,
         },
       },
     },
@@ -2072,15 +2072,15 @@ export default {
         },
       },
       withCheckOption: "NO_CHECK_OPTION",
-      range: [0, 1790],
+      range: [1539, 1791],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 47,
+          column: 60,
         },
         end: {
           line: 56,
-          column: 24,
+          column: 25,
         },
       },
     },
@@ -2530,15 +2530,15 @@ export default {
         },
       },
       objtype: "OBJECT_MATVIEW",
-      range: [0, 2073],
+      range: [1792, 2083],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 56,
+          column: 26,
         },
         end: {
-          line: 65,
-          column: 52,
+          line: 66,
+          column: 9,
         },
       },
     },
@@ -2582,15 +2582,15 @@ export default {
           },
         },
       ],
-      range: [0, 2167],
+      range: [2084, 2193],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 66,
+          column: 10,
         },
         end: {
           line: 69,
-          column: 49,
+          column: 75,
         },
       },
     },
@@ -2634,15 +2634,15 @@ export default {
           },
         },
       ],
-      range: [0, 2243],
+      range: [2194, 2274],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 69,
+          column: 76,
         },
         end: {
           line: 70,
-          column: 48,
+          column: 79,
         },
       },
     },
@@ -2684,15 +2684,15 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [0, 2320],
+      range: [2275, 2358],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 70,
+          column: 80,
         },
         end: {
           line: 73,
-          column: 21,
+          column: 59,
         },
       },
     },
@@ -2909,15 +2909,15 @@ export default {
           },
         },
       },
-      range: [0, 2509],
+      range: [2359, 2510],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 73,
+          column: 60,
         },
         end: {
           line: 77,
-          column: 64,
+          column: 65,
         },
       },
     },
@@ -2979,11 +2979,11 @@ export default {
         },
       ],
       behavior: "DROP_RESTRICT",
-      range: [0, 2583],
+      range: [2511, 2583],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 77,
+          column: 66,
         },
         end: {
           line: 80,
@@ -3079,11 +3079,11 @@ export default {
         },
       ],
       behavior: "DROP_RESTRICT",
-      range: [0, 2665],
+      range: [2584, 2665],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 80,
+          column: 50,
         },
         end: {
           line: 81,
@@ -3149,11 +3149,11 @@ export default {
         },
       ],
       behavior: "DROP_RESTRICT",
-      range: [0, 2733],
+      range: [2666, 2733],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 81,
+          column: 81,
         },
         end: {
           line: 82,
@@ -3357,15 +3357,15 @@ export default {
           },
         },
       ],
-      range: [0, 2864],
+      range: [2734, 2865],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 82,
+          column: 67,
         },
         end: {
           line: 86,
-          column: 66,
+          column: 67,
         },
       },
     },
@@ -3544,15 +3544,15 @@ export default {
           },
         },
       ],
-      range: [0, 2936],
+      range: [2866, 2937],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 86,
+          column: 68,
         },
         end: {
           line: 89,
-          column: 16,
+          column: 17,
         },
       },
     },
@@ -3806,15 +3806,15 @@ export default {
           },
         },
       ],
-      range: [0, 3082],
+      range: [2938, 3084],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 89,
+          column: 18,
         },
         end: {
-          line: 97,
-          column: 16,
+          line: 98,
+          column: 1,
         },
       },
     },
@@ -3965,15 +3965,15 @@ export default {
           },
         },
       ],
-      range: [0, 3210],
+      range: [3085, 3212],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 98,
+          column: 2,
         },
         end: {
-          line: 103,
-          column: 40,
+          line: 104,
+          column: 1,
         },
       },
     },

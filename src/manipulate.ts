@@ -280,6 +280,23 @@ export const manipulate = (
     addTypes(stmtNode);
     addParents(stmtNode);
     addLocation(stmtNode);
+    // The descendant aggregation in `addLocation` cannot recover the
+    // statement's true bounds when some descendant lacks `location` —
+    // the [0, 0] fallback for unanchored nodes drags `range[0]` to 0
+    // for every statement after the first. libpg-query already gives
+    // us the absolute byte offset and byte length of each top-level
+    // statement; trust those over the aggregate.
+    if (typeof stmt.stmt_location === "number" && stmt.stmt_len > 0) {
+      const startChar = byteToChar(stmt.stmt_location);
+      const endChar = byteToChar(stmt.stmt_location + stmt.stmt_len);
+      const startPos = lineMap.getPosition(startChar);
+      const endPos = lineMap.getPosition(endChar);
+      stmtNode["range"] = [startChar, endChar];
+      stmtNode["loc"] = {
+        start: { line: startPos.line, column: startPos.column },
+        end: { line: endPos.line, column: endPos.column },
+      };
+    }
     result.push(stmtNode);
   }
 

@@ -492,15 +492,15 @@ export default {
           },
         },
       ],
-      range: [0, 534],
+      range: [419, 780],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 15,
+          column: 20,
         },
         end: {
-          line: 21,
-          column: 19,
+          line: 34,
+          column: 2,
         },
       },
       embeddedCode: {
@@ -730,15 +730,15 @@ export default {
           },
         },
       ],
-      range: [0, 992],
+      range: [781, 1000],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 34,
+          column: 3,
         },
         end: {
           line: 46,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {
@@ -1152,15 +1152,15 @@ export default {
           },
         },
       ],
-      range: [0, 1289],
+      range: [1001, 1297],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 46,
+          column: 20,
         },
         end: {
           line: 57,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {

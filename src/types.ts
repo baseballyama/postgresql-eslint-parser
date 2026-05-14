@@ -9,6 +9,12 @@ export interface RawPostgreSQLAst {
   version: number;
   stmts: {
     stmt: RawPostgreSQLNode;
+    // libpg-query emits the absolute byte offset of each top-level
+    // statement and its length. Both are used to give the resulting
+    // top-level AST node a correct `range` and `loc`, since the
+    // descendant min/max aggregation cannot recover them when some
+    // child node lacks its own `location`.
+    stmt_location?: number;
     stmt_len: number;
   }[];
 }

@@ -34,15 +34,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "hstore",
       if_not_exists: true,
-      range: [0, 0],
+      range: [94, 134],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 3,
+          column: 43,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 4,
+          column: 39,
         },
       },
     },
@@ -50,15 +50,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "ltree",
       if_not_exists: true,
-      range: [0, 0],
+      range: [135, 174],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 4,
+          column: 40,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 5,
+          column: 38,
         },
       },
     },
@@ -66,15 +66,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "pg_trgm",
       if_not_exists: true,
-      range: [0, 0],
+      range: [175, 216],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 5,
+          column: 39,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 6,
+          column: 40,
         },
       },
     },
@@ -82,15 +82,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "postgis",
       if_not_exists: true,
-      range: [0, 0],
+      range: [217, 258],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 6,
+          column: 41,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 7,
+          column: 40,
         },
       },
     },
@@ -671,15 +671,15 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 505],
+      range: [259, 509],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 7,
+          column: 41,
         },
         end: {
-          line: 16,
-          column: 36,
+          line: 17,
+          column: 1,
         },
       },
     },
@@ -1052,15 +1052,15 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [0, 849],
+      range: [510, 851],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 17,
+          column: 2,
         },
         end: {
           line: 22,
-          column: 125,
+          column: 127,
         },
       },
     },
@@ -1550,11 +1550,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 991],
+      range: [852, 991],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 22,
+          column: 128,
         },
         end: {
           line: 26,
@@ -1806,15 +1806,15 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 1128],
+      range: [992, 1135],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 26,
+          column: 56,
         },
         end: {
-          line: 32,
-          column: 25,
+          line: 33,
+          column: 1,
         },
       },
     },
@@ -2137,15 +2137,15 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [0, 1388],
+      range: [1136, 1389],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 33,
+          column: 2,
         },
         end: {
           line: 40,
-          column: 41,
+          column: 42,
         },
       },
     },
@@ -2298,11 +2298,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 1462],
+      range: [1390, 1462],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 40,
+          column: 43,
         },
         end: {
           line: 43,
@@ -2459,11 +2459,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 1526],
+      range: [1463, 1526],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 43,
+          column: 54,
         },
         end: {
           line: 44,
@@ -2527,15 +2527,15 @@ export default {
           },
         },
       ],
-      range: [0, 1608],
+      range: [1527, 1638],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 44,
+          column: 63,
         },
         end: {
           line: 47,
-          column: 46,
+          column: 76,
         },
       },
     },
@@ -2835,15 +2835,15 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [-1, 1736],
+      range: [1639, 1741],
       loc: {
         start: {
-          line: 1,
-          column: -1,
+          line: 47,
+          column: 77,
         },
         end: {
           line: 52,
-          column: 12,
+          column: 17,
         },
       },
     },
@@ -3457,15 +3457,15 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 1996],
+      range: [1742, 1997],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 52,
+          column: 18,
         },
         end: {
           line: 62,
-          column: 45,
+          column: 46,
         },
       },
     },
@@ -3677,15 +3677,15 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 2141],
+      range: [1998, 2145],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 62,
+          column: 47,
         },
         end: {
-          line: 68,
-          column: 13,
+          line: 69,
+          column: 1,
         },
       },
     },
@@ -3956,15 +3956,15 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [0, 2438],
+      range: [2146, 2440],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 69,
+          column: 2,
         },
         end: {
           line: 73,
-          column: 109,
+          column: 111,
         },
       },
     },
@@ -4262,11 +4262,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 2559],
+      range: [2441, 2559],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 73,
+          column: 112,
         },
         end: {
           line: 78,
@@ -4424,11 +4424,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 2653],
+      range: [2560, 2653],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 78,
+          column: 35,
         },
         end: {
           line: 82,
@@ -4586,15 +4586,15 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 2739],
+      range: [2654, 2740],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 82,
+          column: 55,
         },
         end: {
           line: 87,
-          column: 26,
+          column: 27,
         },
       },
     },
@@ -4748,11 +4748,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 2800],
+      range: [2741, 2800],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 87,
+          column: 28,
         },
         end: {
           line: 90,
@@ -5977,11 +5977,11 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [-1, 3560],
+      range: [2801, 3560],
       loc: {
         start: {
-          line: 1,
-          column: -1,
+          line: 90,
+          column: 22,
         },
         end: {
           line: 111,
@@ -6549,15 +6549,15 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [-1, 3772],
+      range: [3561, 3788],
       loc: {
         start: {
-          line: 1,
-          column: -1,
+          line: 111,
+          column: 16,
         },
         end: {
-          line: 121,
-          column: 11,
+          line: 122,
+          column: 15,
         },
       },
     },
@@ -6840,15 +6840,15 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [0, 3944],
+      range: [3789, 3954],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 122,
+          column: 16,
         },
         end: {
           line: 126,
-          column: 68,
+          column: 78,
         },
       },
     },
@@ -6961,15 +6961,15 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [0, 4066],
+      range: [3955, 4100],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 126,
+          column: 79,
         },
         end: {
-          line: 130,
-          column: 38,
+          line: 131,
+          column: 29,
         },
       },
     },
