@@ -28,6 +28,10 @@
       title: "Typed AST",
       body: "All node types are shipped under the `Ast` namespace export. Write custom ESLint rules in TypeScript with full inference — no `any` casts needed.",
     },
+    {
+      title: "Lint plv8, plpgsql, plpython3u, …",
+      body: "PL function bodies are exposed as `EmbeddedCode` nodes, and the bundled processor emits one virtual file per body — bring your own ESLint parser for any language.",
+    },
   ];
 
 </script>

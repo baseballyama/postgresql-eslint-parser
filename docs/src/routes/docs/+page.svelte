@@ -8,6 +8,7 @@
     { id: "install", title: "Installation" },
     { id: "eslint", title: "ESLint configuration" },
     { id: "directives", title: "ESLint directives in SQL comments" },
+    { id: "embedded", title: "Linting PL function bodies" },
     { id: "api", title: "Programmatic API" },
     { id: "errors", title: "Syntax errors" },
     { id: "rules", title: "Writing custom rules" },
@@ -88,6 +89,42 @@
       </table>
     </section>
 
+    <section id="embedded">
+      <h2>Linting PL function bodies</h2>
+      <p>
+        <code>CREATE FUNCTION</code> and <code>CREATE PROCEDURE</code> bodies
+        written in another language are exposed as <code>EmbeddedCode</code>
+        nodes on the parent statement. The parser stays language-agnostic —
+        it captures the source text, the absolute range/loc inside the SQL,
+        the lower-cased <code>LANGUAGE</code> clause, and the quote style
+        (<code>"dollar"</code> or <code>"single"</code>), and stops there. C
+        functions written as the two-argument <code>AS 'lib', 'sym'</code>
+        form are skipped because they are not source code.
+      </p>
+      <p>
+        To lint these bodies, plug the
+        <code>postgresql-eslint-parser/processor</code> subpath into your
+        flat config. It emits one virtual file per body (<code>0.js</code>,
+        <code>1.py</code>, …) and translates lint messages back to the SQL
+        coordinate system. Any PL is supported as long as you give it an
+        extension and configure an ESLint parser for that extension:
+      </p>
+      <div class="code shiki-host">{@html data.processorConfig}</div>
+      <p>
+        Need to enumerate bodies for tooling that isn't ESLint? Use the
+        low-level <code>extractEmbeddedCode</code> helper exported from the
+        main entry point — it returns every <code>EmbeddedCode</code> node in
+        source order:
+      </p>
+      <div class="code shiki-host">{@html data.extractEmbedded}</div>
+      <div class="callout">
+        <strong>Limitation.</strong>
+        Fix-range translation runs only for dollar-quoted bodies. For
+        single-quoted bodies that contain <code>''</code> escapes, the
+        processor drops fixes (line/column positions are still reported).
+      </div>
+    </section>
+
     <section id="api">
       <h2>Programmatic API</h2>
 
@@ -109,6 +146,27 @@
       </p>
 
       <div class="code shiki-host">{@html data.apiExample}</div>
+
+      <h3>
+        <code
+          >extractEmbeddedCode(program: Program): EmbeddedCode[]</code
+        >
+      </h3>
+      <p>
+        Returns every <code>EmbeddedCode</code> node (PL function body) in
+        source order. Each entry carries <code>language</code>,
+        <code>source</code>, absolute <code>range</code> / <code>loc</code> in
+        the SQL file, and <code>quoteStyle</code>. See
+        <a href="#embedded">Linting PL function bodies</a> for the full flow.
+      </p>
+
+      <h3><code>createPlProcessor(options): Processor</code></h3>
+      <p>
+        Exported from <code>postgresql-eslint-parser/processor</code>. Takes
+        a <code>{`{ languages, unknown? }`}</code> options object and returns
+        a generic ESLint processor that emits one virtual file per PL body
+        with the configured extension.
+      </p>
     </section>
 
     <section id="errors">

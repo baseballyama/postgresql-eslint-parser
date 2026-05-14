@@ -65,6 +65,45 @@ export const noSelectStar: Rule.RuleModule = {
   },
 };`;
 
+const processorConfig = `// eslint.config.js
+import postgresqlParser from "postgresql-eslint-parser";
+import { createPlProcessor } from "postgresql-eslint-parser/processor";
+import tsParser from "@typescript-eslint/parser";
+
+const plProcessor = createPlProcessor({
+  languages: {
+    plv8: ".js",
+    plv8u: ".js",
+    plpgsql: ".plpgsql",
+    plpython3u: ".py",
+  },
+  // "skip" (default) silently drops bodies whose language is not mapped;
+  // "error" throws so unhandled PLs do not pass silently.
+  unknown: "skip",
+});
+
+export default [
+  {
+    files: ["**/*.sql"],
+    languageOptions: { parser: postgresqlParser },
+    processor: plProcessor,
+  },
+  {
+    files: ["**/*.sql/*.js"],
+    languageOptions: { parser: tsParser },
+    rules: {
+      // your JS rules for plv8 bodies
+    },
+  },
+];`;
+
+const extractEmbedded = `import { parseForESLint, extractEmbeddedCode } from "postgresql-eslint-parser";
+
+const { ast } = parseForESLint(sql);
+for (const body of extractEmbeddedCode(ast)) {
+  console.log(\`\${body.language}: \${body.source.length} chars at \${body.range[0]}\`);
+}`;
+
 export const load = async () => {
   const [
     installHtml,
@@ -73,6 +112,8 @@ export const load = async () => {
     apiExampleHtml,
     sqlParseErrorHtml,
     customRuleHtml,
+    processorConfigHtml,
+    extractEmbeddedHtml,
   ] = await Promise.all([
     highlight(install, "bash"),
     highlight(eslintConfig, "javascript"),
@@ -80,6 +121,8 @@ export const load = async () => {
     highlight(apiExample, "typescript"),
     highlight(sqlParseError, "typescript"),
     highlight(customRule, "typescript"),
+    highlight(processorConfig, "javascript"),
+    highlight(extractEmbedded, "typescript"),
   ]);
   return {
     install: installHtml,
@@ -88,5 +131,7 @@ export const load = async () => {
     apiExample: apiExampleHtml,
     sqlParseError: sqlParseErrorHtml,
     customRule: customRuleHtml,
+    processorConfig: processorConfigHtml,
+    extractEmbedded: extractEmbeddedHtml,
   };
 };
