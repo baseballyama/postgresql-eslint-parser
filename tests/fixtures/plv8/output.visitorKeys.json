@@ -9,8 +9,6 @@
   "Keyword": [],
   "Identifier": [],
   "Punctuator": [],
-  "Operator": [],
-  "Numeric": [],
   "Line": [],
   "Program": ["body", "tokens", "comments"],
   "SQLStatement": ["statement"],

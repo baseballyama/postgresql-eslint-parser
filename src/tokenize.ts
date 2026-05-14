@@ -373,6 +373,47 @@ export const tokenizeSQL = (
       continue;
     }
 
+    // dollar-quoted string literal: $$...$$ or $tag$...$tag$
+    // The tag, if present, follows unquoted-identifier rules: it must
+    // start with a letter or underscore. `$1`, `$2`, ... are positional
+    // parameters and are intentionally not handled here.
+    if (char === "$") {
+      let j = i + 1;
+      if (j < length && code[j] && /[a-zA-Z_]/.test(code[j]!)) {
+        j++;
+        while (j < length && code[j] && /[a-zA-Z0-9_]/.test(code[j]!)) {
+          j++;
+        }
+      }
+      if (j < length && code[j] === "$") {
+        const tag = code.slice(i, j + 1);
+        const start = i;
+        i = j + 1;
+        while (i < length) {
+          if (code[i] === "$" && code.slice(i, i + tag.length) === tag) {
+            i += tag.length;
+            break;
+          }
+          i++;
+        }
+        const value = code.slice(start, i);
+        const { range, loc } = calculateLocationFromOffset(
+          lineMap,
+          start,
+          value.length,
+        );
+        tokens.push({
+          type: "String",
+          value,
+          range,
+          loc,
+        });
+        continue;
+      }
+      // Not a dollar-quote opening — fall through to the unsupported-char
+      // branch so `$1` etc. are skipped exactly as before.
+    }
+
     // punctuation or operator
     if (/[(),;.=<>!+\-*/%|&:]/.test(char)) {
       const start = i;

@@ -816,7 +816,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1018, 1018],
+          range: [1018, 1026],
           loc: {
             start: {
               line: 32,
@@ -824,7 +824,7 @@ export default {
             },
             end: {
               line: 32,
-              column: 3,
+              column: 11,
             },
           },
         },
@@ -847,7 +847,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1032, 1032],
+          range: [1032, 1041],
           loc: {
             start: {
               line: 32,
@@ -855,7 +855,7 @@ export default {
             },
             end: {
               line: 32,
-              column: 17,
+              column: 26,
             },
           },
         },
@@ -878,7 +878,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1042, 1042],
+          range: [1042, 1048],
           loc: {
             start: {
               line: 32,
@@ -886,12 +886,12 @@ export default {
             },
             end: {
               line: 32,
-              column: 27,
+              column: 33,
             },
           },
         },
       ],
-      range: [0, 1042],
+      range: [0, 1048],
       loc: {
         start: {
           line: 1,
@@ -899,7 +899,7 @@ export default {
         },
         end: {
           line: 32,
-          column: 27,
+          column: 33,
         },
       },
     },
@@ -956,7 +956,7 @@ export default {
         },
         typemod: -1,
         type: "names",
-        range: [1132, 1132],
+        range: [1132, 1136],
         loc: {
           start: {
             line: 36,
@@ -964,7 +964,7 @@ export default {
           },
           end: {
             line: 36,
-            column: 8,
+            column: 12,
           },
         },
       },
@@ -1004,7 +1004,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1137, 1137],
+          range: [1137, 1139],
           loc: {
             start: {
               line: 36,
@@ -1012,7 +1012,7 @@ export default {
             },
             end: {
               line: 36,
-              column: 13,
+              column: 15,
             },
           },
         },
@@ -1035,7 +1035,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1569, 1569],
+          range: [1569, 1577],
           loc: {
             start: {
               line: 49,
@@ -1043,12 +1043,12 @@ export default {
             },
             end: {
               line: 49,
-              column: 3,
+              column: 11,
             },
           },
         },
       ],
-      range: [0, 1569],
+      range: [0, 1577],
       loc: {
         start: {
           line: 1,
@@ -1056,7 +1056,7 @@ export default {
         },
         end: {
           line: 49,
-          column: 3,
+          column: 11,
         },
       },
     },
@@ -1098,7 +1098,7 @@ export default {
         },
         typemod: -1,
         type: "names",
-        range: [1661, 1661],
+        range: [1661, 1668],
         loc: {
           start: {
             line: 53,
@@ -1106,7 +1106,7 @@ export default {
           },
           end: {
             line: 53,
-            column: 8,
+            column: 15,
           },
         },
       },
@@ -1146,7 +1146,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [1669, 1669],
+          range: [1669, 1671],
           loc: {
             start: {
               line: 53,
@@ -1154,7 +1154,7 @@ export default {
             },
             end: {
               line: 53,
-              column: 16,
+              column: 18,
             },
           },
         },
@@ -1177,7 +1177,7 @@ export default {
             },
           },
           defaction: "DEFELEM_UNSPEC",
-          range: [2000, 2000],
+          range: [2000, 2008],
           loc: {
             start: {
               line: 68,
@@ -1185,12 +1185,12 @@ export default {
             },
             end: {
               line: 68,
-              column: 3,
+              column: 11,
             },
           },
         },
       ],
-      range: [0, 2000],
+      range: [0, 2008],
       loc: {
         start: {
           line: 1,
@@ -1198,7 +1198,7 @@ export default {
         },
         end: {
           line: 68,
-          column: 3,
+          column: 11,
         },
       },
     },
@@ -1355,47 +1355,17 @@ export default {
       },
     },
     {
-      type: "Keyword",
-      value: "return",
-      range: [96, 102],
-      loc: {
-        start: {
-          line: 3,
-          column: 4,
-        },
-        end: {
-          line: 3,
-          column: 10,
-        },
-      },
-    },
-    {
       type: "String",
-      value: '"Hello from PLV8!"',
-      range: [103, 121],
+      value: '$$\n    return "Hello from PLV8!";\n$$',
+      range: [89, 125],
       loc: {
         start: {
-          line: 3,
-          column: 11,
+          line: 2,
+          column: 55,
         },
         end: {
-          line: 3,
-          column: 29,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [121, 122],
-      loc: {
-        start: {
-          line: 3,
-          column: 29,
-        },
-        end: {
-          line: 3,
-          column: 30,
+          line: 4,
+          column: 2,
         },
       },
     },
@@ -1655,557 +1625,18 @@ export default {
       },
     },
     {
-      type: "Identifier",
-      value: "var",
-      range: [242, 245],
+      type: "String",
+      value:
+        "$$\n    var obj = JSON.parse(input_json);\n    obj.processed = true;\n    obj.timestamp = new Date().toISOString();\n    return JSON.stringify(obj);\n$$",
+      range: [235, 382],
       loc: {
         start: {
-          line: 8,
-          column: 4,
-        },
-        end: {
-          line: 8,
-          column: 7,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "obj",
-      range: [246, 249],
-      loc: {
-        start: {
-          line: 8,
-          column: 8,
-        },
-        end: {
-          line: 8,
-          column: 11,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "=",
-      range: [250, 251],
-      loc: {
-        start: {
-          line: 8,
-          column: 12,
-        },
-        end: {
-          line: 8,
-          column: 13,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "JSON",
-      range: [252, 256],
-      loc: {
-        start: {
-          line: 8,
-          column: 14,
-        },
-        end: {
-          line: 8,
-          column: 18,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [256, 257],
-      loc: {
-        start: {
-          line: 8,
-          column: 18,
-        },
-        end: {
-          line: 8,
-          column: 19,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "parse",
-      range: [257, 262],
-      loc: {
-        start: {
-          line: 8,
-          column: 19,
-        },
-        end: {
-          line: 8,
-          column: 24,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [262, 263],
-      loc: {
-        start: {
-          line: 8,
-          column: 24,
-        },
-        end: {
-          line: 8,
-          column: 25,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "input_json",
-      range: [263, 273],
-      loc: {
-        start: {
-          line: 8,
-          column: 25,
-        },
-        end: {
-          line: 8,
-          column: 35,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [273, 274],
-      loc: {
-        start: {
-          line: 8,
-          column: 35,
-        },
-        end: {
-          line: 8,
-          column: 36,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [274, 275],
-      loc: {
-        start: {
-          line: 8,
-          column: 36,
-        },
-        end: {
-          line: 8,
-          column: 37,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "obj",
-      range: [280, 283],
-      loc: {
-        start: {
-          line: 9,
-          column: 4,
-        },
-        end: {
-          line: 9,
-          column: 7,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [283, 284],
-      loc: {
-        start: {
-          line: 9,
-          column: 7,
-        },
-        end: {
-          line: 9,
-          column: 8,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "processed",
-      range: [284, 293],
-      loc: {
-        start: {
-          line: 9,
-          column: 8,
-        },
-        end: {
-          line: 9,
-          column: 17,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "=",
-      range: [294, 295],
-      loc: {
-        start: {
-          line: 9,
-          column: 18,
-        },
-        end: {
-          line: 9,
-          column: 19,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "true",
-      range: [296, 300],
-      loc: {
-        start: {
-          line: 9,
-          column: 20,
-        },
-        end: {
-          line: 9,
-          column: 24,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [300, 301],
-      loc: {
-        start: {
-          line: 9,
-          column: 24,
-        },
-        end: {
-          line: 9,
-          column: 25,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "obj",
-      range: [306, 309],
-      loc: {
-        start: {
-          line: 10,
-          column: 4,
-        },
-        end: {
-          line: 10,
-          column: 7,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [309, 310],
-      loc: {
-        start: {
-          line: 10,
-          column: 7,
-        },
-        end: {
-          line: 10,
-          column: 8,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "timestamp",
-      range: [310, 319],
-      loc: {
-        start: {
-          line: 10,
-          column: 8,
-        },
-        end: {
-          line: 10,
-          column: 17,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "=",
-      range: [320, 321],
-      loc: {
-        start: {
-          line: 10,
-          column: 18,
-        },
-        end: {
-          line: 10,
-          column: 19,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "new",
-      range: [322, 325],
-      loc: {
-        start: {
-          line: 10,
-          column: 20,
-        },
-        end: {
-          line: 10,
-          column: 23,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "Date",
-      range: [326, 330],
-      loc: {
-        start: {
-          line: 10,
-          column: 24,
-        },
-        end: {
-          line: 10,
-          column: 28,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [330, 331],
-      loc: {
-        start: {
-          line: 10,
-          column: 28,
-        },
-        end: {
-          line: 10,
-          column: 29,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [331, 332],
-      loc: {
-        start: {
-          line: 10,
-          column: 29,
-        },
-        end: {
-          line: 10,
-          column: 30,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [332, 333],
-      loc: {
-        start: {
-          line: 10,
-          column: 30,
-        },
-        end: {
-          line: 10,
-          column: 31,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "toISOString",
-      range: [333, 344],
-      loc: {
-        start: {
-          line: 10,
-          column: 31,
-        },
-        end: {
-          line: 10,
-          column: 42,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [344, 345],
-      loc: {
-        start: {
-          line: 10,
-          column: 42,
-        },
-        end: {
-          line: 10,
-          column: 43,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [345, 346],
-      loc: {
-        start: {
-          line: 10,
-          column: 43,
-        },
-        end: {
-          line: 10,
-          column: 44,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [346, 347],
-      loc: {
-        start: {
-          line: 10,
-          column: 44,
-        },
-        end: {
-          line: 10,
-          column: 45,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "return",
-      range: [352, 358],
-      loc: {
-        start: {
-          line: 11,
-          column: 4,
-        },
-        end: {
-          line: 11,
-          column: 10,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "JSON",
-      range: [359, 363],
-      loc: {
-        start: {
-          line: 11,
-          column: 11,
-        },
-        end: {
-          line: 11,
-          column: 15,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [363, 364],
-      loc: {
-        start: {
-          line: 11,
-          column: 15,
-        },
-        end: {
-          line: 11,
-          column: 16,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "stringify",
-      range: [364, 373],
-      loc: {
-        start: {
-          line: 11,
+          line: 7,
           column: 16,
         },
         end: {
-          line: 11,
-          column: 25,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [373, 374],
-      loc: {
-        start: {
-          line: 11,
-          column: 25,
-        },
-        end: {
-          line: 11,
-          column: 26,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "obj",
-      range: [374, 377],
-      loc: {
-        start: {
-          line: 11,
-          column: 26,
-        },
-        end: {
-          line: 11,
-          column: 29,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [377, 378],
-      loc: {
-        start: {
-          line: 11,
-          column: 29,
-        },
-        end: {
-          line: 11,
-          column: 30,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [378, 379],
-      loc: {
-        start: {
-          line: 11,
-          column: 30,
-        },
-        end: {
-          line: 11,
-          column: 31,
+          line: 12,
+          column: 2,
         },
       },
     },
@@ -2570,301 +2001,288 @@ export default {
       },
     },
     {
-      type: "Keyword",
-      value: "function",
-      range: [517, 525],
+      type: "String",
+      value:
+        "$$\n    function toRadians(degrees) {\n        return degrees * (Math.PI / 180);\n    }\n    \n    var R = 6371; // Earth's radius in kilometers\n    var dLat = toRadians(lat2 - lat1);\n    var dLon = toRadians(lon2 - lon1);\n    \n    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +\n            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *\n            Math.sin(dLon/2) * Math.sin(dLon/2);\n    \n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));\n    var distance = R * c;\n    \n    return distance;\n$$",
+      range: [510, 1017],
       loc: {
         start: {
-          line: 16,
-          column: 4,
+          line: 15,
+          column: 17,
         },
         end: {
-          line: 16,
-          column: 12,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "toRadians",
-      range: [526, 535],
-      loc: {
-        start: {
-          line: 16,
-          column: 13,
-        },
-        end: {
-          line: 16,
-          column: 22,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [535, 536],
-      loc: {
-        start: {
-          line: 16,
-          column: 22,
-        },
-        end: {
-          line: 16,
-          column: 23,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "degrees",
-      range: [536, 543],
-      loc: {
-        start: {
-          line: 16,
-          column: 23,
-        },
-        end: {
-          line: 16,
-          column: 30,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [543, 544],
-      loc: {
-        start: {
-          line: 16,
-          column: 30,
-        },
-        end: {
-          line: 16,
-          column: 31,
+          line: 32,
+          column: 2,
         },
       },
     },
     {
       type: "Keyword",
-      value: "return",
-      range: [555, 561],
+      value: "LANGUAGE",
+      range: [1018, 1026],
       loc: {
         start: {
-          line: 17,
-          column: 8,
+          line: 32,
+          column: 3,
         },
         end: {
-          line: 17,
-          column: 14,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "degrees",
-      range: [562, 569],
-      loc: {
-        start: {
-          line: 17,
-          column: 15,
-        },
-        end: {
-          line: 17,
-          column: 22,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "*",
-      range: [570, 571],
-      loc: {
-        start: {
-          line: 17,
-          column: 23,
-        },
-        end: {
-          line: 17,
-          column: 24,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [572, 573],
-      loc: {
-        start: {
-          line: 17,
-          column: 25,
-        },
-        end: {
-          line: 17,
-          column: 26,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "Math",
-      range: [573, 577],
-      loc: {
-        start: {
-          line: 17,
-          column: 26,
-        },
-        end: {
-          line: 17,
-          column: 30,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ".",
-      range: [577, 578],
-      loc: {
-        start: {
-          line: 17,
-          column: 30,
-        },
-        end: {
-          line: 17,
-          column: 31,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "PI",
-      range: [578, 580],
-      loc: {
-        start: {
-          line: 17,
-          column: 31,
-        },
-        end: {
-          line: 17,
-          column: 33,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "/",
-      range: [581, 582],
-      loc: {
-        start: {
-          line: 17,
-          column: 34,
-        },
-        end: {
-          line: 17,
-          column: 35,
-        },
-      },
-    },
-    {
-      type: "Numeric",
-      value: "180",
-      range: [583, 586],
-      loc: {
-        start: {
-          line: 17,
-          column: 36,
-        },
-        end: {
-          line: 17,
-          column: 39,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [586, 587],
-      loc: {
-        start: {
-          line: 17,
-          column: 39,
-        },
-        end: {
-          line: 17,
-          column: 40,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ";",
-      range: [587, 588],
-      loc: {
-        start: {
-          line: 17,
-          column: 40,
-        },
-        end: {
-          line: 17,
-          column: 41,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "var",
-      range: [604, 607],
-      loc: {
-        start: {
-          line: 20,
-          column: 4,
-        },
-        end: {
-          line: 20,
-          column: 7,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "R",
-      range: [608, 609],
-      loc: {
-        start: {
-          line: 20,
-          column: 8,
-        },
-        end: {
-          line: 20,
-          column: 9,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "=",
-      range: [610, 611],
-      loc: {
-        start: {
-          line: 20,
-          column: 10,
-        },
-        end: {
-          line: 20,
+          line: 32,
           column: 11,
         },
       },
     },
     {
-      type: "Numeric",
-      value: "6371",
-      range: [612, 616],
+      type: "Identifier",
+      value: "plv8",
+      range: [1027, 1031],
       loc: {
         start: {
-          line: 20,
+          line: 32,
           column: 12,
         },
         end: {
-          line: 20,
+          line: 32,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "IMMUTABLE",
+      range: [1032, 1041],
+      loc: {
+        start: {
+          line: 32,
+          column: 17,
+        },
+        end: {
+          line: 32,
+          column: 26,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "STRICT",
+      range: [1042, 1048],
+      loc: {
+        start: {
+          line: 32,
+          column: 27,
+        },
+        end: {
+          line: 32,
+          column: 33,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: ";",
+      range: [1048, 1049],
+      loc: {
+        start: {
+          line: 32,
+          column: 33,
+        },
+        end: {
+          line: 32,
+          column: 34,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "CREATE",
+      range: [1080, 1086],
+      loc: {
+        start: {
+          line: 35,
+          column: 0,
+        },
+        end: {
+          line: 35,
+          column: 6,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "OR",
+      range: [1087, 1089],
+      loc: {
+        start: {
+          line: 35,
+          column: 7,
+        },
+        end: {
+          line: 35,
+          column: 9,
+        },
+      },
+    },
+    {
+      type: "Identifier",
+      value: "REPLACE",
+      range: [1090, 1097],
+      loc: {
+        start: {
+          line: 35,
+          column: 10,
+        },
+        end: {
+          line: 35,
+          column: 17,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "FUNCTION",
+      range: [1098, 1106],
+      loc: {
+        start: {
+          line: 35,
+          column: 18,
+        },
+        end: {
+          line: 35,
+          column: 26,
+        },
+      },
+    },
+    {
+      type: "Identifier",
+      value: "get_user_stats",
+      range: [1107, 1121],
+      loc: {
+        start: {
+          line: 35,
+          column: 27,
+        },
+        end: {
+          line: 35,
+          column: 41,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: "(",
+      range: [1121, 1122],
+      loc: {
+        start: {
+          line: 35,
+          column: 41,
+        },
+        end: {
+          line: 35,
+          column: 42,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: ")",
+      range: [1122, 1123],
+      loc: {
+        start: {
+          line: 35,
+          column: 42,
+        },
+        end: {
+          line: 35,
+          column: 43,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "RETURNS",
+      range: [1124, 1131],
+      loc: {
+        start: {
+          line: 36,
+          column: 0,
+        },
+        end: {
+          line: 36,
+          column: 7,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "JSON",
+      range: [1132, 1136],
+      loc: {
+        start: {
+          line: 36,
+          column: 8,
+        },
+        end: {
+          line: 36,
+          column: 12,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "AS",
+      range: [1137, 1139],
+      loc: {
+        start: {
+          line: 36,
+          column: 13,
+        },
+        end: {
+          line: 36,
+          column: 15,
+        },
+      },
+    },
+    {
+      type: "String",
+      value:
+        "$$\n    var result = plv8.execute('SELECT status, COUNT(*) as count FROM users GROUP BY status');\n    var stats = {};\n    \n    for (var i = 0; i < result.length; i++) {\n        stats[result[i].status] = result[i].count;\n    }\n    \n    return JSON.stringify({\n        total_users: result.reduce(function(sum, row) { return sum + row.count; }, 0),\n        by_status: stats,\n        generated_at: new Date().toISOString()\n    });\n$$",
+      range: [1140, 1568],
+      loc: {
+        start: {
+          line: 36,
+          column: 16,
+        },
+        end: {
+          line: 49,
+          column: 2,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "LANGUAGE",
+      range: [1569, 1577],
+      loc: {
+        start: {
+          line: 49,
+          column: 3,
+        },
+        end: {
+          line: 49,
+          column: 11,
+        },
+      },
+    },
+    {
+      type: "Identifier",
+      value: "plv8",
+      range: [1578, 1582],
+      loc: {
+        start: {
+          line: 49,
+          column: 12,
+        },
+        end: {
+          line: 49,
           column: 16,
         },
       },
@@ -2872,468 +2290,226 @@ export default {
     {
       type: "Punctuator",
       value: ";",
-      range: [616, 617],
+      range: [1582, 1583],
       loc: {
         start: {
-          line: 20,
+          line: 49,
           column: 16,
         },
         end: {
-          line: 20,
+          line: 49,
           column: 17,
         },
       },
     },
     {
-      type: "Operator",
-      value: "/",
-      range: [618, 619],
+      type: "Keyword",
+      value: "CREATE",
+      range: [1610, 1616],
       loc: {
         start: {
-          line: 20,
+          line: 52,
+          column: 0,
+        },
+        end: {
+          line: 52,
+          column: 6,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "OR",
+      range: [1617, 1619],
+      loc: {
+        start: {
+          line: 52,
+          column: 7,
+        },
+        end: {
+          line: 52,
+          column: 9,
+        },
+      },
+    },
+    {
+      type: "Identifier",
+      value: "REPLACE",
+      range: [1620, 1627],
+      loc: {
+        start: {
+          line: 52,
+          column: 10,
+        },
+        end: {
+          line: 52,
+          column: 17,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "FUNCTION",
+      range: [1628, 1636],
+      loc: {
+        start: {
+          line: 52,
           column: 18,
         },
         end: {
-          line: 20,
-          column: 19,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "/",
-      range: [619, 620],
-      loc: {
-        start: {
-          line: 20,
-          column: 19,
-        },
-        end: {
-          line: 20,
-          column: 20,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "Earth",
-      range: [621, 626],
-      loc: {
-        start: {
-          line: 20,
-          column: 21,
-        },
-        end: {
-          line: 20,
+          line: 52,
           column: 26,
         },
       },
     },
     {
-      type: "String",
-      value:
-        "'s radius in kilometers\n    var dLat = toRadians(lat2 - lat1);\n    var dLon = toRadians(lon2 - lon1);\n    \n    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +\n            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *\n            Math.sin(dLon/2) * Math.sin(dLon/2);\n    \n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));\n    var distance = R * c;\n    \n    return distance;\n$$ LANGUAGE plv8 IMMUTABLE STRICT;\n\n-- PLV8 with database access\nCREATE OR REPLACE FUNCTION get_user_stats()\nRETURNS JSON AS $$\n    var result = plv8.execute('",
-      range: [626, 1174],
-      loc: {
-        start: {
-          line: 20,
-          column: 26,
-        },
-        end: {
-          line: 37,
-          column: 31,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "SELECT",
-      range: [1174, 1180],
-      loc: {
-        start: {
-          line: 37,
-          column: 31,
-        },
-        end: {
-          line: 37,
-          column: 37,
-        },
-      },
-    },
-    {
       type: "Identifier",
-      value: "status",
-      range: [1181, 1187],
+      value: "audit_trigger",
+      range: [1637, 1650],
       loc: {
         start: {
-          line: 37,
-          column: 38,
+          line: 52,
+          column: 27,
         },
         end: {
-          line: 37,
-          column: 44,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ",",
-      range: [1187, 1188],
-      loc: {
-        start: {
-          line: 37,
-          column: 44,
-        },
-        end: {
-          line: 37,
-          column: 45,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "COUNT",
-      range: [1189, 1194],
-      loc: {
-        start: {
-          line: 37,
-          column: 46,
-        },
-        end: {
-          line: 37,
-          column: 51,
+          line: 52,
+          column: 40,
         },
       },
     },
     {
       type: "Punctuator",
       value: "(",
-      range: [1194, 1195],
+      range: [1650, 1651],
       loc: {
         start: {
-          line: 37,
-          column: 51,
+          line: 52,
+          column: 40,
         },
         end: {
-          line: 37,
-          column: 52,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: "*",
-      range: [1195, 1196],
-      loc: {
-        start: {
-          line: 37,
-          column: 52,
-        },
-        end: {
-          line: 37,
-          column: 53,
+          line: 52,
+          column: 41,
         },
       },
     },
     {
       type: "Punctuator",
       value: ")",
-      range: [1196, 1197],
+      range: [1651, 1652],
       loc: {
         start: {
-          line: 37,
-          column: 53,
+          line: 52,
+          column: 41,
         },
         end: {
-          line: 37,
-          column: 54,
+          line: 52,
+          column: 42,
         },
       },
     },
     {
       type: "Keyword",
-      value: "as",
-      range: [1198, 1200],
+      value: "RETURNS",
+      range: [1653, 1660],
       loc: {
         start: {
-          line: 37,
-          column: 55,
+          line: 53,
+          column: 0,
         },
         end: {
-          line: 37,
-          column: 57,
+          line: 53,
+          column: 7,
         },
       },
     },
     {
       type: "Keyword",
-      value: "count",
-      range: [1201, 1206],
+      value: "TRIGGER",
+      range: [1661, 1668],
       loc: {
         start: {
-          line: 37,
-          column: 58,
+          line: 53,
+          column: 8,
         },
         end: {
-          line: 37,
-          column: 63,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "FROM",
-      range: [1207, 1211],
-      loc: {
-        start: {
-          line: 37,
-          column: 64,
-        },
-        end: {
-          line: 37,
-          column: 68,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "users",
-      range: [1212, 1217],
-      loc: {
-        start: {
-          line: 37,
-          column: 69,
-        },
-        end: {
-          line: 37,
-          column: 74,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "GROUP",
-      range: [1218, 1223],
-      loc: {
-        start: {
-          line: 37,
-          column: 75,
-        },
-        end: {
-          line: 37,
-          column: 80,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "BY",
-      range: [1224, 1226],
-      loc: {
-        start: {
-          line: 37,
-          column: 81,
-        },
-        end: {
-          line: 37,
-          column: 83,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "status",
-      range: [1227, 1233],
-      loc: {
-        start: {
-          line: 37,
-          column: 84,
-        },
-        end: {
-          line: 37,
-          column: 90,
-        },
-      },
-    },
-    {
-      type: "String",
-      value:
-        "');\n    var stats = {};\n    \n    for (var i = 0; i < result.length; i++) {\n        stats[result[i].status] = result[i].count;\n    }\n    \n    return JSON.stringify({\n        total_users: result.reduce(function(sum, row) { return sum + row.count; }, 0),\n        by_status: stats,\n        generated_at: new Date().toISOString()\n    });\n$$ LANGUAGE plv8;\n\n-- PLV8 trigger function\nCREATE OR REPLACE FUNCTION audit_trigger()\nRETURNS TRIGGER AS $$\n    var audit_data = {\n        table_name: TG_TABLE_NAME,\n        operation: TG_OP,\n        timestamp: new Date().toISOString(),\n        old_data: OLD,\n        new_data: NEW\n    };\n    \n    plv8.execute(\n        '",
-      range: [1233, 1888],
-      loc: {
-        start: {
-          line: 37,
-          column: 90,
-        },
-        end: {
-          line: 63,
-          column: 9,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "INSERT",
-      range: [1888, 1894],
-      loc: {
-        start: {
-          line: 63,
-          column: 9,
-        },
-        end: {
-          line: 63,
+          line: 53,
           column: 15,
         },
       },
     },
     {
       type: "Keyword",
-      value: "INTO",
-      range: [1895, 1899],
+      value: "AS",
+      range: [1669, 1671],
       loc: {
         start: {
-          line: 63,
+          line: 53,
           column: 16,
         },
         end: {
-          line: 63,
-          column: 20,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "audit_log",
-      range: [1900, 1909],
-      loc: {
-        start: {
-          line: 63,
-          column: 21,
-        },
-        end: {
-          line: 63,
-          column: 30,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [1910, 1911],
-      loc: {
-        start: {
-          line: 63,
-          column: 31,
-        },
-        end: {
-          line: 63,
-          column: 32,
-        },
-      },
-    },
-    {
-      type: "Identifier",
-      value: "data",
-      range: [1911, 1915],
-      loc: {
-        start: {
-          line: 63,
-          column: 32,
-        },
-        end: {
-          line: 63,
-          column: 36,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [1915, 1916],
-      loc: {
-        start: {
-          line: 63,
-          column: 36,
-        },
-        end: {
-          line: 63,
-          column: 37,
-        },
-      },
-    },
-    {
-      type: "Keyword",
-      value: "VALUES",
-      range: [1917, 1923],
-      loc: {
-        start: {
-          line: 63,
-          column: 38,
-        },
-        end: {
-          line: 63,
-          column: 44,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: "(",
-      range: [1924, 1925],
-      loc: {
-        start: {
-          line: 63,
-          column: 45,
-        },
-        end: {
-          line: 63,
-          column: 46,
-        },
-      },
-    },
-    {
-      type: "Numeric",
-      value: "1",
-      range: [1926, 1927],
-      loc: {
-        start: {
-          line: 63,
-          column: 47,
-        },
-        end: {
-          line: 63,
-          column: 48,
-        },
-      },
-    },
-    {
-      type: "Punctuator",
-      value: ")",
-      range: [1927, 1928],
-      loc: {
-        start: {
-          line: 63,
-          column: 48,
-        },
-        end: {
-          line: 63,
-          column: 49,
+          line: 53,
+          column: 18,
         },
       },
     },
     {
       type: "String",
       value:
-        "',\n        [JSON.stringify(audit_data)]\n    );\n    \n    return null;\n$$ LANGUAGE plv8; ",
-      range: [1928, 2015],
+        "$$\n    var audit_data = {\n        table_name: TG_TABLE_NAME,\n        operation: TG_OP,\n        timestamp: new Date().toISOString(),\n        old_data: OLD,\n        new_data: NEW\n    };\n    \n    plv8.execute(\n        'INSERT INTO audit_log (data) VALUES ($1)',\n        [JSON.stringify(audit_data)]\n    );\n    \n    return null;\n$$",
+      range: [1672, 1999],
       loc: {
         start: {
-          line: 63,
-          column: 49,
+          line: 53,
+          column: 19,
         },
         end: {
           line: 68,
-          column: 18,
+          column: 2,
+        },
+      },
+    },
+    {
+      type: "Keyword",
+      value: "LANGUAGE",
+      range: [2000, 2008],
+      loc: {
+        start: {
+          line: 68,
+          column: 3,
+        },
+        end: {
+          line: 68,
+          column: 11,
+        },
+      },
+    },
+    {
+      type: "Identifier",
+      value: "plv8",
+      range: [2009, 2013],
+      loc: {
+        start: {
+          line: 68,
+          column: 12,
+        },
+        end: {
+          line: 68,
+          column: 16,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: ";",
+      range: [2013, 2014],
+      loc: {
+        start: {
+          line: 68,
+          column: 16,
+        },
+        end: {
+          line: 68,
+          column: 17,
         },
       },
     },
@@ -3351,6 +2527,36 @@ export default {
         end: {
           line: 1,
           column: 33,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " PLV8 with database access",
+      range: [1051, 1079],
+      loc: {
+        start: {
+          line: 34,
+          column: 0,
+        },
+        end: {
+          line: 34,
+          column: 28,
+        },
+      },
+    },
+    {
+      type: "Line",
+      value: " PLV8 trigger function",
+      range: [1585, 1609],
+      loc: {
+        start: {
+          line: 51,
+          column: 0,
+        },
+        end: {
+          line: 51,
+          column: 24,
         },
       },
     },
