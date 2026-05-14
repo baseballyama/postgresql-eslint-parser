@@ -1,0 +1,301 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   postgresql-eslint-parser — docs theme
+   ESLint-aligned: light default, restrained typography, purple primary.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* surfaces */
+  --bg: #ffffff;
+  --bg-soft: #f8f8fa;
+  --bg-code: #f3f3f5;
+  --bg-elevated: #ffffff;
+
+  /* text */
+  --fg: #1d1f21;
+  --fg-strong: #0b0d10;
+  --fg-muted: #5b6068;
+  --fg-faint: #8b8f96;
+
+  /* lines */
+  --rule: #e4e4e8;
+  --rule-strong: #cdced3;
+
+  /* brand — ESLint purple */
+  --brand: #4b32c3;
+  --brand-strong: #341cb9;
+  --brand-soft: #ede9f9;
+  --brand-tint: #f5f2fc;
+
+  /* code accents (kept subtle) */
+  --kw: #4b32c3;
+  --str: #277a32;
+  --num: #a43a30;
+  --com: #8b8f96;
+  --typ: #2452a9;
+  --punc: #5b6068;
+
+  /* error surface */
+  --err-bg: #fff1ee;
+  --err-border: #f3c3b5;
+
+  /* typography */
+  --font-body:
+    "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* layout */
+  --max-w: 72rem;
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --radius: 6px;
+}
+
+/* Dark palette — shared between `data-theme="dark"` and the auto media query. */
+:root[data-theme="dark"],
+:root[data-theme="auto"] {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    color-scheme: dark;
+    --bg: #1d1f21;
+    --bg-soft: #25272a;
+    --bg-code: #2a2c2f;
+    --bg-elevated: #25272a;
+
+    --fg: #e6e6e9;
+    --fg-strong: #ffffff;
+    --fg-muted: #b3b6bb;
+    --fg-faint: #82858b;
+
+    --rule: #34373b;
+    --rule-strong: #4a4d52;
+
+    --brand: #a08bef;
+    --brand-strong: #c3b3f7;
+    --brand-soft: #2d2647;
+    --brand-tint: #25223a;
+
+    --kw: #c0acff;
+    --str: #9bcfa3;
+    --num: #f0907a;
+    --com: #82858b;
+    --typ: #92b4f0;
+    --punc: #b3b6bb;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1d1f21;
+  --bg-soft: #25272a;
+  --bg-code: #2a2c2f;
+  --bg-elevated: #25272a;
+
+  --fg: #e6e6e9;
+  --fg-strong: #ffffff;
+  --fg-muted: #b3b6bb;
+  --fg-faint: #82858b;
+
+  --rule: #34373b;
+  --rule-strong: #4a4d52;
+
+  --brand: #a08bef;
+  --brand-strong: #c3b3f7;
+  --brand-soft: #2d2647;
+  --brand-tint: #25223a;
+
+  --kw: #c0acff;
+  --str: #9bcfa3;
+  --num: #f0907a;
+  --com: #82858b;
+  --typ: #92b4f0;
+  --punc: #b3b6bb;
+
+  --err-bg: #3a1a14;
+  --err-border: #6a2a1f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 20px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--fg-strong);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0;
+  color: var(--fg);
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+a:hover {
+  color: var(--brand-strong);
+  border-bottom-color: currentColor;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+button {
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.shell {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Shiki dual-theme: pick light/dark CSS vars based on data-theme.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* The wrapper Shiki generates */
+.shiki-host {
+  padding: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: auto;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.shiki-host pre.shiki {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: transparent !important;
+  font-family: var(--font-mono);
+  overflow-x: auto;
+}
+.shiki-host pre.shiki code {
+  font-family: inherit;
+  background: transparent;
+  padding: 0;
+}
+
+/* The inline style on the <pre> sets `background-color: var(--shiki-light-bg)`
+   and on each <span> sets the token-level bg too. Let the container provide
+   the background and only swap text color / weight / style per theme. */
+.shiki-host pre.shiki,
+.shiki-host pre.shiki span {
+  background-color: transparent !important;
+}
+
+:root[data-theme="light"] .shiki span {
+  color: var(--shiki-light) !important;
+  font-style: var(--shiki-light-font-style) !important;
+  font-weight: var(--shiki-light-font-weight) !important;
+  text-decoration: var(--shiki-light-text-decoration) !important;
+}
+:root[data-theme="auto"] .shiki span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+:root[data-theme="dark"] .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] .shiki span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+}

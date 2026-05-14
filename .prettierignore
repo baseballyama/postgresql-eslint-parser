@@ -3,3 +3,6 @@ dist/
 .vscode/settings.json
 pnpm-lock.yaml
 .oxlintrc.json
+docs/.svelte-kit/
+docs/build/
+docs/node_modules/
