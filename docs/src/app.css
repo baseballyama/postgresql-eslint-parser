@@ -1,0 +1,223 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   postgresql-eslint-parser · field-manual aesthetic
+   editorial dark theme: cream ink on midnight, with terracotta + amber accents
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* surfaces */
+  --bg: #0a0c12;
+  --bg-elevated: #11141d;
+  --bg-deep: #060810;
+  --surface: #161a25;
+  --surface-2: #1c2230;
+
+  /* ink */
+  --ink: #f4eee0;
+  --ink-strong: #fdf9ee;
+  --ink-muted: #a8a496;
+  --ink-faint: #6b6a62;
+
+  /* accents */
+  --pg-blue: #6b9bd6; /* postgres elephant blue, lightened for dark bg */
+  --pg-blue-deep: #336791; /* canonical postgres */
+  --amber: #f4b942; /* warm field-manual highlight */
+  --terracotta: #e57452; /* signal / errors / hot */
+  --phosphor: #9eed8a; /* terminal-green for tokens */
+  --plum: #c89bd9; /* secondary accent */
+
+  /* rules */
+  --rule: rgba(244, 238, 224, 0.09);
+  --rule-strong: rgba(244, 238, 224, 0.18);
+  --rule-faint: rgba(244, 238, 224, 0.04);
+
+  /* typography */
+  --font-display:
+    "Fraunces", "Iowan Old Style", "Apple Garamond", Georgia, serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* layout */
+  --max-w: 78rem;
+  --gutter: clamp(1.5rem, 4vw, 4rem);
+  --radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+body {
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 12% -5%,
+      rgba(107, 155, 214, 0.1),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 100% 15%,
+      rgba(229, 116, 82, 0.08),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 50% 80% at 50% 110%,
+      rgba(244, 185, 66, 0.06),
+      transparent 60%
+    );
+  background-attachment: fixed;
+}
+
+/* grain overlay — paper-noise texture for atmosphere */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96   0 0 0 0 0.93   0 0 0 0 0.87   0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+}
+
+/* selection */
+::selection {
+  background: var(--amber);
+  color: var(--bg);
+}
+
+/* scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 20px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 360;
+  font-style: italic;
+  font-variation-settings:
+    "opsz" 144,
+    "SOFT" 60;
+  color: var(--ink-strong);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+p {
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0;
+}
+
+a {
+  color: var(--amber);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(244, 185, 66, 0.4);
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+a:hover {
+  color: var(--ink-strong);
+  border-bottom-color: var(--ink-strong);
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss02", "cv11";
+}
+
+/* utility classes for the editorial vibe */
+.mono {
+  font-family: var(--font-mono);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+.section-no {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--pg-blue);
+  font-weight: 600;
+}
+.rule {
+  height: 1px;
+  background: var(--rule);
+  border: 0;
+  margin: 0;
+}
+.ascii-rule {
+  font-family: var(--font-mono);
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  letter-spacing: -0.05em;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* page container */
+.shell {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+button {
+  font-family: inherit;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
