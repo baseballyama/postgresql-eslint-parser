@@ -165,11 +165,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 116],
+      range: [63, 116],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 2,
+          column: 20,
         },
         end: {
           line: 4,

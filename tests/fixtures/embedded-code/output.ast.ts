@@ -301,15 +301,15 @@ export default {
           },
         },
       ],
-      range: [0, 304],
+      range: [154, 312],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 4,
+          column: 27,
         },
         end: {
           line: 9,
-          column: 10,
+          column: 18,
         },
       },
       embeddedCode: {
@@ -489,15 +489,15 @@ export default {
           },
         },
       ],
-      range: [0, 452],
+      range: [313, 454],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 9,
+          column: 19,
         },
         end: {
           line: 12,
-          column: 68,
+          column: 70,
         },
       },
     },
@@ -645,15 +645,15 @@ export default {
           },
         },
       ],
-      range: [0, 612],
+      range: [455, 619],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 12,
+          column: 71,
         },
         end: {
           line: 17,
-          column: 11,
+          column: 18,
         },
       },
       embeddedCode: {
@@ -774,15 +774,15 @@ export default {
           },
         },
       ],
-      range: [0, 765],
+      range: [620, 770],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 17,
+          column: 19,
         },
         end: {
           line: 22,
-          column: 11,
+          column: 16,
         },
       },
       embeddedCode: {

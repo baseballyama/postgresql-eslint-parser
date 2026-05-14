@@ -301,15 +301,15 @@ export default {
           },
         },
       ],
-      range: [0, 198],
+      range: [90, 206],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 5,
+          column: 20,
         },
         end: {
           line: 11,
-          column: 15,
+          column: 23,
         },
       },
       embeddedCode: {

@@ -1,0 +1,23 @@
+{
+  "Program": ["body", "tokens", "comments"],
+  "SelectStmt": ["targetList", "fromClause", "valuesLists"],
+  "ResTarget": ["val"],
+  "ColumnRef": ["fields"],
+  "String": [],
+  "RangeVar": [],
+  "InsertStmt": ["relation", "cols", "selectStmt"],
+  "Unknown": [],
+  "List": ["items"],
+  "A_Const": ["sval", "boolval", "ival"],
+  "UpdateStmt": ["relation", "targetList", "whereClause"],
+  "A_Expr": ["name", "lexpr", "rexpr"],
+  "Keyword": [],
+  "Identifier": [],
+  "Punctuator": [],
+  "Operator": [],
+  "Numeric": [],
+  "SQLStatement": ["statement"],
+  "SQLParseError": [],
+  "SQLProcedure": [],
+  "EmbeddedCode": []
+}

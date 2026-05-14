@@ -212,15 +212,15 @@ export default {
       row: true,
       timing: 2,
       events: 16,
-      range: [0, 230],
+      range: [166, 293],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 8,
+          column: 20,
         },
         end: {
-          line: 11,
-          column: 26,
+          line: 13,
+          column: 45,
         },
       },
     },
@@ -354,15 +354,15 @@ export default {
           },
         },
       ],
-      range: [0, 1108],
+      range: [294, 1116],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 13,
+          column: 46,
         },
         end: {
           line: 34,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {
@@ -422,15 +422,15 @@ export default {
       ],
       row: true,
       events: 28,
-      range: [0, 1199],
+      range: [1117, 1253],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 34,
+          column: 20,
         },
         end: {
-          line: 37,
-          column: 45,
+          line: 39,
+          column: 36,
         },
       },
     },
@@ -564,15 +564,15 @@ export default {
           },
         },
       ],
-      range: [0, 1641],
+      range: [1254, 1649],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 39,
+          column: 37,
         },
         end: {
           line: 56,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {
@@ -694,15 +694,15 @@ export default {
           },
         },
       },
-      range: [0, 1777],
+      range: [1650, 1828],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 56,
+          column: 20,
         },
         end: {
-          line: 61,
-          column: 29,
+          line: 62,
+          column: 40,
         },
       },
     },
@@ -836,15 +836,15 @@ export default {
           },
         },
       ],
-      range: [0, 2204],
+      range: [1829, 2212],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 62,
+          column: 41,
         },
         end: {
           line: 78,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {
@@ -905,14 +905,14 @@ export default {
       row: true,
       timing: 64,
       events: 16,
-      range: [0, 2312],
+      range: [2213, 2378],
       loc: {
         start: {
-          line: 1,
-          column: 0,
+          line: 78,
+          column: 20,
         },
         end: {
-          line: 81,
+          line: 83,
           column: 48,
         },
       },
