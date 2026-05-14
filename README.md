@@ -81,6 +81,45 @@ SELECT id FROM users;
 | `-- ...`    | `{ type: "Line",  value: "..." }` (without the leading `--`)           |
 | `/* ... */` | `{ type: "Block", value: "..." }` (without the `/*` / `*/` delimiters) |
 
+### Linting PL/\* function bodies (plv8, plpgsql, plpython3u, …)
+
+`CREATE FUNCTION` / `CREATE PROCEDURE` bodies written in another language are exposed as `EmbeddedCode` nodes on the parent statement (see [`extractEmbeddedCode`](#extractembeddedcodeprogram-program-embeddedcode)). To lint them with the appropriate language's ESLint rules, use the `createPlProcessor` factory from the `postgresql-eslint-parser/processor` subpath. It produces a generic ESLint processor that emits one virtual file per body — the parser does not know about any specific PL, so any language is supported as long as you provide an ESLint parser for it via your flat config.
+
+```js
+import postgresqlParser from "postgresql-eslint-parser";
+import { createPlProcessor } from "postgresql-eslint-parser/processor";
+import tsParser from "@typescript-eslint/parser";
+
+const plProcessor = createPlProcessor({
+  languages: {
+    plv8: ".js",
+    plv8u: ".js",
+    plpgsql: ".plpgsql",
+    plpython3u: ".py",
+  },
+  // "skip" (default) silently drops bodies whose language is not mapped;
+  // "error" throws so unhandled PLs do not pass silently.
+  unknown: "skip",
+});
+
+export default [
+  {
+    files: ["**/*.sql"],
+    languageOptions: { parser: postgresqlParser },
+    processor: plProcessor,
+  },
+  {
+    files: ["**/*.sql/*.js"],
+    languageOptions: { parser: tsParser },
+    rules: {
+      // your JS rules for plv8 bodies
+    },
+  },
+];
+```
+
+**Limitations.** Fix-range translation only runs for dollar-quoted bodies. For single-quoted bodies that contain `''` escapes, fixes are dropped to avoid reporting wrong ranges (a future source-map–based mapping is tracked separately).
+
 ## Features
 
 - **PostgreSQL 17 parsing** — powered by `@libpg-query/parser`, loaded synchronously via WebAssembly so it works with ESLint's synchronous parser API.
