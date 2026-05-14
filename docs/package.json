@@ -25,6 +25,7 @@
     "@codemirror/state": "^6.5.1",
     "@codemirror/view": "^6.36.2",
     "@lezer/highlight": "^1.2.1",
-    "@libpg-query/parser": "^17.6.10"
+    "@libpg-query/parser": "^17.6.10",
+    "shiki": "^1.27.0"
   }
 }

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { base } from "$app/paths";
 
+  let { data } = $props();
+
   const features: { title: string; body: string }[] = [
     {
       title: "Real PostgreSQL 17 grammar",
@@ -28,20 +30,6 @@
     },
   ];
 
-  const eslintExample = `// eslint.config.js
-import postgresqlParser from "postgresql-eslint-parser";
-
-export default [
-  {
-    files: ["**/*.sql"],
-    languageOptions: {
-      parser: postgresqlParser,
-    },
-    rules: {
-      // your SQL-specific rules
-    },
-  },
-];`;
 </script>
 
 <section class="hero">
@@ -96,7 +84,7 @@ export default [
         would receive.
       </p>
     </div>
-    <pre class="code"><code>{eslintExample}</code></pre>
+    <div class="code shiki-host">{@html data.eslintConfig}</div>
   </div>
 </section>
 

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { base } from "$app/paths";
 
+  let { data } = $props();
+
   const toc: { id: string; title: string }[] = [
     { id: "requirements", title: "Requirements" },
     { id: "install", title: "Installation" },
@@ -49,11 +51,7 @@
 
     <section id="install">
       <h2>Installation</h2>
-      <pre class="code"><code>{`npm install --save-dev postgresql-eslint-parser
-# or
-pnpm add -D postgresql-eslint-parser
-# or
-yarn add --dev postgresql-eslint-parser`}</code></pre>
+      <div class="code shiki-host">{@html data.install}</div>
     </section>
 
     <section id="eslint">
@@ -61,20 +59,7 @@ yarn add --dev postgresql-eslint-parser`}</code></pre>
       <p>
         Use ESLint's flat config and point the parser at <code>.sql</code> files.
       </p>
-      <pre class="code"><code>{`// eslint.config.js
-import postgresqlParser from "postgresql-eslint-parser";
-
-export default [
-  {
-    files: ["**/*.sql"],
-    languageOptions: {
-      parser: postgresqlParser,
-    },
-    rules: {
-      // your SQL-specific rules
-    },
-  },
-];`}</code></pre>
+      <div class="code shiki-host">{@html data.eslintConfig}</div>
     </section>
 
     <section id="directives">
@@ -84,12 +69,7 @@ export default [
         comments. The parser surfaces SQL comments as ESLint comment nodes, so
         the usual directives work in <code>.sql</code> files:
       </p>
-      <pre class="code"><code>{`-- eslint-disable-next-line no-select-star
-SELECT * FROM users;
-
-/* eslint-disable some-rule */
-SELECT id FROM users;
-/* eslint-enable some-rule */`}</code></pre>
+      <div class="code shiki-host">{@html data.directives}</div>
 
       <table class="table">
         <thead>
@@ -128,14 +108,7 @@ SELECT id FROM users;
         re-exported under <code>Ast</code> for use in TypeScript rule authoring.
       </p>
 
-      <pre class="code"><code>{`import parser, { parse, parseForESLint, type Ast } from "postgresql-eslint-parser";
-
-const program = parse("SELECT 1");
-const { ast, visitorKeys } = parseForESLint("SELECT 1");
-
-function isSelect(node: Ast.SQLStatementNode): node is Ast.SelectStmt {
-  return node.type === "SelectStmt";
-}`}</code></pre>
+      <div class="code shiki-host">{@html data.apiExample}</div>
     </section>
 
     <section id="errors">
@@ -145,13 +118,7 @@ function isSelect(node: Ast.SQLStatementNode): node is Ast.SelectStmt {
         SQL. The lint run keeps going, and the program body holds a single
         <code>SQLParseError</code> node so other tooling can still introspect:
       </p>
-      <pre class="code"><code>{`interface SQLParseError {
-  type: "SQLParseError";
-  range: [number, number];
-  loc: Ast.SourceLocation;
-  error: string;   // human-readable message from libpg-query
-  raw: string;     // the original source
-}`}</code></pre>
+      <div class="code shiki-host">{@html data.sqlParseError}</div>
     </section>
 
     <section id="rules">
@@ -159,25 +126,7 @@ function isSelect(node: Ast.SQLStatementNode): node is Ast.SelectStmt {
       <p>
         Visitor keys are exported, so the regular ESLint rule shape works:
       </p>
-      <pre class="code"><code>{`// no-select-star.ts
-import type { Rule } from "eslint";
-import type { Ast } from "postgresql-eslint-parser";
-
-export const noSelectStar: Rule.RuleModule = {
-  meta: {
-    type: "suggestion",
-    messages: { star: "SELECT * is disallowed — list columns explicitly." },
-  },
-  create(context) {
-    return {
-      SelectStmt(node: Ast.SelectStmt) {
-        const target = node.targetList ?? [];
-        const hasStar = target.some((t) => t?.ResTarget?.val?.A_Star);
-        if (hasStar) context.report({ node, messageId: "star" });
-      },
-    };
-  },
-};`}</code></pre>
+      <div class="code shiki-host">{@html data.customRule}</div>
 
       <div class="callout">
         <strong>Tip.</strong>
