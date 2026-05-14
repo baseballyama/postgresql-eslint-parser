@@ -26,6 +26,6 @@
     "@codemirror/view": "^6.36.2",
     "@lezer/highlight": "^1.2.1",
     "@libpg-query/parser": "^17.6.10",
-    "shiki": "^1.27.0"
+    "shiki": "^4.0.0"
   }
 }
