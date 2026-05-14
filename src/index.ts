@@ -9,3 +9,4 @@ export default {
 
 export * as Ast from "./ast.ts";
 export { parse, parseForESLint } from "./parse.ts";
+export { extractEmbeddedCode } from "./embeddedCode.ts";
