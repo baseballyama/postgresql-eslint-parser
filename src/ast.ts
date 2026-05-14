@@ -662,6 +662,30 @@ export interface CreateFunctionStmt extends BaseNode {
   returnType?: TypeName | NamesPG;
   options?: (DefElem | ListPG)[];
   sql_body?: Node;
+  embeddedCode?: EmbeddedCode;
+}
+
+// ================================================================
+// Embedded Code (PL/* function body)
+// ================================================================
+
+/**
+ * Represents the textual body of a CREATE FUNCTION / CREATE PROCEDURE that is
+ * written in another language (plv8, plpgsql, plpython3u, ...). The parser
+ * itself never tries to parse the inner language; it just exposes the source
+ * text and its absolute position in the original SQL so downstream tooling
+ * (typically an ESLint processor) can hand it to whatever parser is
+ * appropriate.
+ *
+ * The `language` field is a free-form string carrying the LANGUAGE clause
+ * verbatim (lower-cased). We deliberately do NOT enumerate known languages —
+ * any new PL would otherwise become a breaking change of the public type.
+ */
+export interface EmbeddedCode extends BaseNode {
+  type: "EmbeddedCode";
+  language: string;
+  source: string;
+  quoteStyle: "dollar" | "single";
 }
 
 export interface FunctionParameter extends BaseNode {

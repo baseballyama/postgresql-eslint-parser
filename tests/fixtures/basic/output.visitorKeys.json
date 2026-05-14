@@ -1,15 +1,16 @@
 {
-  "A_Star": [],
-  "ColumnRef": ["fields"],
-  "ResTarget": ["val"],
-  "RangeVar": [],
+  "Program": ["body", "tokens", "comments"],
   "SelectStmt": ["targetList", "fromClause"],
+  "ResTarget": ["val"],
+  "ColumnRef": ["fields"],
+  "A_Star": [],
+  "RangeVar": [],
   "Keyword": [],
   "Operator": [],
   "Identifier": [],
   "Punctuator": [],
-  "Program": ["body", "tokens", "comments"],
   "SQLStatement": ["statement"],
   "SQLParseError": [],
-  "SQLProcedure": []
+  "SQLProcedure": [],
+  "EmbeddedCode": []
 }

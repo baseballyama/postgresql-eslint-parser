@@ -155,6 +155,23 @@ export default {
           column: 11,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source: "\nBEGIN\n    NEW.updated_at = NOW();\n    RETURN NEW;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [90, 146],
+        loc: {
+          start: {
+            line: 3,
+            column: 21,
+          },
+          end: {
+            line: 8,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateTrigStmt",
@@ -348,6 +365,24 @@ export default {
           column: 11,
         },
       },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    IF TG_OP = 'DELETE' THEN\n        INSERT INTO audit_log (table_name, operation, old_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), NOW(), current_user);\n        RETURN OLD;\n    ELSIF TG_OP = 'UPDATE' THEN\n        INSERT INTO audit_log (table_name, operation, old_data, new_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), row_to_json(NEW), NOW(), current_user);\n        RETURN NEW;\n    ELSIF TG_OP = 'INSERT' THEN\n        INSERT INTO audit_log (table_name, operation, new_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(NEW), NOW(), current_user);\n        RETURN NEW;\n    END IF;\n    RETURN NULL;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [377, 1097],
+        loc: {
+          start: {
+            line: 17,
+            column: 21,
+          },
+          end: {
+            line: 34,
+            column: 0,
+          },
+        },
+      },
     },
     {
       type: "CreateTrigStmt",
@@ -538,6 +573,24 @@ export default {
         end: {
           line: 56,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    IF NEW.total_amount < 0 THEN\n        RAISE EXCEPTION 'Order total cannot be negative';\n    END IF;\n    \n    IF NEW.total_amount > 10000 THEN\n        INSERT INTO high_value_orders (order_id, flagged_at)\n        VALUES (NEW.id, NOW());\n    END IF;\n    \n    RETURN NEW;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [1347, 1630],
+        loc: {
+          start: {
+            line: 43,
+            column: 21,
+          },
+          end: {
+            line: 56,
+            column: 0,
+          },
         },
       },
     },
@@ -792,6 +845,24 @@ export default {
         end: {
           line: 78,
           column: 11,
+        },
+      },
+      embeddedCode: {
+        type: "EmbeddedCode",
+        language: "plpgsql",
+        source:
+          "\nBEGIN\n    UPDATE users \n    SET full_name = NEW.user_name\n    WHERE id = NEW.user_id;\n    \n    IF NEW.order_count <> OLD.order_count THEN\n        RAISE NOTICE 'Cannot directly update order count through this view';\n    END IF;\n    \n    RETURN NEW;\nEND;\n",
+        quoteStyle: "dollar",
+        range: [1939, 2193],
+        loc: {
+          start: {
+            line: 66,
+            column: 21,
+          },
+          end: {
+            line: 78,
+            column: 0,
+          },
         },
       },
     },
