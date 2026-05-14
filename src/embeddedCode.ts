@@ -161,3 +161,25 @@ export const attachEmbeddedCode = (
     attachToFunctionStmt(node, tokens, lineMap);
   }
 };
+
+/**
+ * Collects every `EmbeddedCode` node in a parsed program. Intended for tools
+ * that need to enumerate PL function bodies — e.g. an ESLint processor that
+ * emits a virtual file per body, or a CI script that audits which languages
+ * are in use across a codebase.
+ *
+ * The returned list preserves source order so virtual-file indices line up
+ * with the order embedded bodies appear in the SQL file.
+ */
+export const extractEmbeddedCode = (program: Program): EmbeddedCode[] => {
+  const result: EmbeddedCode[] = [];
+  for (const rawNode of program.body) {
+    const node = rawNode as unknown as Record<string, unknown>;
+    if (!isRecord(node)) continue;
+    const embedded = node["embeddedCode"];
+    if (isRecord(embedded) && embedded["type"] === "EmbeddedCode") {
+      result.push(embedded as unknown as EmbeddedCode);
+    }
+  }
+  return result;
+};

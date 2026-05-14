@@ -109,6 +109,21 @@ Parses SQL code for ESLint usage. Returns:
 
 All AST node type definitions (e.g. `Program`, `SQLStatementNode`, `SelectStmt`, `SQLParseError`, …) are re-exported under the `Ast` namespace for use in custom ESLint rules.
 
+### `extractEmbeddedCode(program: Program): EmbeddedCode[]`
+
+Returns every `EmbeddedCode` node (PL function bodies) in source order. Each entry exposes `language` (the lower-cased `LANGUAGE` clause, e.g. `"plv8"`, `"plpgsql"`, `"plpython3u"`), `source` (the body text), `range` / `loc` (absolute position in the SQL file), and `quoteStyle` (`"dollar"` or `"single"`). C-style two-argument `AS 'libname', 'symbol'` is intentionally skipped because it is not source code.
+
+```ts
+import { parseForESLint, extractEmbeddedCode } from "postgresql-eslint-parser";
+
+const { ast } = parseForESLint(sql);
+for (const body of extractEmbeddedCode(ast)) {
+  console.log(
+    `${body.language}: ${body.source.length} chars at ${body.range[0]}`,
+  );
+}
+```
+
 ### Syntax errors
 
 When the input cannot be parsed, `parseForESLint` does **not** throw. Instead, `program.body` contains a single `SQLParseError` node:
