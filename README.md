@@ -45,6 +45,8 @@ const program = parse("SELECT 1");
 
 ## ESLint Integration
 
+> Looking for ready-made rules? See [`eslint-plugin-postgresql`](https://baseballyama.github.io/eslint-plugin-postgresql/), the companion plugin that ships lint rules built on this parser.
+
 ### ESLint Flat Config (`eslint.config.js`)
 
 ```javascript
@@ -179,6 +181,10 @@ interface SQLParseError {
   raw: string; // the original source code
 }
 ```
+
+## Related projects
+
+- [`eslint-plugin-postgresql`](https://baseballyama.github.io/eslint-plugin-postgresql/) — companion ESLint plugin with rules built on this parser.
 
 ## License
 

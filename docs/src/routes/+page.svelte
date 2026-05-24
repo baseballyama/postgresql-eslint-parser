@@ -87,6 +87,14 @@
         <a href="{base}/playground">playground</a> to inspect the AST a rule
         would receive.
       </p>
+      <p class="usage-lede">
+        Looking for ready-made rules? Check out
+        <a
+          href="https://baseballyama.github.io/eslint-plugin-postgresql/"
+          target="_blank"
+          rel="noreferrer noopener">eslint-plugin-postgresql</a
+        >, the companion plugin that ships lint rules built on this parser.
+      </p>
     </div>
     <div class="code shiki-host">{@html data.eslintConfig}</div>
   </div>

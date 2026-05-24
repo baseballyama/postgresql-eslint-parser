@@ -52,6 +52,13 @@
           </li>
           <li>
             <a
+              href="https://baseballyama.github.io/eslint-plugin-postgresql/"
+              target="_blank"
+              rel="noreferrer noopener">eslint-plugin-postgresql</a
+            >
+          </li>
+          <li>
+            <a
               href="https://github.com/baseballyama/postgresql-eslint-parser/blob/main/LICENSE"
               target="_blank"
               rel="noreferrer noopener">MIT License</a
