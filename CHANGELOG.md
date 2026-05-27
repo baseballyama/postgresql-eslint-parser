@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.5.2
+
+### Patch Changes
+
+- [#215](https://github.com/baseballyama/postgresql-eslint-parser/pull/215) [`7a5ad10`](https://github.com/baseballyama/postgresql-eslint-parser/commit/7a5ad109123c058b90b88b837defefcb48327c02) Thanks [@baseballyama](https://github.com/baseballyama)! - Treat libpg-query's negative `location` values (most commonly `-1`) as "no location" instead of converting them to a `[-1, -1]` range. libpg-query uses negative locations to mark synthetic / unanchored nodes — e.g. the `selectStmt` that `transformInsertStmt` wraps around an `INSERT INTO ... SELECT ...`. Previously, these nodes ended up with `range: [-1, n]` (where `n` came from sibling/parent bounds), which made downstream rules report at `line 1 column -1` and bypass every inline `eslint-disable` directive.
+
 ## 0.5.1
 
 ### Patch Changes
