@@ -2820,15 +2820,15 @@ export default {
           },
           sortby_dir: "SORTBY_DESC",
           sortby_nulls: "SORTBY_NULLS_DEFAULT",
-          range: [-1, -1],
+          range: [1733, 1736],
           loc: {
             start: {
-              line: 1,
-              column: -1,
+              line: 52,
+              column: 9,
             },
             end: {
-              line: 1,
-              column: -1,
+              line: 52,
+              column: 12,
             },
           },
         },
@@ -5515,15 +5515,15 @@ export default {
                         },
                         sortby_dir: "SORTBY_DEFAULT",
                         sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                        range: [-1, -1],
+                        range: [2979, 2988],
                         loc: {
                           start: {
-                            line: 1,
-                            column: -1,
+                            line: 98,
+                            column: 59,
                           },
                           end: {
-                            line: 1,
-                            column: -1,
+                            line: 98,
+                            column: 68,
                           },
                         },
                       },
@@ -5690,15 +5690,15 @@ export default {
                         },
                         sortby_dir: "SORTBY_DEFAULT",
                         sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                        range: [-1, -1],
+                        range: [3073, 3082],
                         loc: {
                           start: {
-                            line: 1,
-                            column: -1,
+                            line: 99,
+                            column: 67,
                           },
                           end: {
-                            line: 1,
-                            column: -1,
+                            line: 99,
+                            column: 76,
                           },
                         },
                       },
@@ -5865,15 +5865,15 @@ export default {
                         },
                         sortby_dir: "SORTBY_DEFAULT",
                         sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                        range: [-1, -1],
+                        range: [3256, 3265],
                         loc: {
                           start: {
-                            line: 1,
-                            column: -1,
+                            line: 101,
+                            column: 66,
                           },
                           end: {
-                            line: 1,
-                            column: -1,
+                            line: 101,
+                            column: 75,
                           },
                         },
                       },
@@ -5939,11 +5939,11 @@ export default {
             ],
             limitOption: "LIMIT_OPTION_DEFAULT",
             op: "SETOP_NONE",
-            range: [-1, 3384],
+            range: [2873, 3384],
             loc: {
               start: {
-                line: 1,
-                column: -1,
+                line: 95,
+                column: 8,
               },
               end: {
                 line: 103,
@@ -6475,15 +6475,15 @@ export default {
                   },
                   sortby_dir: "SORTBY_DESC",
                   sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                  range: [-1, -1],
+                  range: [3745, 3755],
                   loc: {
                     start: {
-                      line: 1,
-                      column: -1,
+                      line: 120,
+                      column: 13,
                     },
                     end: {
-                      line: 1,
-                      column: -1,
+                      line: 120,
+                      column: 23,
                     },
                   },
                 },
@@ -6507,11 +6507,11 @@ export default {
               },
               limitOption: "LIMIT_OPTION_COUNT",
               op: "SETOP_NONE",
-              range: [-1, 3772],
+              range: [3662, 3772],
               loc: {
                 start: {
-                  line: 1,
-                  column: -1,
+                  line: 117,
+                  column: 11,
                 },
                 end: {
                   line: 121,
@@ -6522,11 +6522,11 @@ export default {
             alias: {
               aliasname: "recent_orders",
             },
-            range: [-1, 3772],
+            range: [3662, 3772],
             loc: {
               start: {
-                line: 1,
-                column: -1,
+                line: 117,
+                column: 11,
               },
               end: {
                 line: 121,
@@ -6534,11 +6534,11 @@ export default {
               },
             },
           },
-          range: [-1, 3772],
+          range: [3622, 3772],
           loc: {
             start: {
-              line: 1,
-              column: -1,
+              line: 115,
+              column: 5,
             },
             end: {
               line: 121,

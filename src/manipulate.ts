@@ -149,15 +149,24 @@ const buildAddLocation = (
       }
     }
 
+    // libpg-query uses negative `location` values (most commonly -1) to mark
+    // synthetic / unanchored nodes — e.g. the `selectStmt` that
+    // `transformInsertStmt` wraps around an `INSERT INTO ... SELECT ...`. Treat
+    // those as "no location" so they neither overwrite the node with a bogus
+    // position nor bubble a negative `minLocation` into their ancestors.
     const rawLocation =
-      typeof node["location"] === "number" ? node["location"] : null;
+      typeof node["location"] === "number" && node["location"] >= 0
+        ? node["location"]
+        : null;
     // libpg-query reports `location` as a UTF-8 byte offset, but the rest of
     // the pipeline (tokens, line map, node ranges) operates on JS string
     // (UTF-16) offsets. Convert here so downstream lookups line up when the
     // source contains multi-byte characters.
     const location = rawLocation == null ? null : byteToChar(rawLocation);
-    if (location != null) {
+    if (typeof node["location"] === "number") {
       delete node["location"];
+    }
+    if (location != null) {
       const locationInfo = locationMap[location];
 
       if (locationInfo) {
