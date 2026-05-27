@@ -1,5 +1,15 @@
 # postgresql-eslint-parser
 
+## 0.5.1
+
+### Patch Changes
+
+- [#213](https://github.com/baseballyama/postgresql-eslint-parser/pull/213) [`ca20209`](https://github.com/baseballyama/postgresql-eslint-parser/commit/ca202098300b343e97ef450c151c82d71219d406) Thanks [@baseballyama](https://github.com/baseballyama)! - Fix `[0, 0]` fallback locations for nodes nested in a statement that lack their own `location` from libpg-query (most commonly the `SelectStmt` wrapped inside an `InsertStmt`).
+
+  Previously, those nodes resolved to `range: [0, 0]` / `loc: { line: 1, column: 0 }`, which made every inline `eslint-disable` directive useless — downstream rules (e.g. `postgresql/require-limit`) reported against `line 1, column 0`, strictly before any comment-based directive could take effect.
+
+  After this fix, when `manipulate` knows the true bounds of the top-level statement (from `stmt_location` / `stmt_len`), it walks back down and replaces the `[0, 0]` fallbacks with the nearest ancestor's `range` / `loc`. The result is an over-approximation of each child's true range, but it sits strictly inside the enclosing statement and is large enough that `/* eslint-disable */` directives at the file head suppress reports against it as expected.
+
 ## 0.5.0
 
 ### Minor Changes
