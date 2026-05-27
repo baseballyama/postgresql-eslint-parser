@@ -1383,15 +1383,15 @@ export default {
                       },
                       sortby_dir: "SORTBY_DESC",
                       sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                      range: [-1, -1],
+                      range: [402, 413],
                       loc: {
                         start: {
-                          line: 1,
-                          column: -1,
+                          line: 16,
+                          column: 30,
                         },
                         end: {
-                          line: 1,
-                          column: -1,
+                          line: 16,
+                          column: 41,
                         },
                       },
                     },
@@ -1511,15 +1511,15 @@ export default {
                       },
                       sortby_dir: "SORTBY_DEFAULT",
                       sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                      range: [-1, -1],
+                      range: [490, 501],
                       loc: {
                         start: {
-                          line: 1,
-                          column: -1,
+                          line: 17,
+                          column: 52,
                         },
                         end: {
-                          line: 1,
-                          column: -1,
+                          line: 17,
+                          column: 63,
                         },
                       },
                     },
@@ -1664,11 +1664,11 @@ export default {
             },
             limitOption: "LIMIT_OPTION_DEFAULT",
             op: "SETOP_NONE",
-            range: [-1, 572],
+            range: [369, 572],
             loc: {
               start: {
-                line: 1,
-                column: -1,
+                line: 15,
+                column: 11,
               },
               end: {
                 line: 19,
@@ -1702,11 +1702,11 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [-1, 791],
+      range: [24, 791],
       loc: {
         start: {
-          line: 1,
-          column: -1,
+          line: 2,
+          column: 0,
         },
         end: {
           line: 29,
@@ -1817,15 +1817,15 @@ export default {
           },
           sortby_dir: "SORTBY_DEFAULT",
           sortby_nulls: "SORTBY_NULLS_DEFAULT",
-          range: [-1, -1],
+          range: [1243, 1247],
           loc: {
             start: {
-              line: 1,
-              column: -1,
+              line: 46,
+              column: 42,
             },
             end: {
-              line: 1,
-              column: -1,
+              line: 46,
+              column: 46,
             },
           },
         },
@@ -3119,15 +3119,15 @@ export default {
                   },
                   sortby_dir: "SORTBY_DEFAULT",
                   sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                  range: [-1, -1],
+                  range: [1397, 1407],
                   loc: {
                     start: {
-                      line: 1,
-                      column: -1,
+                      line: 53,
+                      column: 58,
                     },
                     end: {
-                      line: 1,
-                      column: -1,
+                      line: 53,
+                      column: 68,
                     },
                   },
                 },
@@ -3294,15 +3294,15 @@ export default {
                   },
                   sortby_dir: "SORTBY_DEFAULT",
                   sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                  range: [-1, -1],
+                  range: [1487, 1497],
                   loc: {
                     start: {
-                      line: 1,
-                      column: -1,
+                      line: 54,
+                      column: 59,
                     },
                     end: {
-                      line: 1,
-                      column: -1,
+                      line: 54,
+                      column: 69,
                     },
                   },
                 },
@@ -3469,15 +3469,15 @@ export default {
                   },
                   sortby_dir: "SORTBY_DEFAULT",
                   sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                  range: [-1, -1],
+                  range: [1572, 1582],
                   loc: {
                     start: {
-                      line: 1,
-                      column: -1,
+                      line: 55,
+                      column: 58,
                     },
                     end: {
-                      line: 1,
-                      column: -1,
+                      line: 55,
+                      column: 68,
                     },
                   },
                 },
@@ -3644,15 +3644,15 @@ export default {
                   },
                   sortby_dir: "SORTBY_DEFAULT",
                   sortby_nulls: "SORTBY_NULLS_DEFAULT",
-                  range: [-1, -1],
+                  range: [1737, 1747],
                   loc: {
                     start: {
-                      line: 1,
-                      column: -1,
+                      line: 57,
+                      column: 58,
                     },
                     end: {
-                      line: 1,
-                      column: -1,
+                      line: 57,
+                      column: 68,
                     },
                   },
                 },
@@ -3901,15 +3901,15 @@ export default {
                 },
               },
             },
-            range: [-1, -1],
+            range: [1879, 1896],
             loc: {
               start: {
-                line: 1,
-                column: -1,
+                line: 60,
+                column: 35,
               },
               end: {
-                line: 1,
-                column: -1,
+                line: 60,
+                column: 52,
               },
             },
           },
@@ -4395,15 +4395,15 @@ export default {
                             },
                           },
                         },
-                        range: [-1, -1],
+                        range: [2073, 2091],
                         loc: {
                           start: {
-                            line: 1,
-                            column: -1,
+                            line: 68,
+                            column: 39,
                           },
                           end: {
-                            line: 1,
-                            column: -1,
+                            line: 68,
+                            column: 57,
                           },
                         },
                       },
@@ -4446,11 +4446,11 @@ export default {
               },
               limitOption: "LIMIT_OPTION_DEFAULT",
               op: "SETOP_NONE",
-              range: [-1, 2091],
+              range: [1991, 2091],
               loc: {
                 start: {
-                  line: 1,
-                  column: -1,
+                  line: 66,
+                  column: 11,
                 },
                 end: {
                   line: 68,
