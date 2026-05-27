@@ -21,15 +21,15 @@ export default {
         {
           type: "String",
           sval: "update_modified_column",
-          range: [0, 0],
+          range: [77, 157],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 3,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 8,
+              column: 11,
             },
           },
         },
@@ -38,15 +38,15 @@ export default {
         "0": {
           type: "String",
           sval: "trigger",
-          range: [0, 0],
+          range: [77, 84],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 3,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 3,
+              column: 15,
             },
           },
         },
@@ -74,28 +74,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n    NEW.updated_at = NOW();\n    RETURN NEW;\nEND;\n",
-                range: [0, 0],
+                range: [85, 87],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 3,
+                    column: 16,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 3,
+                    column: 18,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [85, 87],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 3,
+                column: 16,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 3,
+                column: 18,
               },
             },
           },
@@ -118,15 +118,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [149, 157],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 8,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 8,
+                column: 11,
               },
             },
           },
@@ -196,15 +196,15 @@ export default {
         {
           type: "String",
           sval: "update_modified_column",
-          range: [0, 0],
+          range: [166, 293],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 8,
+              column: 20,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 13,
+              column: 45,
             },
           },
         },
@@ -231,15 +231,15 @@ export default {
         {
           type: "String",
           sval: "audit_changes",
-          range: [0, 0],
+          range: [294, 1116],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 13,
+              column: 46,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 34,
+              column: 19,
             },
           },
         },
@@ -248,15 +248,15 @@ export default {
         "0": {
           type: "String",
           sval: "trigger",
-          range: [0, 0],
+          range: [364, 371],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 17,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 17,
+              column: 15,
             },
           },
         },
@@ -284,28 +284,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n    IF TG_OP = 'DELETE' THEN\n        INSERT INTO audit_log (table_name, operation, old_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), NOW(), current_user);\n        RETURN OLD;\n    ELSIF TG_OP = 'UPDATE' THEN\n        INSERT INTO audit_log (table_name, operation, old_data, new_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), row_to_json(NEW), NOW(), current_user);\n        RETURN NEW;\n    ELSIF TG_OP = 'INSERT' THEN\n        INSERT INTO audit_log (table_name, operation, new_data, changed_at, changed_by)\n        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(NEW), NOW(), current_user);\n        RETURN NEW;\n    END IF;\n    RETURN NULL;\nEND;\n",
-                range: [0, 0],
+                range: [372, 374],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 17,
+                    column: 16,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 17,
+                    column: 18,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [372, 374],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 17,
+                column: 16,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 17,
+                column: 18,
               },
             },
           },
@@ -328,15 +328,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [1100, 1108],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 34,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 34,
+                column: 11,
               },
             },
           },
@@ -407,15 +407,15 @@ export default {
         {
           type: "String",
           sval: "audit_changes",
-          range: [0, 0],
+          range: [1117, 1253],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 34,
+              column: 20,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 39,
+              column: 36,
             },
           },
         },
@@ -441,15 +441,15 @@ export default {
         {
           type: "String",
           sval: "check_order_total",
-          range: [0, 0],
+          range: [1254, 1649],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 39,
+              column: 37,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 56,
+              column: 19,
             },
           },
         },
@@ -458,15 +458,15 @@ export default {
         "0": {
           type: "String",
           sval: "trigger",
-          range: [0, 0],
+          range: [1334, 1341],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 43,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 43,
+              column: 15,
             },
           },
         },
@@ -494,28 +494,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n    IF NEW.total_amount < 0 THEN\n        RAISE EXCEPTION 'Order total cannot be negative';\n    END IF;\n    \n    IF NEW.total_amount > 10000 THEN\n        INSERT INTO high_value_orders (order_id, flagged_at)\n        VALUES (NEW.id, NOW());\n    END IF;\n    \n    RETURN NEW;\nEND;\n",
-                range: [0, 0],
+                range: [1342, 1344],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 16,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 18,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [1342, 1344],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 43,
+                column: 16,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 43,
+                column: 18,
               },
             },
           },
@@ -538,15 +538,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [1633, 1641],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 56,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 56,
+                column: 11,
               },
             },
           },
@@ -617,15 +617,15 @@ export default {
         {
           type: "String",
           sval: "check_order_total",
-          range: [0, 0],
+          range: [1650, 1828],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 56,
+              column: 20,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 62,
+              column: 40,
             },
           },
         },
@@ -641,30 +641,30 @@ export default {
             {
               type: "String",
               sval: "new",
-              range: [0, 0],
+              range: [1758, 1761],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 61,
+                  column: 10,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 61,
+                  column: 13,
                 },
               },
             },
             {
               type: "String",
               sval: "total_amount",
-              range: [0, 0],
+              range: [1758, 1761],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 61,
+                  column: 10,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 61,
+                  column: 13,
                 },
               },
             },
@@ -713,15 +713,15 @@ export default {
         {
           type: "String",
           sval: "user_order_summary_update",
-          range: [0, 0],
+          range: [1829, 2212],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 62,
+              column: 41,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 78,
+              column: 19,
             },
           },
         },
@@ -730,15 +730,15 @@ export default {
         "0": {
           type: "String",
           sval: "trigger",
-          range: [0, 0],
+          range: [1926, 1933],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 66,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 66,
+              column: 15,
             },
           },
         },
@@ -766,28 +766,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n    UPDATE users \n    SET full_name = NEW.user_name\n    WHERE id = NEW.user_id;\n    \n    IF NEW.order_count <> OLD.order_count THEN\n        RAISE NOTICE 'Cannot directly update order count through this view';\n    END IF;\n    \n    RETURN NEW;\nEND;\n",
-                range: [0, 0],
+                range: [1934, 1936],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 66,
+                    column: 16,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 66,
+                    column: 18,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [1934, 1936],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 66,
+                column: 16,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 66,
+                column: 18,
               },
             },
           },
@@ -810,15 +810,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [2196, 2204],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 78,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 78,
+                column: 11,
               },
             },
           },
@@ -889,15 +889,15 @@ export default {
         {
           type: "String",
           sval: "user_order_summary_update",
-          range: [0, 0],
+          range: [2213, 2378],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 78,
+              column: 20,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 83,
+              column: 48,
             },
           },
         },

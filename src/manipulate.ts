@@ -264,6 +264,60 @@ const buildStartEndMap = (tokens: ESLintToken[]): Record<number, Location> => {
   return result;
 };
 
+// `addLocation` falls back to `range: [0, 0]` for nodes that have no own
+// `location` and whose descendants are also unanchored (most commonly the
+// `SelectStmt` and its children wrapped inside an `InsertStmt`). That makes
+// every inline `eslint-disable` directive useless for downstream rules,
+// because reports against those nodes resolve to line 1 column 0 — strictly
+// before any comment-based directive can take effect.
+//
+// By the time the loop in `manipulate` knows the true bounds of the top-level
+// statement (from libpg-query's `stmt_location` / `stmt_len`), we can walk
+// back down and replace the [0, 0] fallbacks with the nearest ancestor's loc.
+// This still over-approximates a child statement's exact range, but it is
+// strictly inside the enclosing statement and large enough that inline
+// directives at the file head suppress reports against it.
+const isFallbackRange = (range: unknown): boolean =>
+  isArray(range) && range.length === 2 && range[0] === 0 && range[1] === 0;
+
+const repairFallbackLocations = (
+  node: unknown,
+  ancestorRange: [number, number],
+  ancestorLoc: SourceLocation,
+): void => {
+  if (isArray(node)) {
+    for (const item of node)
+      repairFallbackLocations(item, ancestorRange, ancestorLoc);
+    return;
+  }
+  if (!isRecord(node)) return;
+
+  let inheritedRange = ancestorRange;
+  let inheritedLoc = ancestorLoc;
+
+  if (isFallbackRange(node["range"])) {
+    setNodeLocation(node, [ancestorRange[0], ancestorRange[1]], {
+      start: { line: ancestorLoc.start.line, column: ancestorLoc.start.column },
+      end: { line: ancestorLoc.end.line, column: ancestorLoc.end.column },
+    });
+  } else if (
+    isArray(node["range"]) &&
+    isRecord(node["loc"]) &&
+    isRecord((node["loc"] as unknown as SourceLocation).start) &&
+    isRecord((node["loc"] as unknown as SourceLocation).end)
+  ) {
+    inheritedRange = node["range"] as [number, number];
+    inheritedLoc = node["loc"] as unknown as SourceLocation;
+  }
+
+  for (const [key, value] of Object.entries(node)) {
+    if (specialKeys.includes(key)) continue;
+    if (isRecord(value) || isArray(value)) {
+      repairFallbackLocations(value, inheritedRange, inheritedLoc);
+    }
+  }
+};
+
 export const manipulate = (
   pgAst: RawPostgreSQLAst,
   tokens: ESLintToken[],
@@ -295,6 +349,17 @@ export const manipulate = (
         start: { line: startPos.line, column: startPos.column },
         end: { line: endPos.line, column: endPos.column },
       };
+    }
+    // Propagate the resolved statement loc down into descendants whose
+    // location resolution bottomed out at [0, 0].
+    const resolvedRange = stmtNode["range"];
+    const resolvedLoc = stmtNode["loc"];
+    if (isArray(resolvedRange) && isRecord(resolvedLoc)) {
+      repairFallbackLocations(
+        stmtNode,
+        resolvedRange as [number, number],
+        resolvedLoc as unknown as SourceLocation,
+      );
     }
     result.push(stmtNode);
   }
