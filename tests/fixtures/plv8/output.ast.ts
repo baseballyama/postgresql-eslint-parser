@@ -21,15 +21,15 @@ export default {
         {
           type: "String",
           sval: "plv8_test",
-          range: [0, 0],
+          range: [81, 156],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 47,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 4,
+              column: 33,
             },
           },
         },
@@ -38,15 +38,15 @@ export default {
         "0": {
           type: "String",
           sval: "text",
-          range: [0, 0],
+          range: [81, 85],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 47,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 51,
             },
           },
         },
@@ -74,28 +74,28 @@ export default {
               {
                 type: "String",
                 sval: '\n    return "Hello from PLV8!";\n',
-                range: [0, 0],
+                range: [86, 88],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 52,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 54,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [86, 88],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 2,
+                column: 52,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 2,
+                column: 54,
               },
             },
           },
@@ -118,15 +118,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [126, 134],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 11,
               },
             },
           },
@@ -149,15 +149,15 @@ export default {
           arg: {
             type: "String",
             sval: "immutable",
-            range: [0, 0],
+            range: [140, 149],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 17,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 26,
               },
             },
           },
@@ -180,15 +180,15 @@ export default {
           arg: {
             type: "Boolean",
             boolval: true,
-            range: [0, 0],
+            range: [150, 156],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 27,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 33,
               },
             },
           },
@@ -242,15 +242,15 @@ export default {
         {
           type: "String",
           sval: "json_manipulate",
-          range: [0, 0],
+          range: [157, 396],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 4,
+              column: 34,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 16,
             },
           },
         },
@@ -263,30 +263,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [213, 217],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 6,
+                  column: 54,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 6,
+                  column: 58,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "json",
-              range: [0, 0],
+              range: [213, 217],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 6,
+                  column: 54,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 6,
+                  column: 58,
                 },
               },
             },
@@ -322,30 +322,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [227, 231],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 12,
             },
           },
         },
         "1": {
           type: "String",
           sval: "json",
-          range: [0, 0],
+          range: [227, 231],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 12,
             },
           },
         },
@@ -373,28 +373,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    var obj = JSON.parse(input_json);\n    obj.processed = true;\n    obj.timestamp = new Date().toISOString();\n    return JSON.stringify(obj);\n",
-                range: [0, 0],
+                range: [232, 234],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 13,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 15,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [232, 234],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 13,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 15,
               },
             },
           },
@@ -417,15 +417,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [383, 391],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 11,
               },
             },
           },
@@ -480,15 +480,15 @@ export default {
         {
           type: "String",
           sval: "calculate_distance",
-          range: [0, 0],
+          range: [397, 1048],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 17,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 32,
+              column: 33,
             },
           },
         },
@@ -501,30 +501,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [450, 455],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 51,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 56,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "float8",
-              range: [0, 0],
+              range: [450, 455],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 51,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 56,
                 },
               },
             },
@@ -562,30 +562,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [462, 467],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 63,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 68,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "float8",
-              range: [0, 0],
+              range: [462, 467],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 63,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 68,
                 },
               },
             },
@@ -623,30 +623,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [474, 479],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 75,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 80,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "float8",
-              range: [0, 0],
+              range: [474, 479],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 75,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 80,
                 },
               },
             },
@@ -684,30 +684,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [486, 491],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 87,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 92,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "float8",
-              range: [0, 0],
+              range: [486, 491],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 87,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 92,
                 },
               },
             },
@@ -743,30 +743,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [501, 506],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 13,
             },
           },
         },
         "1": {
           type: "String",
           sval: "float8",
-          range: [0, 0],
+          range: [501, 506],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 13,
             },
           },
         },
@@ -794,28 +794,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    function toRadians(degrees) {\n        return degrees * (Math.PI / 180);\n    }\n    \n    var R = 6371; // Earth's radius in kilometers\n    var dLat = toRadians(lat2 - lat1);\n    var dLon = toRadians(lon2 - lon1);\n    \n    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +\n            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *\n            Math.sin(dLon/2) * Math.sin(dLon/2);\n    \n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));\n    var distance = R * c;\n    \n    return distance;\n",
-                range: [0, 0],
+                range: [507, 509],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 15,
+                    column: 14,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 15,
+                    column: 16,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [507, 509],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 15,
+                column: 14,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 15,
+                column: 16,
               },
             },
           },
@@ -838,15 +838,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [1018, 1026],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 11,
               },
             },
           },
@@ -869,15 +869,15 @@ export default {
           arg: {
             type: "String",
             sval: "immutable",
-            range: [0, 0],
+            range: [1032, 1041],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 17,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 26,
               },
             },
           },
@@ -900,15 +900,15 @@ export default {
           arg: {
             type: "Boolean",
             boolval: true,
-            range: [0, 0],
+            range: [1042, 1048],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 27,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 32,
+                column: 33,
               },
             },
           },
@@ -963,15 +963,15 @@ export default {
         {
           type: "String",
           sval: "get_user_stats",
-          range: [0, 0],
+          range: [1049, 1582],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 32,
+              column: 34,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 49,
+              column: 16,
             },
           },
         },
@@ -980,30 +980,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [1132, 1136],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 36,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 36,
+              column: 12,
             },
           },
         },
         "1": {
           type: "String",
           sval: "json",
-          range: [0, 0],
+          range: [1132, 1136],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 36,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 36,
+              column: 12,
             },
           },
         },
@@ -1031,28 +1031,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    var result = plv8.execute('SELECT status, COUNT(*) as count FROM users GROUP BY status');\n    var stats = {};\n    \n    for (var i = 0; i < result.length; i++) {\n        stats[result[i].status] = result[i].count;\n    }\n    \n    return JSON.stringify({\n        total_users: result.reduce(function(sum, row) { return sum + row.count; }, 0),\n        by_status: stats,\n        generated_at: new Date().toISOString()\n    });\n",
-                range: [0, 0],
+                range: [1137, 1139],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 36,
+                    column: 13,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 36,
+                    column: 15,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [1137, 1139],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 13,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 15,
               },
             },
           },
@@ -1075,15 +1075,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [1569, 1577],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 49,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 49,
+                column: 11,
               },
             },
           },
@@ -1138,15 +1138,15 @@ export default {
         {
           type: "String",
           sval: "audit_trigger",
-          range: [0, 0],
+          range: [1583, 2013],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 49,
+              column: 17,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 68,
+              column: 16,
             },
           },
         },
@@ -1155,15 +1155,15 @@ export default {
         "0": {
           type: "String",
           sval: "trigger",
-          range: [0, 0],
+          range: [1661, 1668],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 53,
+              column: 8,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 53,
+              column: 15,
             },
           },
         },
@@ -1191,28 +1191,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    var audit_data = {\n        table_name: TG_TABLE_NAME,\n        operation: TG_OP,\n        timestamp: new Date().toISOString(),\n        old_data: OLD,\n        new_data: NEW\n    };\n    \n    plv8.execute(\n        'INSERT INTO audit_log (data) VALUES ($1)',\n        [JSON.stringify(audit_data)]\n    );\n    \n    return null;\n",
-                range: [0, 0],
+                range: [1669, 1671],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 53,
+                    column: 16,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 53,
+                    column: 18,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [1669, 1671],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 53,
+                column: 16,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 53,
+                column: 18,
               },
             },
           },
@@ -1235,15 +1235,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [2000, 2008],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 68,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 68,
+                column: 11,
               },
             },
           },

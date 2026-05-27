@@ -24,15 +24,15 @@ export default {
             fields: [
               {
                 type: "A_Star",
-                range: [0, 0],
+                range: [7, 8],
                 loc: {
                   start: {
                     line: 1,
-                    column: 0,
+                    column: 7,
                   },
                   end: {
                     line: 1,
-                    column: 0,
+                    column: 8,
                   },
                 },
               },

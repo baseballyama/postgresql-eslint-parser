@@ -20,15 +20,15 @@ export default {
         {
           type: "String",
           sval: "py_demo",
-          range: [0, 0],
+          range: [84, 142],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 34,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 4,
+              column: 15,
             },
           },
         },
@@ -37,15 +37,15 @@ export default {
         "0": {
           type: "String",
           sval: "text",
-          range: [0, 0],
+          range: [84, 88],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 34,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 2,
+              column: 38,
             },
           },
         },
@@ -73,28 +73,28 @@ export default {
               {
                 type: "String",
                 sval: '\n    return "hi from python"\n',
-                range: [0, 0],
+                range: [89, 91],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 39,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 41,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [89, 91],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 2,
+                column: 39,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 2,
+                column: 41,
               },
             },
           },
@@ -117,15 +117,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpython3u",
-            range: [0, 0],
+            range: [134, 142],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 7,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 4,
+                column: 15,
               },
             },
           },
@@ -178,15 +178,15 @@ export default {
         {
           type: "String",
           sval: "sq_demo",
-          range: [0, 0],
+          range: [154, 312],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 4,
+              column: 27,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 9,
+              column: 18,
             },
           },
         },
@@ -195,15 +195,15 @@ export default {
         "0": {
           type: "String",
           sval: "void",
-          range: [0, 0],
+          range: [246, 250],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 34,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 38,
             },
           },
         },
@@ -231,28 +231,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    RAISE NOTICE 'hi from plpgsql';\n",
-                range: [0, 0],
+                range: [251, 253],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 39,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 41,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [251, 253],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 39,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 41,
               },
             },
           },
@@ -275,15 +275,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [296, 304],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 9,
+                column: 2,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 9,
+                column: 10,
               },
             },
           },
@@ -336,15 +336,15 @@ export default {
         {
           type: "String",
           sval: "c_demo",
-          range: [0, 0],
+          range: [313, 454],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 9,
+              column: 19,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 70,
             },
           },
         },
@@ -353,30 +353,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [417, 420],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 33,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 36,
             },
           },
         },
         "1": {
           type: "String",
           sval: "int4",
-          range: [0, 0],
+          range: [417, 420],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 33,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 36,
             },
           },
         },
@@ -404,43 +404,43 @@ export default {
               {
                 type: "String",
                 sval: "libname",
-                range: [0, 0],
+                range: [421, 423],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 12,
+                    column: 37,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 12,
+                    column: 39,
                   },
                 },
               },
               {
                 type: "String",
                 sval: "symbol",
-                range: [0, 0],
+                range: [421, 423],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 12,
+                    column: 37,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 12,
+                    column: 39,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [421, 423],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 37,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 39,
               },
             },
           },
@@ -463,15 +463,15 @@ export default {
           arg: {
             type: "String",
             sval: "c",
-            range: [0, 0],
+            range: [444, 452],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 60,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 12,
+                column: 68,
               },
             },
           },
@@ -507,15 +507,15 @@ export default {
         {
           type: "String",
           sval: "rust_demo",
-          range: [0, 0],
+          range: [455, 619],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 12,
+              column: 71,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 17,
+              column: 18,
             },
           },
         },
@@ -524,30 +524,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [574, 577],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 36,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 39,
             },
           },
         },
         "1": {
           type: "String",
           sval: "int4",
-          range: [0, 0],
+          range: [574, 577],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 36,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 15,
+              column: 39,
             },
           },
         },
@@ -575,28 +575,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    Ok(Some(42))\n",
-                range: [0, 0],
+                range: [578, 580],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 15,
+                    column: 40,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 15,
+                    column: 42,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [578, 580],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 15,
+                column: 40,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 15,
+                column: 42,
               },
             },
           },
@@ -619,15 +619,15 @@ export default {
           arg: {
             type: "String",
             sval: "plrust",
-            range: [0, 0],
+            range: [604, 612],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 17,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 17,
+                column: 11,
               },
             },
           },
@@ -681,15 +681,15 @@ export default {
         {
           type: "String",
           sval: "proc_demo",
-          range: [0, 0],
+          range: [620, 770],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 17,
+              column: 19,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 22,
+              column: 16,
             },
           },
         },
@@ -704,28 +704,28 @@ export default {
               {
                 type: "String",
                 sval: "\n    plv8.elog(NOTICE, 'from procedure');\n",
-                range: [0, 0],
+                range: [707, 709],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 20,
+                    column: 29,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 20,
+                    column: 31,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [707, 709],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 20,
+                column: 29,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 20,
+                column: 31,
               },
             },
           },
@@ -748,15 +748,15 @@ export default {
           arg: {
             type: "String",
             sval: "plv8",
-            range: [0, 0],
+            range: [757, 765],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 22,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 22,
+                column: 11,
               },
             },
           },

@@ -25,15 +25,15 @@ export default {
               {
                 type: "String",
                 sval: "id",
-                range: [0, 0],
+                range: [7, 9],
                 loc: {
                   start: {
                     line: 1,
-                    column: 0,
+                    column: 7,
                   },
                   end: {
                     line: 1,
-                    column: 0,
+                    column: 9,
                   },
                 },
               },
@@ -252,15 +252,15 @@ export default {
           {
             type: "String",
             sval: "=",
-            range: [0, 0],
+            range: [107, 108],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 3,
+                column: 41,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 3,
+                column: 42,
               },
             },
           },
@@ -271,15 +271,15 @@ export default {
             {
               type: "String",
               sval: "id",
-              range: [0, 0],
+              range: [104, 106],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 3,
+                  column: 38,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 3,
+                  column: 40,
                 },
               },
             },

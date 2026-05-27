@@ -20,15 +20,15 @@ export default {
         {
           type: "String",
           sval: "anon_body",
-          range: [0, 0],
+          range: [36, 81],
           loc: {
             start: {
               line: 1,
-              column: 0,
+              column: 36,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 5,
+              column: 11,
             },
           },
         },
@@ -37,15 +37,15 @@ export default {
         "0": {
           type: "String",
           sval: "void",
-          range: [0, 0],
+          range: [36, 40],
           loc: {
             start: {
               line: 1,
-              column: 0,
+              column: 36,
             },
             end: {
               line: 1,
-              column: 0,
+              column: 40,
             },
           },
         },
@@ -73,28 +73,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n  SELECT 1;\nEND;\n",
-                range: [0, 0],
+                range: [41, 43],
                 loc: {
                   start: {
                     line: 1,
-                    column: 0,
+                    column: 41,
                   },
                   end: {
                     line: 1,
-                    column: 0,
+                    column: 43,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [41, 43],
             loc: {
               start: {
                 line: 1,
-                column: 0,
+                column: 41,
               },
               end: {
                 line: 1,
-                column: 0,
+                column: 43,
               },
             },
           },
@@ -117,15 +117,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [73, 81],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 5,
+                column: 3,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 5,
+                column: 11,
               },
             },
           },
@@ -178,15 +178,15 @@ export default {
         {
           type: "String",
           sval: "tagged_body",
-          range: [0, 0],
+          range: [90, 206],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 5,
+              column: 20,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 11,
+              column: 23,
             },
           },
         },
@@ -195,15 +195,15 @@ export default {
         "0": {
           type: "String",
           sval: "void",
-          range: [0, 0],
+          range: [130, 134],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 38,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 7,
+              column: 42,
             },
           },
         },
@@ -231,28 +231,28 @@ export default {
               {
                 type: "String",
                 sval: "\nBEGIN\n  SELECT 'hello $$ world';\nEND;\n",
-                range: [0, 0],
+                range: [135, 137],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 43,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 7,
+                    column: 45,
                   },
                 },
               },
             ],
-            range: [0, 0],
+            range: [135, 137],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 43,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 7,
+                column: 45,
               },
             },
           },
@@ -275,15 +275,15 @@ export default {
           arg: {
             type: "String",
             sval: "plpgsql",
-            range: [0, 0],
+            range: [190, 198],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 11,
+                column: 7,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 11,
+                column: 15,
               },
             },
           },

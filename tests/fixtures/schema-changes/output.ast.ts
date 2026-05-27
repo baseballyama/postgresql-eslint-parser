@@ -125,15 +125,15 @@ export default {
             "0": {
               type: "String",
               sval: "bigserial",
-              range: [0, 0],
+              range: [262, 271],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 11,
+                  column: 7,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 11,
+                  column: 16,
                 },
               },
             },
@@ -188,30 +188,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [297, 304],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 12,
+                  column: 12,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 12,
+                  column: 19,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "int4",
-              range: [0, 0],
+              range: [297, 304],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 12,
+                  column: 12,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 12,
+                  column: 19,
                 },
               },
             },
@@ -271,15 +271,15 @@ export default {
                 {
                   type: "String",
                   sval: "id",
-                  range: [0, 0],
+                  range: [314, 324],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 12,
+                      column: 29,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 12,
+                      column: 39,
                     },
                   },
                 },
@@ -319,30 +319,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [376, 383],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 13,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 13,
+                  column: 22,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "varchar",
-              range: [0, 0],
+              range: [376, 383],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 13,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 13,
+                  column: 22,
                 },
               },
             },
@@ -416,15 +416,15 @@ export default {
             "0": {
               type: "String",
               sval: "jsonb",
-              range: [0, 0],
+              range: [413, 418],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 14,
+                  column: 20,
                 },
               },
             },
@@ -462,15 +462,15 @@ export default {
             "0": {
               type: "String",
               sval: "inet",
-              range: [0, 0],
+              range: [435, 439],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 15,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 15,
+                  column: 19,
                 },
               },
             },
@@ -508,15 +508,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [456, 460],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 16,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 16,
+                  column: 19,
                 },
               },
             },
@@ -554,30 +554,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [477, 486],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 17,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 17,
+                  column: 24,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "timestamptz",
-              range: [0, 0],
+              range: [477, 486],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 17,
+                  column: 15,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 17,
+                  column: 24,
                 },
               },
             },
@@ -606,15 +606,15 @@ export default {
                   {
                     type: "String",
                     sval: "now",
-                    range: [0, 0],
+                    range: [510, 513],
                     loc: {
                       start: {
-                        line: 1,
-                        column: 0,
+                        line: 17,
+                        column: 48,
                       },
                       end: {
-                        line: 1,
-                        column: 0,
+                        line: 17,
+                        column: 51,
                       },
                     },
                   },
@@ -669,15 +669,15 @@ export default {
               {
                 type: "String",
                 sval: "=",
-                range: [0, 0],
+                range: [572, 574],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 19,
+                    column: 50,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 19,
+                    column: 52,
                   },
                 },
               },
@@ -688,15 +688,15 @@ export default {
                 {
                   type: "String",
                   sval: "event_type",
-                  range: [0, 0],
+                  range: [561, 571],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 19,
+                      column: 39,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 19,
+                      column: 49,
                     },
                   },
                 },
@@ -851,15 +851,15 @@ export default {
                 {
                   type: "String",
                   sval: "ip_address",
-                  range: [0, 0],
+                  range: [657, 667],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 20,
+                      column: 31,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 20,
+                      column: 41,
                     },
                   },
                 },
@@ -913,15 +913,15 @@ export default {
               {
                 type: "String",
                 sval: ">",
-                range: [0, 0],
+                range: [744, 745],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 21,
+                    column: 62,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 21,
+                    column: 63,
                   },
                 },
               },
@@ -932,15 +932,15 @@ export default {
                 {
                   type: "String",
                   sval: "length",
-                  range: [0, 0],
+                  range: [725, 731],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 21,
+                      column: 43,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 21,
+                      column: 49,
                     },
                   },
                 },
@@ -952,15 +952,15 @@ export default {
                     {
                       type: "String",
                       sval: "user_agent",
-                      range: [0, 0],
+                      range: [732, 742],
                       loc: {
                         start: {
-                          line: 1,
-                          column: 0,
+                          line: 21,
+                          column: 50,
                         },
                         end: {
-                          line: 1,
-                          column: 0,
+                          line: 21,
+                          column: 60,
                         },
                       },
                     },
@@ -1277,15 +1277,15 @@ export default {
           arg: {
             type: "String",
             sval: "remote-db.example.com",
-            range: [0, 0],
+            range: [1176, 1180],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 9,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 13,
               },
             },
           },
@@ -1308,15 +1308,15 @@ export default {
           arg: {
             type: "String",
             sval: "5432",
-            range: [0, 0],
+            range: [1206, 1210],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 39,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 43,
               },
             },
           },
@@ -1339,15 +1339,15 @@ export default {
           arg: {
             type: "String",
             sval: "external_db",
-            range: [0, 0],
+            range: [1219, 1225],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 52,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 36,
+                column: 58,
               },
             },
           },
@@ -1401,15 +1401,15 @@ export default {
           arg: {
             type: "String",
             sval: "remote_user",
-            range: [0, 0],
+            range: [1310, 1314],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 40,
+                column: 9,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 40,
+                column: 13,
               },
             },
           },
@@ -1432,15 +1432,15 @@ export default {
           arg: {
             type: "String",
             sval: "remote_password",
-            range: [0, 0],
+            range: [1330, 1338],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 40,
+                column: 29,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 40,
+                column: 37,
               },
             },
           },
@@ -1481,30 +1481,30 @@ export default {
               "0": {
                 type: "String",
                 sval: "pg_catalog",
-                range: [0, 0],
+                range: [1414, 1421],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 7,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 14,
                   },
                 },
               },
               "1": {
                 type: "String",
                 sval: "int4",
-                range: [0, 0],
+                range: [1414, 1421],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 7,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 43,
+                    column: 14,
                   },
                 },
               },
@@ -1542,15 +1542,15 @@ export default {
               "0": {
                 type: "String",
                 sval: "text",
-                range: [0, 0],
+                range: [1432, 1436],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 44,
+                    column: 9,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 44,
+                    column: 13,
                   },
                 },
               },
@@ -1588,30 +1588,30 @@ export default {
               "0": {
                 type: "String",
                 sval: "pg_catalog",
-                range: [0, 0],
+                range: [1448, 1455],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 45,
+                    column: 10,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 45,
+                    column: 17,
                   },
                 },
               },
               "1": {
                 type: "String",
                 sval: "numeric",
-                range: [0, 0],
+                range: [1448, 1455],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 45,
+                    column: 10,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 45,
+                    column: 17,
                   },
                 },
               },
@@ -1669,15 +1669,15 @@ export default {
           arg: {
             type: "String",
             sval: "public",
-            range: [0, 0],
+            range: [1488, 1499],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 47,
+                column: 9,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 47,
+                column: 20,
               },
             },
           },
@@ -1700,15 +1700,15 @@ export default {
           arg: {
             type: "String",
             sval: "external_table",
-            range: [0, 0],
+            range: [1510, 1520],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 47,
+                column: 31,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 47,
+                column: 41,
               },
             },
           },
@@ -1769,15 +1769,15 @@ export default {
                 {
                   type: "String",
                   sval: "date",
-                  range: [0, 0],
+                  range: [1630, 1634],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 52,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 52,
+                      column: 8,
                     },
                   },
                 },
@@ -1789,15 +1789,15 @@ export default {
                     {
                       type: "String",
                       sval: "created_at",
-                      range: [0, 0],
+                      range: [1635, 1645],
                       loc: {
                         start: {
-                          line: 1,
-                          column: 0,
+                          line: 52,
+                          column: 9,
                         },
                         end: {
-                          line: 1,
-                          column: 0,
+                          line: 52,
+                          column: 19,
                         },
                       },
                     },
@@ -1849,15 +1849,15 @@ export default {
                 {
                   type: "String",
                   sval: "count",
-                  range: [0, 0],
+                  range: [1669, 1674],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 53,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 53,
+                      column: 9,
                     },
                   },
                 },
@@ -1869,15 +1869,15 @@ export default {
                     {
                       type: "String",
                       sval: "user_id",
-                      range: [0, 0],
+                      range: [1684, 1691],
                       loc: {
                         start: {
-                          line: 1,
-                          column: 0,
+                          line: 53,
+                          column: 19,
                         },
                         end: {
-                          line: 1,
-                          column: 0,
+                          line: 53,
+                          column: 26,
                         },
                       },
                     },
@@ -1930,15 +1930,15 @@ export default {
                 {
                   type: "String",
                   sval: "count",
-                  range: [0, 0],
+                  range: [1714, 1719],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 54,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 54,
+                      column: 9,
                     },
                   },
                 },
@@ -1997,15 +1997,15 @@ export default {
               {
                 type: "String",
                 sval: "date",
-                range: [0, 0],
+                range: [1775, 1779],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 56,
+                    column: 9,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 56,
+                    column: 13,
                   },
                 },
               },
@@ -2017,15 +2017,15 @@ export default {
                   {
                     type: "String",
                     sval: "created_at",
-                    range: [0, 0],
+                    range: [1780, 1790],
                     loc: {
                       start: {
-                        line: 1,
-                        column: 0,
+                        line: 56,
+                        column: 14,
                       },
                       end: {
-                        line: 1,
-                        column: 0,
+                        line: 56,
+                        column: 24,
                       },
                     },
                   },
@@ -2098,15 +2098,15 @@ export default {
                 {
                   type: "String",
                   sval: "date_trunc",
-                  range: [0, 0],
+                  range: [1863, 1873],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 60,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 60,
+                      column: 14,
                     },
                   },
                 },
@@ -2135,15 +2135,15 @@ export default {
                     {
                       type: "String",
                       sval: "created_at",
-                      range: [0, 0],
+                      range: [1883, 1893],
                       loc: {
                         start: {
-                          line: 1,
-                          column: 0,
+                          line: 60,
+                          column: 24,
                         },
                         end: {
-                          line: 1,
-                          column: 0,
+                          line: 60,
+                          column: 34,
                         },
                       },
                     },
@@ -2194,15 +2194,15 @@ export default {
                 {
                   type: "String",
                   sval: "event_type",
-                  range: [0, 0],
+                  range: [1909, 1919],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 61,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 61,
+                      column: 14,
                     },
                   },
                 },
@@ -2240,15 +2240,15 @@ export default {
                 {
                   type: "String",
                   sval: "count",
-                  range: [0, 0],
+                  range: [1925, 1930],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 62,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 62,
+                      column: 9,
                     },
                   },
                 },
@@ -2288,15 +2288,15 @@ export default {
                 {
                   type: "String",
                   sval: "count",
-                  range: [0, 0],
+                  range: [1954, 1959],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 63,
+                      column: 4,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 63,
+                      column: 9,
                     },
                   },
                 },
@@ -2308,15 +2308,15 @@ export default {
                     {
                       type: "String",
                       sval: "user_id",
-                      range: [0, 0],
+                      range: [1969, 1976],
                       loc: {
                         start: {
-                          line: 1,
-                          column: 0,
+                          line: 63,
+                          column: 19,
                         },
                         end: {
-                          line: 1,
-                          column: 0,
+                          line: 63,
+                          column: 26,
                         },
                       },
                     },
@@ -2388,15 +2388,15 @@ export default {
               {
                 type: "String",
                 sval: "date_trunc",
-                range: [0, 0],
+                range: [2030, 2040],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 65,
+                    column: 9,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 65,
+                    column: 19,
                   },
                 },
               },
@@ -2425,15 +2425,15 @@ export default {
                   {
                     type: "String",
                     sval: "created_at",
-                    range: [0, 0],
+                    range: [2050, 2060],
                     loc: {
                       start: {
-                        line: 1,
-                        column: 0,
+                        line: 65,
+                        column: 29,
                       },
                       end: {
-                        line: 1,
-                        column: 0,
+                        line: 65,
+                        column: 39,
                       },
                     },
                   },
@@ -2470,15 +2470,15 @@ export default {
               {
                 type: "String",
                 sval: "event_type",
-                range: [0, 0],
+                range: [2063, 2073],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 65,
+                    column: 42,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 65,
+                    column: 52,
                   },
                 },
               },
@@ -2569,15 +2569,15 @@ export default {
           name: "month",
           ordering: "SORTBY_DEFAULT",
           nulls_ordering: "SORTBY_NULLS_DEFAULT",
-          range: [0, 0],
+          range: [2084, 2193],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 66,
+              column: 10,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 69,
+              column: 75,
             },
           },
         },
@@ -2621,15 +2621,15 @@ export default {
           name: "event_type",
           ordering: "SORTBY_DEFAULT",
           nulls_ordering: "SORTBY_NULLS_DEFAULT",
-          range: [0, 0],
+          range: [2194, 2274],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 69,
+              column: 76,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 70,
+              column: 79,
             },
           },
         },
@@ -2670,15 +2670,15 @@ export default {
           type: "AlterTableCmd",
           subtype: "AT_EnableRowSecurity",
           behavior: "DROP_RESTRICT",
-          range: [0, 0],
+          range: [2275, 2358],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 70,
+              column: 80,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 73,
+              column: 59,
             },
           },
         },
@@ -2743,15 +2743,15 @@ export default {
           {
             type: "String",
             sval: "=",
-            range: [0, 0],
+            range: [2460, 2461],
             loc: {
               start: {
-                line: 1,
-                column: 0,
+                line: 77,
+                column: 15,
               },
               end: {
-                line: 1,
-                column: 0,
+                line: 77,
+                column: 16,
               },
             },
           },
@@ -2762,15 +2762,15 @@ export default {
             {
               type: "String",
               sval: "user_id",
-              range: [0, 0],
+              range: [2452, 2459],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 7,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 14,
                 },
               },
             },
@@ -2795,15 +2795,15 @@ export default {
               {
                 type: "String",
                 sval: "current_setting",
-                range: [0, 0],
+                range: [2462, 2477],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 77,
+                    column: 17,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 77,
+                    column: 32,
                   },
                 },
               },
@@ -2844,30 +2844,30 @@ export default {
             "0": {
               type: "String",
               sval: "pg_catalog",
-              range: [0, 0],
+              range: [2502, 2509],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 57,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 64,
                 },
               },
             },
             "1": {
               type: "String",
               sval: "int4",
-              range: [0, 0],
+              range: [2502, 2509],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 57,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 77,
+                  column: 64,
                 },
               },
             },
@@ -2930,15 +2930,15 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [2511, 2583],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 77,
+              column: 66,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 49,
             },
           },
         },
@@ -2947,15 +2947,15 @@ export default {
         {
           type: "AccessPriv",
           priv_name: "usage",
-          range: [0, 0],
+          range: [2511, 2583],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 77,
+              column: 66,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 49,
             },
           },
         },
@@ -3000,15 +3000,15 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [2584, 2665],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 50,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 80,
             },
           },
         },
@@ -3017,45 +3017,45 @@ export default {
         {
           type: "AccessPriv",
           priv_name: "select",
-          range: [0, 0],
+          range: [2584, 2665],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 50,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 80,
             },
           },
         },
         {
           type: "AccessPriv",
           priv_name: "insert",
-          range: [0, 0],
+          range: [2584, 2665],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 50,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 80,
             },
           },
         },
         {
           type: "AccessPriv",
           priv_name: "update",
-          range: [0, 0],
+          range: [2584, 2665],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 80,
+              column: 50,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 80,
             },
           },
         },
@@ -3100,15 +3100,15 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [2666, 2733],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 81,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 82,
+              column: 66,
             },
           },
         },
@@ -3117,15 +3117,15 @@ export default {
         {
           type: "AccessPriv",
           priv_name: "usage",
-          range: [0, 0],
+          range: [2666, 2733],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 81,
+              column: 81,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 82,
+              column: 66,
             },
           },
         },
@@ -3167,30 +3167,30 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [2734, 2865],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 82,
+              column: 67,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 86,
+              column: 67,
             },
           },
         },
         {
           type: "String",
           sval: "email",
-          range: [0, 0],
+          range: [2734, 2865],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 82,
+              column: 67,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 86,
+              column: 67,
             },
           },
         },
@@ -3199,30 +3199,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [2785, 2792],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 85,
+              column: 33,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 85,
+              column: 40,
             },
           },
         },
         "1": {
           type: "String",
           sval: "varchar",
-          range: [0, 0],
+          range: [2785, 2792],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 85,
+              column: 33,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 85,
+              column: 40,
             },
           },
         },
@@ -3271,15 +3271,15 @@ export default {
               {
                 type: "String",
                 sval: "~*",
-                range: [0, 0],
+                range: [2811, 2811],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 86,
+                    column: 13,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 86,
+                    column: 13,
                   },
                 },
               },
@@ -3290,15 +3290,15 @@ export default {
                 {
                   type: "String",
                   sval: "value",
-                  range: [0, 0],
+                  range: [2805, 2810],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 86,
+                      column: 7,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 86,
+                      column: 12,
                     },
                   },
                 },
@@ -3375,30 +3375,30 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [2866, 2937],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 86,
+              column: 68,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 89,
+              column: 17,
             },
           },
         },
         {
           type: "String",
           sval: "positive_integer",
-          range: [0, 0],
+          range: [2866, 2937],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 86,
+              column: 68,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 89,
+              column: 17,
             },
           },
         },
@@ -3407,30 +3407,30 @@ export default {
         "0": {
           type: "String",
           sval: "pg_catalog",
-          range: [0, 0],
+          range: [2912, 2919],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 88,
+              column: 44,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 88,
+              column: 51,
             },
           },
         },
         "1": {
           type: "String",
           sval: "int4",
-          range: [0, 0],
+          range: [2912, 2919],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 88,
+              column: 44,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 88,
+              column: 51,
             },
           },
         },
@@ -3460,15 +3460,15 @@ export default {
               {
                 type: "String",
                 sval: ">",
-                range: [0, 0],
+                range: [2933, 2934],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 89,
+                    column: 13,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 89,
+                    column: 14,
                   },
                 },
               },
@@ -3479,15 +3479,15 @@ export default {
                 {
                   type: "String",
                   sval: "value",
-                  range: [0, 0],
+                  range: [2927, 2932],
                   loc: {
                     start: {
-                      line: 1,
-                      column: 0,
+                      line: 89,
+                      column: 7,
                     },
                     end: {
-                      line: 1,
-                      column: 0,
+                      line: 89,
+                      column: 12,
                     },
                   },
                 },
@@ -3582,15 +3582,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [3010, 3014],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 93,
+                  column: 11,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 93,
+                  column: 15,
                 },
               },
             },
@@ -3628,15 +3628,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [3025, 3029],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 94,
+                  column: 9,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 94,
+                  column: 13,
                 },
               },
             },
@@ -3674,15 +3674,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [3041, 3045],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 95,
+                  column: 10,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 95,
+                  column: 14,
                 },
               },
             },
@@ -3720,15 +3720,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [3060, 3064],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 96,
+                  column: 13,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 96,
+                  column: 17,
                 },
               },
             },
@@ -3766,15 +3766,15 @@ export default {
             "0": {
               type: "String",
               sval: "text",
-              range: [0, 0],
+              range: [3078, 3082],
               loc: {
                 start: {
-                  line: 1,
-                  column: 0,
+                  line: 97,
+                  column: 12,
                 },
                 end: {
-                  line: 1,
-                  column: 0,
+                  line: 97,
+                  column: 16,
                 },
               },
             },
@@ -3824,30 +3824,30 @@ export default {
         {
           type: "String",
           sval: "analytics",
-          range: [0, 0],
+          range: [3085, 3212],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 98,
+              column: 2,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 104,
+              column: 1,
             },
           },
         },
         {
           type: "String",
           sval: "price_range",
-          range: [0, 0],
+          range: [3085, 3212],
           loc: {
             start: {
-              line: 1,
-              column: 0,
+              line: 98,
+              column: 2,
             },
             end: {
-              line: 1,
-              column: 0,
+              line: 104,
+              column: 1,
             },
           },
         },
@@ -3862,30 +3862,30 @@ export default {
               {
                 type: "String",
                 sval: "pg_catalog",
-                range: [0, 0],
+                range: [3161, 3168],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 102,
+                    column: 14,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 102,
+                    column: 21,
                   },
                 },
               },
               {
                 type: "String",
                 sval: "numeric",
-                range: [0, 0],
+                range: [3161, 3168],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 102,
+                    column: 14,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 102,
+                    column: 21,
                   },
                 },
               },
@@ -3925,15 +3925,15 @@ export default {
               {
                 type: "String",
                 sval: "numeric_range_subdiff",
-                range: [0, 0],
+                range: [3189, 3210],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 103,
+                    column: 19,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 103,
+                    column: 40,
                   },
                 },
               },

@@ -24,15 +24,15 @@ export default {
             fields: [
               {
                 type: "A_Star",
-                range: [0, 0],
+                range: [50, 51],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 7,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 2,
+                    column: 8,
                   },
                 },
               },
@@ -106,15 +106,15 @@ export default {
               {
                 type: "String",
                 sval: "id",
-                range: [0, 0],
+                range: [102, 104],
                 loc: {
                   start: {
-                    line: 1,
-                    column: 0,
+                    line: 4,
+                    column: 7,
                   },
                   end: {
-                    line: 1,
-                    column: 0,
+                    line: 4,
+                    column: 9,
                   },
                 },
               },
