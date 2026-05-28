@@ -58,21 +58,39 @@ const addParents = (
   }
 };
 
+// libpg-query emits some node types as bare objects without the
+// usual single-key `{ TypeName: {...} }` wrapper. Without an explicit
+// type tag, the typeKey-detection loop below would pick whichever
+// field happens to be an object — for `Alias` (`{ aliasname, colnames? }`)
+// that wrongly picks `colnames` (an array) and inlines its items into
+// the node under numeric keys, stranding the String children with no
+// per-name range. Detect these bare nodes by their characteristic
+// fields and assign the canonical type explicitly instead.
+const detectBareNodeType = (node: Record<string, unknown>): string | null => {
+  if (typeof node["aliasname"] === "string") return "Alias";
+  return null;
+};
+
 const addTypes = (node: Record<string, unknown>): void => {
   if (isArray(node)) {
     for (const item of node) {
       if (isRecord(item)) addTypes(item);
     }
   } else if (isRecord(node)) {
-    const typeKey = Object.keys(node).find(
-      (k) => !specialKeys.includes(k) && isRecord(node[k]),
-    );
-    if (typeKey) {
-      node["type"] = typeKey;
-      const value = node[typeKey];
-      if (isRecord(value)) {
-        delete node[typeKey];
-        Object.assign(node, value);
+    const bareType = node["type"] == null ? detectBareNodeType(node) : null;
+    if (bareType != null) {
+      node["type"] = bareType;
+    } else {
+      const typeKey = Object.keys(node).find(
+        (k) => !specialKeys.includes(k) && isRecord(node[k]),
+      );
+      if (typeKey) {
+        node["type"] = typeKey;
+        const value = node[typeKey];
+        if (isRecord(value)) {
+          delete node[typeKey];
+          Object.assign(node, value);
+        }
       }
     }
     for (const [key, value] of Object.entries(node)) {
@@ -327,6 +345,173 @@ const repairFallbackLocations = (
   }
 };
 
+// libpg-query carries no per-name location for `Alias.colnames` String
+// children, and emits no location for the Alias node itself — both
+// inherit the parent's range via `addLocation`'s fallback. That works
+// for nodes that live INSIDE the parent's range, but fails for an alias
+// in `func() WITH ORDINALITY AS r(range, r_idx)` where the parent
+// (`RangeFunction`) range covers only the function call. Resolve the
+// aliasname's position from the token stream and walk the parenthesised
+// colname list to assign each String its own per-name range. Without
+// this, rules like `prefer-keyword-case` cannot tell that `range`,
+// `user`, `order` etc. inside `AS r(...)` are identifier positions, and
+// case-fold them as keywords (corrupting the alias column reference).
+const isIdentifierLike = (token: ESLintToken): boolean =>
+  token.type === "Identifier" || token.type === "Keyword";
+
+const unquoteIdentifier = (value: string): string => {
+  if (value.length >= 2 && value.startsWith('"') && value.endsWith('"')) {
+    return value.slice(1, -1).replace(/""/g, '"');
+  }
+  return value;
+};
+
+const findFirstTokenAtOrAfter = (
+  tokens: ESLintToken[],
+  position: number,
+): number => {
+  let lo = 0;
+  let hi = tokens.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (tokens[mid]!.range[0] >= position) {
+      hi = mid;
+    } else {
+      lo = mid + 1;
+    }
+  }
+  return lo;
+};
+
+const setRangeAndLoc = (
+  node: Record<string, unknown>,
+  range: [number, number],
+  lineMap: LineMap,
+): void => {
+  const startPos = lineMap.getPosition(range[0]);
+  const endPos = lineMap.getPosition(range[1]);
+  node["range"] = range;
+  node["loc"] = {
+    start: { line: startPos.line, column: startPos.column },
+    end: { line: endPos.line, column: endPos.column },
+  };
+};
+
+const resolveAliasNodeRanges = (
+  alias: Record<string, unknown>,
+  parentRange: [number, number] | null,
+  tokens: ESLintToken[],
+  lineMap: LineMap,
+): void => {
+  const aliasname = alias["aliasname"];
+  if (typeof aliasname !== "string") return;
+
+  // Search forward from the parent's start (not its end — for some node
+  // types like RangeSubselect the parent's range begins before the
+  // alias). The alias name is the first identifier-like token after the
+  // parent's start whose unquoted value matches `aliasname`.
+  const searchFrom = parentRange != null ? parentRange[0] : 0;
+  const startIdx = findFirstTokenAtOrAfter(tokens, searchFrom);
+  const target = aliasname.toLowerCase();
+
+  let aliasTokenIdx = -1;
+  for (let i = startIdx; i < tokens.length; i++) {
+    const token = tokens[i]!;
+    if (!isIdentifierLike(token)) continue;
+    // Skip identifiers that fall inside the parent's range — those are
+    // table / function / column references in the relation expression,
+    // not the alias name. The aliasname token always lives strictly
+    // after the parent ends.
+    if (parentRange != null && token.range[1] <= parentRange[1]) continue;
+    const unquoted = unquoteIdentifier(token.value).toLowerCase();
+    if (unquoted === target) {
+      aliasTokenIdx = i;
+      break;
+    }
+  }
+  if (aliasTokenIdx === -1) return;
+
+  const aliasToken = tokens[aliasTokenIdx]!;
+  let endRange: [number, number] = aliasToken.range;
+
+  const colnames = alias["colnames"];
+  if (isArray(colnames) && colnames.length > 0) {
+    // Expect `(` immediately after the aliasname token (modulo comments
+    // which the lexer strips out of `tokens`).
+    const open = tokens[aliasTokenIdx + 1];
+    if (open && open.type === "Punctuator" && open.value === "(") {
+      const colTokens: ESLintToken[][] = [];
+      let current: ESLintToken[] = [];
+      let depth = 1;
+      let closeIdx = -1;
+      for (let i = aliasTokenIdx + 2; i < tokens.length && depth > 0; i++) {
+        const t = tokens[i]!;
+        if (t.type === "Punctuator" && t.value === "(") {
+          depth++;
+          current.push(t);
+        } else if (t.type === "Punctuator" && t.value === ")") {
+          depth--;
+          if (depth === 0) {
+            closeIdx = i;
+            colTokens.push(current);
+            current = [];
+          } else {
+            current.push(t);
+          }
+        } else if (t.type === "Punctuator" && t.value === "," && depth === 1) {
+          colTokens.push(current);
+          current = [];
+        } else {
+          current.push(t);
+        }
+      }
+      if (closeIdx !== -1) {
+        endRange = tokens[closeIdx]!.range;
+        for (let i = 0; i < colnames.length && i < colTokens.length; i++) {
+          const colNode = colnames[i];
+          const segment = colTokens[i]!;
+          if (!isRecord(colNode) || segment.length === 0) continue;
+          const first = segment[0]!;
+          const last = segment[segment.length - 1]!;
+          setRangeAndLoc(colNode, [first.range[0], last.range[1]], lineMap);
+        }
+      }
+    }
+  }
+
+  setRangeAndLoc(alias, [aliasToken.range[0], endRange[1]], lineMap);
+};
+
+const resolveAliasRanges = (
+  node: unknown,
+  tokens: ESLintToken[],
+  lineMap: LineMap,
+): void => {
+  if (isArray(node)) {
+    for (const item of node) resolveAliasRanges(item, tokens, lineMap);
+    return;
+  }
+  if (!isRecord(node)) return;
+
+  const alias = node["alias"];
+  if (isRecord(alias) && alias["type"] === "Alias") {
+    const parentRange =
+      isArray(node["range"]) &&
+      typeof node["range"][0] === "number" &&
+      typeof node["range"][1] === "number"
+        ? ([node["range"][0], node["range"][1]] as [number, number])
+        : null;
+    resolveAliasNodeRanges(alias, parentRange, tokens, lineMap);
+  }
+
+  for (const [key, value] of Object.entries(node)) {
+    if (specialKeys.includes(key)) continue;
+    if (isRecord(value) || isArray(value)) {
+      resolveAliasRanges(value, tokens, lineMap);
+    }
+  }
+};
+
 export const manipulate = (
   pgAst: RawPostgreSQLAst,
   tokens: ESLintToken[],
@@ -378,6 +563,10 @@ export const manipulate = (
         resolvedLoc as unknown as SourceLocation,
       );
     }
+    // Recompute Alias / colname ranges from the token stream — see the
+    // comment on `resolveAliasNodeRanges` for why this can't be derived
+    // from libpg-query's `location` data alone.
+    resolveAliasRanges(stmtNode, tokens, lineMap);
     result.push(stmtNode);
   }
 

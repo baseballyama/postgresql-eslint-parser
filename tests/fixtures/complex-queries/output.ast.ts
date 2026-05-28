@@ -369,6 +369,18 @@ export default {
           relpersistence: "p",
           alias: {
             aliasname: "tu",
+            type: "Alias",
+            range: [762, 764],
+            loc: {
+              start: {
+                line: 28,
+                column: 15,
+              },
+              end: {
+                line: 28,
+                column: 17,
+              },
+            },
           },
           range: [752, 761],
           loc: {
@@ -889,6 +901,18 @@ export default {
                   relpersistence: "p",
                   alias: {
                     aliasname: "u",
+                    type: "Alias",
+                    range: [234, 235],
+                    loc: {
+                      start: {
+                        line: 9,
+                        column: 15,
+                      },
+                      end: {
+                        line: 9,
+                        column: 16,
+                      },
+                    },
                   },
                   range: [228, 233],
                   loc: {
@@ -909,6 +933,18 @@ export default {
                   relpersistence: "p",
                   alias: {
                     aliasname: "o",
+                    type: "Alias",
+                    range: [257, 258],
+                    loc: {
+                      start: {
+                        line: 10,
+                        column: 21,
+                      },
+                      end: {
+                        line: 10,
+                        column: 22,
+                      },
+                    },
                   },
                   range: [250, 256],
                   loc: {
@@ -2622,6 +2658,18 @@ export default {
                     relpersistence: "p",
                     alias: {
                       aliasname: "c",
+                      type: "Alias",
+                      range: [1137, 1138],
+                      loc: {
+                        start: {
+                          line: 43,
+                          column: 20,
+                        },
+                        end: {
+                          line: 43,
+                          column: 21,
+                        },
+                      },
                     },
                     range: [1126, 1136],
                     loc: {
@@ -2642,6 +2690,18 @@ export default {
                     relpersistence: "p",
                     alias: {
                       aliasname: "ch",
+                      type: "Alias",
+                      range: [1173, 1175],
+                      loc: {
+                        start: {
+                          line: 44,
+                          column: 34,
+                        },
+                        end: {
+                          line: 44,
+                          column: 36,
+                        },
+                      },
                     },
                     range: [1154, 1172],
                     loc: {
@@ -4023,6 +4083,18 @@ export default {
           relpersistence: "p",
           alias: {
             aliasname: "u",
+            type: "Alias",
+            range: [1963, 1964],
+            loc: {
+              start: {
+                line: 64,
+                column: 11,
+              },
+              end: {
+                line: 64,
+                column: 12,
+              },
+            },
           },
           range: [1957, 1962],
           loc: {
@@ -4087,6 +4159,18 @@ export default {
                   relpersistence: "p",
                   alias: {
                     aliasname: "o",
+                    type: "Alias",
+                    range: [2005, 2006],
+                    loc: {
+                      start: {
+                        line: 66,
+                        column: 25,
+                      },
+                      end: {
+                        line: 66,
+                        column: 26,
+                      },
+                    },
                   },
                   range: [1998, 2004],
                   loc: {
@@ -4520,6 +4604,18 @@ export default {
                       relpersistence: "p",
                       alias: {
                         aliasname: "uc",
+                        type: "Alias",
+                        range: [2145, 2147],
+                        loc: {
+                          start: {
+                            line: 71,
+                            column: 34,
+                          },
+                          end: {
+                            line: 71,
+                            column: 36,
+                          },
+                        },
                       },
                       range: [2129, 2144],
                       loc: {
@@ -4919,6 +5015,18 @@ export default {
                     relpersistence: "p",
                     alias: {
                       aliasname: "oi",
+                      type: "Alias",
+                      range: [2268, 2270],
+                      loc: {
+                        start: {
+                          line: 77,
+                          column: 21,
+                        },
+                        end: {
+                          line: 77,
+                          column: 23,
+                        },
+                      },
                     },
                     range: [2256, 2267],
                     loc: {
@@ -4939,6 +5047,18 @@ export default {
                     relpersistence: "p",
                     alias: {
                       aliasname: "p",
+                      type: "Alias",
+                      range: [2289, 2290],
+                      loc: {
+                        start: {
+                          line: 78,
+                          column: 18,
+                        },
+                        end: {
+                          line: 78,
+                          column: 19,
+                        },
+                      },
                     },
                     range: [2280, 2288],
                     loc: {

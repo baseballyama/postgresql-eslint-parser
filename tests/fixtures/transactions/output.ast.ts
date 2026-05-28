@@ -789,6 +789,18 @@ export default {
               relpersistence: "p",
               alias: {
                 aliasname: "o",
+                type: "Alias",
+                range: [431, 432],
+                loc: {
+                  start: {
+                    line: 19,
+                    column: 12,
+                  },
+                  end: {
+                    line: 19,
+                    column: 13,
+                  },
+                },
               },
               range: [424, 430],
               loc: {
@@ -809,6 +821,18 @@ export default {
               relpersistence: "p",
               alias: {
                 aliasname: "u",
+                type: "Alias",
+                range: [444, 445],
+                loc: {
+                  start: {
+                    line: 20,
+                    column: 11,
+                  },
+                  end: {
+                    line: 20,
+                    column: 12,
+                  },
+                },
               },
               range: [438, 443],
               loc: {
@@ -2193,6 +2217,18 @@ export default {
             relpersistence: "p",
             alias: {
               aliasname: "u",
+              type: "Alias",
+              range: [2144, 2145],
+              loc: {
+                start: {
+                  line: 80,
+                  column: 15,
+                },
+                end: {
+                  line: 80,
+                  column: 16,
+                },
+              },
             },
             range: [2138, 2143],
             loc: {
@@ -2213,6 +2249,18 @@ export default {
             relpersistence: "p",
             alias: {
               aliasname: "o",
+              type: "Alias",
+              range: [2167, 2168],
+              loc: {
+                start: {
+                  line: 81,
+                  column: 21,
+                },
+                end: {
+                  line: 81,
+                  column: 22,
+                },
+              },
             },
             range: [2160, 2166],
             loc: {

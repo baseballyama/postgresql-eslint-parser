@@ -30,6 +30,7 @@
   "IndexElem": ["opclass", "expr"],
   "SortBy": ["node"],
   "JoinExpr": ["larg", "rarg"],
+  "Alias": [],
   "Integer": [],
   "A_ArrayExpr": ["elements"],
   "ctes": ["0"],

@@ -19,6 +19,7 @@
   "RangeVar": ["alias"],
   "A_Expr": ["name", "lexpr", "rexpr"],
   "JoinExpr": ["larg", "rarg", "quals"],
+  "Alias": [],
   "DoStmt": ["args"],
   "DefElem": ["arg"],
   "UpdateStmt": ["relation", "targetList", "whereClause"],
