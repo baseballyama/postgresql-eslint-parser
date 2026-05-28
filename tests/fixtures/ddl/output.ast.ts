@@ -386,15 +386,15 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [36, 184],
+      range: [0, 186],
       loc: {
         start: {
-          line: 2,
-          column: 13,
+          line: 1,
+          column: 0,
         },
         end: {
-          line: 6,
-          column: 50,
+          line: 7,
+          column: 1,
         },
       },
     },

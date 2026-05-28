@@ -20,15 +20,15 @@ export default {
         {
           type: "String",
           sval: "anon_body",
-          range: [36, 81],
+          range: [0, 89],
           loc: {
             start: {
               line: 1,
-              column: 36,
+              column: 0,
             },
             end: {
               line: 5,
-              column: 11,
+              column: 19,
             },
           },
         },
@@ -143,15 +143,15 @@ export default {
           },
         },
       ],
-      range: [36, 81],
+      range: [0, 89],
       loc: {
         start: {
           line: 1,
-          column: 36,
+          column: 0,
         },
         end: {
           line: 5,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {

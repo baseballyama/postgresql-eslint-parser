@@ -17,15 +17,15 @@ export default {
     {
       type: "TransactionStmt",
       kind: "TRANS_STMT_BEGIN",
-      range: [0, 0],
+      range: [0, 33],
       loc: {
         start: {
           line: 1,
           column: 0,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 2,
+          column: 5,
         },
       },
     },

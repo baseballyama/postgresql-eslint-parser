@@ -18,15 +18,15 @@ export default {
       type: "CreateExtensionStmt",
       extname: "uuid-ossp",
       if_not_exists: true,
-      range: [0, 0],
+      range: [0, 93],
       loc: {
         start: {
           line: 1,
           column: 0,
         },
         end: {
-          line: 1,
-          column: 0,
+          line: 3,
+          column: 42,
         },
       },
     },
