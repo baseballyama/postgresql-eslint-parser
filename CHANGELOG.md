@@ -1,5 +1,13 @@
 # postgresql-eslint-parser
 
+## 0.5.3
+
+### Patch Changes
+
+- [#217](https://github.com/baseballyama/postgresql-eslint-parser/pull/217) [`f6c22bc`](https://github.com/baseballyama/postgresql-eslint-parser/commit/f6c22bcc03aa0f60a48e4ee35b9e095290effd1c) Thanks [@baseballyama](https://github.com/baseballyama)! - Treat libpg-query's omitted `stmt_location` as `0` instead of skipping the top-level statement loc override.
+
+  libpg-query omits `stmt_location` from the JSON output when the value is 0 (the default for the first statement in the file). The previous condition `typeof stmt.stmt_location === "number"` rejected `undefined`, so the override path was skipped and the first top-level statement ended up with the `[0, 0]` fallback from `addLocation`. Downstream rules that rely on `node.range` (e.g. `postgresql/require-if-exists`) then reported against `line 1, column 0`, which sits strictly before any inline `eslint-disable` directive and made the directive useless.
+
 ## 0.5.2
 
 ### Patch Changes
