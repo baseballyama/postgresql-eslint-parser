@@ -732,14 +732,14 @@ export interface RelnamePG extends BaseNode {
 export interface Alias extends BaseNode {
   type: "Alias";
   aliasname: string;
-  colnames?: string[];
+  colnames?: StringNode[];
 }
 
 // PostgreSQL actual type name for alias
 export interface AliasPG extends BaseNode {
   type: "aliasname";
   aliasname: string;
-  colnames?: string[];
+  colnames?: StringNode[];
 }
 
 export interface TypeName extends BaseNode {
@@ -1724,7 +1724,7 @@ export type ArrayBoundsElement = ArrayBounds | IntegerNode | ValueNode;
 // Flexible alias interface for parsed aliases without explicit type
 export interface AliasNode {
   aliasname: string;
-  colnames?: string[];
+  colnames?: StringNode[];
   range?: Range;
   loc?: SourceLocation;
 }

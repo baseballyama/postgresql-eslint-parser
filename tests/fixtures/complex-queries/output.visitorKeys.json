@@ -21,6 +21,7 @@
   "A_Const": ["ival", "sval", "fval"],
   "Unknown": [],
   "RangeVar": ["alias"],
+  "Alias": [],
   "ctes": ["0", "1"],
   "CommonTableExpr": ["ctequery"],
   "FuncCall": ["funcname", "args", "over", "agg_order"],

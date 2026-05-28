@@ -3125,6 +3125,18 @@ export default {
             relpersistence: "p",
             alias: {
               aliasname: "p1",
+              type: "Alias",
+              range: [1904, 1906],
+              loc: {
+                start: {
+                  line: 59,
+                  column: 14,
+                },
+                end: {
+                  line: 59,
+                  column: 16,
+                },
+              },
             },
             range: [1895, 1903],
             loc: {
@@ -3145,6 +3157,18 @@ export default {
             relpersistence: "p",
             alias: {
               aliasname: "p2",
+              type: "Alias",
+              range: [1927, 1929],
+              loc: {
+                start: {
+                  line: 60,
+                  column: 20,
+                },
+                end: {
+                  line: 60,
+                  column: 22,
+                },
+              },
             },
             range: [1918, 1926],
             loc: {
@@ -6183,6 +6207,18 @@ export default {
             relpersistence: "p",
             alias: {
               aliasname: "u",
+              type: "Alias",
+              range: [3628, 3629],
+              loc: {
+                start: {
+                  line: 115,
+                  column: 11,
+                },
+                end: {
+                  line: 115,
+                  column: 12,
+                },
+              },
             },
             range: [3622, 3627],
             loc: {
@@ -6301,6 +6337,18 @@ export default {
                   relpersistence: "p",
                   alias: {
                     aliasname: "o",
+                    type: "Alias",
+                    range: [3703, 3704],
+                    loc: {
+                      start: {
+                        line: 118,
+                        column: 16,
+                      },
+                      end: {
+                        line: 118,
+                        column: 17,
+                      },
+                    },
                   },
                   range: [3696, 3702],
                   loc: {
@@ -6521,6 +6569,18 @@ export default {
             },
             alias: {
               aliasname: "recent_orders",
+              type: "Alias",
+              range: [3775, 3788],
+              loc: {
+                start: {
+                  line: 122,
+                  column: 2,
+                },
+                end: {
+                  line: 122,
+                  column: 15,
+                },
+              },
             },
             range: [3662, 3772],
             loc: {
