@@ -21,15 +21,15 @@ export default {
         {
           type: "String",
           sval: "get_user_count",
-          range: [96, 410],
+          range: [0, 418],
           loc: {
             start: {
-              line: 2,
-              column: 56,
+              line: 1,
+              column: 0,
             },
             end: {
               line: 15,
-              column: 11,
+              column: 19,
             },
           },
         },
@@ -237,15 +237,15 @@ export default {
           },
         },
       ],
-      range: [96, 410],
+      range: [0, 418],
       loc: {
         start: {
-          line: 2,
-          column: 56,
+          line: 1,
+          column: 0,
         },
         end: {
           line: 15,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {

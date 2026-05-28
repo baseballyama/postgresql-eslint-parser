@@ -1702,10 +1702,10 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [24, 791],
+      range: [0, 791],
       loc: {
         start: {
-          line: 2,
+          line: 1,
           column: 0,
         },
         end: {

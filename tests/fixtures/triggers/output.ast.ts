@@ -21,15 +21,15 @@ export default {
         {
           type: "String",
           sval: "update_modified_column",
-          range: [77, 157],
+          range: [0, 165],
           loc: {
             start: {
-              line: 3,
-              column: 8,
+              line: 1,
+              column: 0,
             },
             end: {
               line: 8,
-              column: 11,
+              column: 19,
             },
           },
         },
@@ -144,15 +144,15 @@ export default {
           },
         },
       ],
-      range: [77, 157],
+      range: [0, 165],
       loc: {
         start: {
-          line: 3,
-          column: 8,
+          line: 1,
+          column: 0,
         },
         end: {
           line: 8,
-          column: 11,
+          column: 19,
         },
       },
       embeddedCode: {

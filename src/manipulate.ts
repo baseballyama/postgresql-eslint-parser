@@ -348,9 +348,17 @@ export const manipulate = (
     // for every statement after the first. libpg-query already gives
     // us the absolute byte offset and byte length of each top-level
     // statement; trust those over the aggregate.
-    if (typeof stmt.stmt_location === "number" && stmt.stmt_len > 0) {
-      const startChar = byteToChar(stmt.stmt_location);
-      const endChar = byteToChar(stmt.stmt_location + stmt.stmt_len);
+    //
+    // libpg-query omits `stmt_location` from the JSON output when the
+    // value is 0 (the default for the first statement). Treat the
+    // missing field as 0 instead of skipping the override — otherwise
+    // the first DropStmt / SelectStmt ends up with the [0, 0] fallback
+    // and every downstream rule reports against `line 1, column 0`.
+    const stmtLocation =
+      typeof stmt.stmt_location === "number" ? stmt.stmt_location : 0;
+    if (stmt.stmt_len > 0) {
+      const startChar = byteToChar(stmtLocation);
+      const endChar = byteToChar(stmtLocation + stmt.stmt_len);
       const startPos = lineMap.getPosition(startChar);
       const endPos = lineMap.getPosition(endChar);
       stmtNode["range"] = [startChar, endChar];

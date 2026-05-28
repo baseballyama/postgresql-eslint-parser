@@ -20,15 +20,15 @@ export default {
         {
           type: "String",
           sval: "py_demo",
-          range: [84, 142],
+          range: [0, 153],
           loc: {
             start: {
-              line: 2,
-              column: 34,
+              line: 1,
+              column: 0,
             },
             end: {
               line: 4,
-              column: 15,
+              column: 26,
             },
           },
         },
@@ -143,15 +143,15 @@ export default {
           },
         },
       ],
-      range: [84, 142],
+      range: [0, 153],
       loc: {
         start: {
-          line: 2,
-          column: 34,
+          line: 1,
+          column: 0,
         },
         end: {
           line: 4,
-          column: 15,
+          column: 26,
         },
       },
       embeddedCode: {

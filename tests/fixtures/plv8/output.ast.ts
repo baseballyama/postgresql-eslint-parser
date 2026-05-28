@@ -21,11 +21,11 @@ export default {
         {
           type: "String",
           sval: "plv8_test",
-          range: [81, 156],
+          range: [0, 156],
           loc: {
             start: {
-              line: 2,
-              column: 47,
+              line: 1,
+              column: 0,
             },
             end: {
               line: 4,
@@ -206,11 +206,11 @@ export default {
           },
         },
       ],
-      range: [81, 156],
+      range: [0, 156],
       loc: {
         start: {
-          line: 2,
-          column: 47,
+          line: 1,
+          column: 0,
         },
         end: {
           line: 4,

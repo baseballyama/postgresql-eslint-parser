@@ -84,11 +84,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [7, 20],
+      range: [0, 20],
       loc: {
         start: {
           line: 1,
-          column: 7,
+          column: 0,
         },
         end: {
           line: 1,
