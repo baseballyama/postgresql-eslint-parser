@@ -1,9 +1,9 @@
 # Temporary verification for #264, not for merge: runs eslint-plugin-postgresql's
 # full test suite against the parser built from main (baseline) and from the PR head.
-name: tmp-264-consumer
+name: tmp-264-fixture-diff
 on:
   push:
-    branches: [verify/parser-264-consumer-080a4cc]
+    branches: [verify/parser-264-fixture-diff-080a4cc]
 permissions:
   contents: read
 jobs:
@@ -64,6 +64,16 @@ jobs:
             console.log(`total ${r.numTotalTests}, passed ${r.numPassedTests}, failed ${r.numFailedTests}`);
           ' "$RUNNER_TEMP/vitest.json" "$RUNNER_TEMP/results-${{ matrix.parser }}.txt"
           cat "$RUNNER_TEMP/exit-${{ matrix.parser }}.txt"
+      # Diagnostic only: shows exactly which fixture expectations the parser
+      # under test changes. Nothing is committed to the plugin.
+      - name: Fixture differences under this parser
+        if: matrix.parser == 'head'
+        working-directory: plugin
+        run: |
+          npx -y pnpm@12.9.1 run update-fixtures >/dev/null 2>&1 || true
+          npx -y pnpm@12.9.1 exec prettier --write tests/fixtures >/dev/null 2>&1 || true
+          git diff --stat -- tests
+          git diff -- tests | tee "$RUNNER_TEMP/fixture-diff.patch"
       - name: Plugin type check
         working-directory: plugin
         run: npx -y pnpm@12.9.1 run type:check
