@@ -2,10 +2,7 @@ import { Linter, type Rule } from "eslint";
 import { describe, expect, it } from "vitest";
 
 import { parseForESLint } from "../src/parse.ts";
-import {
-  createPlProcessor,
-  type ProcessorMessage,
-} from "../src/processor.ts";
+import { createPlProcessor, type ProcessorMessage } from "../src/processor.ts";
 
 // Runs the parser through ESLint itself (SourceCode, directive comments,
 // SourceCodeFixer) instead of re-deriving ESLint's behaviour in the test.
@@ -178,7 +175,9 @@ describe("processor with a BOM-prefixed file", () => {
             )
             .map((message) => {
               if (!isLintMessage(message)) {
-                throw new Error(`incomplete message ${JSON.stringify(message)}`);
+                throw new Error(
+                  `incomplete message ${JSON.stringify(message)}`,
+                );
               }
               return message;
             }),

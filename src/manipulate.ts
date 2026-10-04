@@ -1,10 +1,6 @@
 import type { Program, SourceLocation } from "./ast.ts";
 import { isWhitespace } from "./tokenize.ts";
-import type {
-  ESLintComment,
-  ESLintToken,
-  RawPostgreSQLAst,
-} from "./types.ts";
+import type { ESLintComment, ESLintToken, RawPostgreSQLAst } from "./types.ts";
 import { createByteToCharOffset, type LineMap } from "./utils.ts";
 
 const specialKeys = ["parent", "type", "range", "loc"];

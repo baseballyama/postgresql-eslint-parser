@@ -87,9 +87,10 @@ describe("parseImportLetters", () => {
   });
 
   it("accepts minified keys longer than one letter", () => {
-    expect(parseImportLetters("wasmImports={a$:_exit,b1:_fd_close}")).toEqual(
-      { _exit: "a$", _fd_close: "b1" },
-    );
+    expect(parseImportLetters("wasmImports={a$:_exit,b1:_fd_close}")).toEqual({
+      _exit: "a$",
+      _fd_close: "b1",
+    });
   });
 
   it("fails loudly when the shim has no import table", () => {

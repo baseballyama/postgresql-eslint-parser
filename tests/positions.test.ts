@@ -234,7 +234,7 @@ describe("tokens: string literals", () => {
     expect(rangesOf(code, "A_Const")).toEqual([[8, 11]]);
   });
 
-  it("emits U&\"…\" quoted identifiers as one String token", () => {
+  it('emits U&"…" quoted identifiers as one String token', () => {
     const code = String.raw`SELECT U&"d\0061t" FROM t`;
     expect(tokensOf(code)).toEqual([
       ["Keyword", "SELECT", 0, 6],
