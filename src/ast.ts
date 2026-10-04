@@ -301,20 +301,13 @@ export type QuerySource =
   | "QSRC_NON_INSTEAD_RULE";
 
 export type SortByDir =
-  | "SORTBY_DEFAULT"
-  | "SORTBY_ASC"
-  | "SORTBY_DESC"
-  | "SORTBY_USING";
+  "SORTBY_DEFAULT" | "SORTBY_ASC" | "SORTBY_DESC" | "SORTBY_USING";
 
 export type SortByNulls =
-  | "SORTBY_NULLS_DEFAULT"
-  | "SORTBY_NULLS_FIRST"
-  | "SORTBY_NULLS_LAST";
+  "SORTBY_NULLS_DEFAULT" | "SORTBY_NULLS_FIRST" | "SORTBY_NULLS_LAST";
 
 export type SetQuantifier =
-  | "SET_QUANTIFIER_DEFAULT"
-  | "SET_QUANTIFIER_ALL"
-  | "SET_QUANTIFIER_DISTINCT";
+  "SET_QUANTIFIER_DEFAULT" | "SET_QUANTIFIER_ALL" | "SET_QUANTIFIER_DISTINCT";
 
 // From parsenodes.h A_Expr_Kind
 export type A_Expr_Kind =
@@ -360,10 +353,7 @@ export type SubLinkType =
   | "SCALAR_SUBLINK";
 
 export type DefElemAction =
-  | "DEFELEM_UNSPEC"
-  | "DEFELEM_SET"
-  | "DEFELEM_ADD"
-  | "DEFELEM_DROP";
+  "DEFELEM_UNSPEC" | "DEFELEM_SET" | "DEFELEM_ADD" | "DEFELEM_DROP";
 
 export type ConstraintType =
   | "CONSTR_NULL"
@@ -415,12 +405,7 @@ export interface NullNode extends BaseNode {
 }
 
 export type ValueNode =
-  | IntegerNode
-  | FloatNode
-  | BooleanNode
-  | StringNode
-  | BitStringNode
-  | NullNode;
+  IntegerNode | FloatNode | BooleanNode | StringNode | BitStringNode | NullNode;
 
 // ================================================================
 // Base Expression Interface (from primnodes.h)
@@ -1013,10 +998,7 @@ export type Node =
 
 // Create flexible types for PostgreSQL arrays that can contain List objects
 export type PostgreSQLValue =
-  | Node
-  | ListPG
-  | (Node | ListPG)[]
-  | (Node | ListPG)[][];
+  Node | ListPG | (Node | ListPG)[] | (Node | ListPG)[][];
 
 // Update ListPG to be more flexible
 export interface ListPG extends BaseNode {
@@ -1307,9 +1289,7 @@ export interface CreateTableAsStmt extends BaseNode {
 }
 
 export type OverridingKind =
-  | "OVERRIDING_NOT_SET"
-  | "OVERRIDING_USER_VALUE"
-  | "OVERRIDING_SYSTEM_VALUE";
+  "OVERRIDING_NOT_SET" | "OVERRIDING_USER_VALUE" | "OVERRIDING_SYSTEM_VALUE";
 
 export type AlterTableType =
   | "AT_AddColumn"

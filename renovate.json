@@ -22,5 +22,6 @@
   },
   "ignoreTests": false,
   "lockFileMaintenance": { "enabled": true },
+  "postUpdateOptions": ["pnpmDedupe"],
   "packageRules": []
 }
