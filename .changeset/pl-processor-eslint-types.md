@@ -9,7 +9,10 @@ The exported `PlProcessor` and `ProcessorMessage` types are unchanged. `createPl
 **Type change:** a variable whose type is inferred from `createPlProcessor(...)` can no longer be reassigned to a processor you typed as `PlProcessor` yourself, and `ReturnType<typeof createPlProcessor>` now names the subtype. Annotate the variable as `PlProcessor` if you swap processors:
 
 ```ts
-import { createPlProcessor, type PlProcessor } from "postgresql-eslint-parser/processor";
+import {
+  createPlProcessor,
+  type PlProcessor,
+} from "postgresql-eslint-parser/processor";
 
 // Before: `let processor = createPlProcessor(options);` then `processor = myProcessor;`
 let processor: PlProcessor = createPlProcessor(options);
