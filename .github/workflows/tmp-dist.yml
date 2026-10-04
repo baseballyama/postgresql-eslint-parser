@@ -1,0 +1,59 @@
+# Temporary, not for merge: compares the packed package built from main with
+# the one built from the dependency update (TypeScript 7 declarations, rolldown
+# 1.2.12) and the parse output of every fixture.
+name: tmp-dist
+on:
+  push:
+    branches: [verify/parser-deps-lock]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: head
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: base
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: head/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build and pack both
+        run: |
+          (cd base && npx -y pnpm@11.5.3 install --frozen-lockfile && npx -y pnpm@11.5.3 run build && npm pack --pack-destination "$RUNNER_TEMP/base")
+          (cd head && pnpm install --no-frozen-lockfile && pnpm run build && npm pack --pack-destination "$RUNNER_TEMP/head")
+          for v in base head; do mkdir -p "$RUNNER_TEMP/x-$v" && tar -xzf "$RUNNER_TEMP"/$v/*.tgz -C "$RUNNER_TEMP/x-$v"; done
+      - name: Package differences
+        working-directory: ${{ runner.temp }}
+        run: |
+          diff <(cd x-base/package && find . -type f | sort) <(cd x-head/package && find . -type f | sort) && echo "same file list"
+          for f in $(cd x-head/package && find dist -name '*.d.ts' | sort); do diff -u "x-base/package/$f" "x-head/package/$f" || true; done
+          ls -l base/*.tgz head/*.tgz
+          diff x-base/package/package.json x-head/package/package.json || true
+      - name: Parse every fixture with both builds
+        working-directory: ${{ runner.temp }}
+        run: |
+          cat > cmp.mjs <<'JS'
+          import { readFileSync, readdirSync } from "node:fs";
+          import { join } from "node:path";
+          const [fixtures] = process.argv.slice(2);
+          const load = async (v) => (await import(`./x-${v}/package/dist/index.js`)).parseForESLint;
+          const [base, head] = [await load("base"), await load("head")];
+          // The packed dist needs its runtime dependency next to it.
+          const out = (p, code) => { try { const r = p(code); return JSON.stringify({ ast: r.ast, visitorKeys: r.visitorKeys }); } catch (e) { return `throws ${e.message}`; } };
+          let same = 0, diff = 0;
+          for (const dir of readdirSync(fixtures)) {
+            const code = readFileSync(join(fixtures, dir, "input.sql"), "utf8");
+            if (out(base, code) === out(head, code)) same++; else { diff++; console.log(`DIFF ${dir}`); }
+          }
+          console.log(`fixtures: ${same} same, ${diff} different`);
+          process.exitCode = diff ? 1 : 0;
+          JS
+          for v in base head; do (cd x-$v/package && npm install --omit=dev --ignore-scripts --no-package-lock >/dev/null); done
+          node cmp.mjs "$GITHUB_WORKSPACE/head/tests/fixtures"
