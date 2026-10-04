@@ -1,0 +1,83 @@
+# Temporary, not for merge: builds the lockfile for U-9 (fix/pl-processor-types
+# at ab8f844, eslint resolved to 10.11.0), runs the quality gate and tests, and
+# type-checks each commit of the branch with that lockfile to record which
+# commits fail before the fixes.
+name: tmp-u9
+on:
+  push:
+    branches: [verify/parser-u9-ab8f844]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          # Resolve eslint to 10.11.0 by pinning it for one install, then put
+          # back the committed range ^10.11.0; pnpm keeps the locked version.
+          cp package.json "$RUNNER_TEMP/package.json"
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --no-frozen-lockfile
+          cp "$RUNNER_TEMP/package.json" package.json
+          git diff --exit-code -- package.json
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          pnpm install --frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+          grep -E "^  eslint@" pnpm-lock.yaml
+          grep -qE "^  eslint@10\.11\.0:" pnpm-lock.yaml
+          ! grep -qE "^  eslint@10\.12" pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: u9-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+  types-per-commit:
+    needs: lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        commit:
+          - 2e33f20023783d0dc6a5033419fdf1ab4f17e812 # main
+          - c8bbf95 # test: use createPlProcessor as an ESLint processor without a cast
+          - 541138f # test: assign createPlProcessor to Linter.Processor directly
+          - 4d2efd9 # fix: accept createPlProcessor where ESLint expects a processor
+          - f0fd3eb # test: keep the published PlProcessor type working for existing code
+          - a7034b9 # fix: keep PlProcessor as published and type createPlProcessor's result
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.commit }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v7
+        with:
+          name: u9-lockfile
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Type check and processor tests at this commit
+        run: |
+          set +e
+          # These commits still say ^10.12.0 (or nothing on main); use the
+          # range from ab8f844 so the frozen lockfile applies unchanged.
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="^10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --frozen-lockfile > /dev/null || exit 1
+          git log --oneline -1
+          pnpm exec tsc --noEmit 2>&1 | tee "$RUNNER_TEMP/tsc.txt"
+          echo "tsc exit ${PIPESTATUS[0]}"
+          pnpm exec vitest run tests/processor.test.ts 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "Tests |Test Files|×|FAIL"
+          echo "vitest exit ${PIPESTATUS[0]}"
