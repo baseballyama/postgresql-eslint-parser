@@ -1,5 +1,54 @@
 # postgresql-eslint-parser
 
+## 0.6.0
+
+### Minor Changes
+
+- [#269](https://github.com/baseballyama/postgresql-eslint-parser/pull/269) [`99bf51a`](https://github.com/baseballyama/postgresql-eslint-parser/commit/99bf51ada98a9e3eab8f27be8304559cd476f1ad) Thanks [@baseballyama](https://github.com/baseballyama)! - `createPlProcessor(...)` can now be passed to ESLint without a cast or a wrapper: `processor` in a flat config (`Linter.Config`), a plugin's `processors`, and `Linter.Processor` accept it. Previously this was a TypeScript error (TS2322), because its `postprocess` only took and returned `ProcessorMessage`, which ESLint's `LintMessage` is not assignable to. Runtime behavior is unchanged.
+
+  The exported `PlProcessor` and `ProcessorMessage` types are unchanged. `createPlProcessor` now returns a subtype of `PlProcessor` whose `postprocess` also accepts `LintMessage[][]` and then returns `LintMessage[]`. Code written against the previous types keeps compiling:
+
+  - Calling `postprocess` with messages assignable to `ProcessorMessage` (`ProcessorMessage[][]`, or object literals and type-literal types) still returns `ProcessorMessage[]`. Messages typed by an interface are not assignable to `ProcessorMessage`, because it has an index signature; `LintMessage[][]` goes through the new signature above and returns `LintMessage[]`.
+  - A variable holding `createPlProcessor(...)` can still be reassigned to a processor you typed as `PlProcessor` yourself.
+  - Types derived with `Parameters` or `ReturnType` from `postprocess` are the same as before, for example `ReturnType<ReturnType<typeof createPlProcessor>["postprocess"]>` is still `ProcessorMessage[]`.
+
+  The only visible difference is that `ReturnType<typeof createPlProcessor>` is now that subtype rather than `PlProcessor` itself, which shows up in exact type-equality checks such as `expectTypeOf(createPlProcessor(options)).toEqualTypeOf<PlProcessor>()`. A processor typed as `PlProcessor` is still not accepted where ESLint expects a processor, so pass the value returned by `createPlProcessor` to ESLint rather than one annotated as `PlProcessor`.
+
+- [#264](https://github.com/baseballyama/postgresql-eslint-parser/pull/264) [`306ed14`](https://github.com/baseballyama/postgresql-eslint-parser/commit/306ed143ba0c2f44cde13b8c0004ce901be12fe3) Thanks [@baseballyama](https://github.com/baseballyama)! - Make token, comment, node and error positions follow PostgreSQL's lexer and ESLint's position rules.
+
+  **Lint results can change after upgrading.** Code that used to be dropped or mis-tokenized is now visible to rules, so rules that read tokens (for example `no-identifier-too-long` and `consistent-as-for-column-alias` in eslint-plugin-postgresql) may report new problems, and reports tied to statements or literals can move to a different line or column. Review the new reports when you upgrade.
+
+  Changes to the token stream (`ast.tokens` / `ast.comments`):
+
+  - Non-ASCII identifiers (`名前`, `café`, full-width letters, emoji) and identifiers containing `$` (`a$b`) are single `Identifier` tokens. They used to be dropped or cut short.
+  - Only PostgreSQL's whitespace (space, tab, CR, LF, form feed, vertical tab) separates tokens. NBSP, U+3000, U+FEFF and U+2028 are identifier characters, as they are to PostgreSQL.
+  - `E'…'`, `B'…'`, `X'…'`, `U&'…'` and `U&"…"` (any letter case) are one `String` token whose `value` includes the prefix.
+  - A backslash no longer escapes a quote in standard `'…'` strings or `"…"` identifiers, so `'C:\'` no longer swallows the rest of the line. Backslash escapes are honoured only in `E'…'`.
+  - Operators are lexed like PostgreSQL: `->>`, `@>`, `<@`, `~`, `~*`, `?`, `#` and similar are single `Operator` tokens instead of being split or dropped. `=-1` still lexes as `=`, `-`, `1`. `[` and `]` are `Punctuator` tokens, and `:=` is one `Operator`.
+  - `0x1F`, `0o17`, `0b101`, `1_000` and `.5` are single `Numeric` tokens.
+  - Nested block comments (`/* a /* b */ c */`) are one comment. Line comments end at a lone CR and never include the `\r` of a CRLF. An unterminated block comment keeps its whole value.
+
+  Changes to positions:
+
+  - `loc` treats CRLF, CR, LF, U+2028 and U+2029 as line breaks, the same as ESLint. Reports and `eslint-disable-line` directives in CR-only files now land on the right line.
+  - Top-level statements start at their first token and end at their last one. Previously, every statement after the first started right after the previous `;`, including any blank lines and comments, so reports landed on the previous line and `eslint-disable-next-line` placed above a statement did not apply. A final statement without `;` used to skip its first keyword.
+  - Nodes anchored on a literal or operator (`A_Const`, `A_Expr`, `ColumnRef`, …) now cover the whole literal, operator or identifier. Nodes anchored on a positional parameter (`ParamRef`, and a `ResTarget` that starts with one) cover `$1` instead of being zero-width. `$1` itself still has no token of its own: the `$` is skipped and the digits are a `Numeric` token.
+
+  Changes to parse errors:
+
+  - `SQLParseError.error` carries libpg-query's message for lexer errors (for example `unterminated quoted string at or near "'abc"`) instead of `Unexpected token 'u', "unterminat"... is not valid JSON`.
+  - New: `SQLParseError.errorPosition` (`{ index, line, column }`) is where PostgreSQL located the error, in the same units as `range` / `loc`. The node's own `range` / `loc` still span the whole file.
+
+  Processor:
+
+  - `createPlProcessor` strips a leading BOM before parsing. PL bodies in BOM-prefixed files are now linted, and their positions and fixes line up with the text ESLint fixes.
+
+### Patch Changes
+
+- [#264](https://github.com/baseballyama/postgresql-eslint-parser/pull/264) [`306ed14`](https://github.com/baseballyama/postgresql-eslint-parser/commit/306ed143ba0c2f44cde13b8c0004ce901be12fe3) Thanks [@baseballyama](https://github.com/baseballyama)! - Fix the parser failing to load with `Unknown libpg-query export symbol: _wasm_parse_query` when `@libpg-query/parser` 17.8.0 is installed. That release changes how its Emscripten shim names exports, and package managers that resolve the highest matching version (rather than the `latest` dist-tag, which still points at 17.6.10) pick it up.
+
+  The parser now requires `@libpg-query/parser` 17.6.6 or later (the dependency range moves from `^17.6.3` to `^17.6.6`), because it reads parse errors through an export that 17.6.3–17.6.5 do not have. If your lockfile pins one of those versions, your package manager updates it when you upgrade the parser. If an older copy is still loaded, the parser now fails at load time with a message that names the missing exports and the required version.
+
 ## 0.5.4
 
 ### Patch Changes
