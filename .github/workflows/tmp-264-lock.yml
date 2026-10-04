@@ -1,0 +1,49 @@
+# Temporary, not for merge: regenerates and dedupes the lockfile for #264 at
+# 17f9e6a (main 2e33f20 merged, docs fix, eslint ^10.11.0, test types), then runs the
+# quality gate, the tests and the docs type check with it.
+name: tmp-264-lock
+on:
+  push:
+    branches: [verify/parser-264-lock-17f9e6a]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          # Resolve eslint to 10.11.0 by pinning it for one install, then put
+          # back the committed range ^10.11.0. pnpm keeps a locked version that
+          # still satisfies the range, so the lockfile stays on 10.11.0.
+          cp package.json "$RUNNER_TEMP/package.json"
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --no-frozen-lockfile
+          cp "$RUNNER_TEMP/package.json" package.json
+          git diff --exit-code -- package.json
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          pnpm install --frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+          grep -A2 -E "^      '(@libpg-query/parser|eslint)':" pnpm-lock.yaml
+          grep -E "^  eslint@" pnpm-lock.yaml
+          grep -qE "^  eslint@10\.11\.0:" pnpm-lock.yaml
+          ! grep -qE "^  eslint@10\.12" pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pr264-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Docs type check
+        working-directory: docs
+        run: pnpm run check
