@@ -43,6 +43,8 @@ const sqlParseError = `interface SQLParseError {
   loc: Ast.SourceLocation;
   error: string;   // human-readable message from libpg-query
   raw: string;     // the original source
+  // where PostgreSQL located the error, in the units of range / loc
+  errorPosition?: { index: number; line: number; column: number };
 }`;
 
 const customRule = `// no-select-star.ts

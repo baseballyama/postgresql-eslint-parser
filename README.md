@@ -179,8 +179,13 @@ interface SQLParseError {
   loc: Ast.SourceLocation;
   error: string; // human-readable error message from libpg-query
   raw: string; // the original source code
+  // Where PostgreSQL located the error, in the same units as `range` / `loc`.
+  // Absent when libpg-query reports no position.
+  errorPosition?: { index: number; line: number; column: number };
 }
 ```
+
+`range` / `loc` span the whole file, so a rule can report there or narrow the report to `errorPosition`.
 
 ## Related projects
 
