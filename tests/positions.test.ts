@@ -545,7 +545,7 @@ describe("parse error position", () => {
 // nesting independently of the tokenizer.
 const closesBlockComment = (raw: string): boolean => {
   let depth = 0;
-  for (let i = 0; i < raw.length; ) {
+  for (let i = 0; i < raw.length;) {
     if (raw.startsWith("/*", i)) {
       depth++;
       i += 2;
