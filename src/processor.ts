@@ -39,6 +39,19 @@ export interface ProcessorMessage {
   [key: string]: unknown;
 }
 
+export interface PlProcessor {
+  meta: { name: string; version: string };
+  supportsAutofix: boolean;
+  preprocess: (
+    text: string,
+    filename: string,
+  ) => Array<{ text: string; filename: string }>;
+  postprocess: (
+    messageLists: ProcessorMessage[][],
+    filename: string,
+  ) => ProcessorMessage[];
+}
+
 // The fields postprocess reads and rewrites. Optional fields allow
 // `undefined` and there is no index signature, so both ESLint's
 // `Linter.LintMessage` and `ProcessorMessage` satisfy it.
@@ -50,16 +63,12 @@ interface TranslatableMessage {
   fix?: FixDescriptor | undefined;
 }
 
-export interface PlProcessor {
-  meta: { name: string; version: string };
-  supportsAutofix: boolean;
-  preprocess: (
-    text: string,
-    filename: string,
-  ) => Array<{ text: string; filename: string }>;
-  // Generic so the processor fits ESLint's `Processor` type (which passes and
-  // expects `LintMessage`) while direct callers keep getting back the
-  // message type they passed in.
+// What createPlProcessor returns. `PlProcessor` stays as published, so code
+// that implements it or derives types from it keeps working. This subtype's
+// generic postprocess also fits ESLint's `Processor` type, which passes and
+// expects `LintMessage`, and still returns `ProcessorMessage[]` when given
+// `ProcessorMessage[][]`.
+interface EslintCompatiblePlProcessor extends PlProcessor {
   postprocess: <M extends TranslatableMessage>(
     messageLists: M[][],
     filename: string,
@@ -135,7 +144,9 @@ const translateMessage = <M extends TranslatableMessage>(
   return translated;
 };
 
-export const createPlProcessor = (options: PlProcessorOptions): PlProcessor => {
+export const createPlProcessor = (
+  options: PlProcessorOptions,
+): EslintCompatiblePlProcessor => {
   const { languages, unknown = "skip" } = options;
   // ESLint always calls postprocess right after preprocess for the same
   // file, so caching by filename is enough — even when several files are
