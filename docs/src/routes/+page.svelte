@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
 
   let { data } = $props();
 
@@ -47,8 +47,8 @@
     </p>
 
     <div class="cta-row">
-      <a class="btn primary" href="{base}/playground">Open the Playground</a>
-      <a class="btn ghost" href="{base}/docs">Read the Docs</a>
+      <a class="btn primary" href={resolve("playground/")}>Open the Playground</a>
+      <a class="btn ghost" href={resolve("docs/")}>Read the Docs</a>
     </div>
 
     <div class="install">
@@ -82,9 +82,9 @@
         they lint TypeScript and JavaScript.
       </p>
       <p class="usage-lede">
-        See the <a href="{base}/docs">documentation</a> for the full API, or
+        See the <a href={resolve("docs/")}>documentation</a> for the full API, or
         try the
-        <a href="{base}/playground">playground</a> to inspect the AST a rule
+        <a href={resolve("playground/")}>playground</a> to inspect the AST a rule
         would receive.
       </p>
       <p class="usage-lede">

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
 
   let { data } = $props();
 
@@ -189,7 +189,7 @@
       <div class="callout">
         <strong>Tip.</strong>
         When you're not sure about a node's shape, open the
-        <a href="{base}/playground">Playground</a> and paste in some SQL — the
+        <a href={resolve("playground/")}>Playground</a> and paste in some SQL — the
         AST tree shows every property, range and location.
       </div>
     </section>

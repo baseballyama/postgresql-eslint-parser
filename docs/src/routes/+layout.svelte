@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import Nav from "#lib/components/Nav.svelte";
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
 
   let { children } = $props();
 </script>
@@ -28,9 +28,9 @@
       <div class="foot-col">
         <div class="foot-heading">Project</div>
         <ul>
-          <li><a href="{base}/">Home</a></li>
-          <li><a href="{base}/docs">Documentation</a></li>
-          <li><a href="{base}/playground">Playground</a></li>
+          <li><a href={resolve("/")}>Home</a></li>
+          <li><a href={resolve("docs/")}>Documentation</a></li>
+          <li><a href={resolve("playground/")}>Playground</a></li>
         </ul>
       </div>
       <div class="foot-col">
