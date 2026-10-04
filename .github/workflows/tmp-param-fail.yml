@@ -1,0 +1,24 @@
+# Temporary, not for merge: runs the tests at 19a3e60 (test-first commit for
+# positional-parameter node ranges) before the fix 76d9adf, to record which
+# assertions fail without it.
+name: tmp-param-fail
+on:
+  push:
+    branches: [verify/parser-264-param-fail-19a3e60]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Tests before the fix (failures expected)
+        run: |
+          set +e
+          pnpm exec vitest run 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "^ +(×|FAIL)|Tests |Test Files|AssertionError|Expected|Received" | head -80
