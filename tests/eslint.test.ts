@@ -160,6 +160,21 @@ describe("processor with a BOM-prefixed file", () => {
     typeof message.message === "string" &&
     (message.severity === 1 || message.severity === 2);
 
+  // LintMessage types its optional fields as `T | undefined`, which
+  // ProcessorMessage does not accept under exactOptionalPropertyTypes, so
+  // copy only the fields ESLint actually set.
+  const toProcessorMessage = ({
+    endLine,
+    endColumn,
+    fix,
+    ...rest
+  }: Linter.LintMessage): ProcessorMessage => ({
+    ...rest,
+    ...(endLine === undefined ? {} : { endLine }),
+    ...(endColumn === undefined ? {} : { endColumn }),
+    ...(fix === undefined ? {} : { fix }),
+  });
+
   const configs: Linter.Config[] = [
     {
       files: ["**/*.sql"],
@@ -170,7 +185,7 @@ describe("processor with a BOM-prefixed file", () => {
         postprocess: (messageLists, filename) =>
           plProcessor
             .postprocess(
-              messageLists.map((list) => list.map((m) => ({ ...m }))),
+              messageLists.map((list) => list.map(toProcessorMessage)),
               filename,
             )
             .map((message) => {
