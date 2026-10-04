@@ -21,8 +21,11 @@ jobs:
         run: |
           # Resolve only versions older than 72 hours (npm:unpublishSafe), so
           # eslint stays on 10.11.0 until 10.12.0 leaves the unpublish window.
-          pnpm install --no-frozen-lockfile --config.minimum-release-age=4320
-          pnpm dedupe --config.minimum-release-age=4320
+          # @types/node 26.6.4 is already locked on main (#265), so it is
+          # excluded from the check rather than downgraded here.
+          AGE="--config.minimum-release-age=4320 --config.minimum-release-age-exclude=@types/node"
+          pnpm install --no-frozen-lockfile $AGE
+          pnpm dedupe $AGE
           pnpm dedupe --check
           git diff --stat -- pnpm-lock.yaml
           grep -A2 -E "^      '(@libpg-query/parser|eslint)':" pnpm-lock.yaml
