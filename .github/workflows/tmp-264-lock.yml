@@ -1,0 +1,54 @@
+# Temporary, not for merge: regenerates and dedupes the lockfile for #264
+# after merging main, runs the quality gate and tests with it, and checks that
+# `pnpm dedupe --check` fails on a lockfile known to hold duplicates.
+name: tmp-264-lock
+on:
+  push:
+    branches: [verify/parser-264-lock-5f959f8]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          git diff --stat -- pnpm-lock.yaml
+          grep -E "^  '(@codemirror/state|eslint)@" pnpm-lock.yaml | sort -u
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pr264-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+  dedupe-check-fails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # #265's first lockfile, with two copies of @codemirror/state.
+          ref: 586ef76c4e64a9d803aaae83497087a40000b191
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: pnpm dedupe --check must fail here
+        run: |
+          pnpm install --frozen-lockfile
+          set +e
+          pnpm dedupe --check
+          code=$?
+          echo "pnpm dedupe --check exit code: $code"
+          test "$code" -ne 0
