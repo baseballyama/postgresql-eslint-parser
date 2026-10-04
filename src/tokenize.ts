@@ -294,9 +294,13 @@ const operatorLength = (code: string, start: number): number => {
     const index = run.indexOf(commentStart);
     if (index > 0 && index < length) length = index;
   }
-  const hasSpecialChar = [...run.slice(0, length - 1)].some((c) =>
-    SPECIAL_OPERATOR_CHARS.includes(c),
-  );
+  let hasSpecialChar = false;
+  for (const c of run.slice(0, length - 1)) {
+    if (SPECIAL_OPERATOR_CHARS.includes(c)) {
+      hasSpecialChar = true;
+      break;
+    }
+  }
   if (length > 1 && isSign(run[length - 1]) && !hasSpecialChar) {
     do {
       length--;
