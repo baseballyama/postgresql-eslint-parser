@@ -27,9 +27,9 @@ jobs:
         run: |
           git diff -- pnpm-lock.yaml tests/fixtures > "$RUNNER_TEMP/regen.patch"
           wc -l "$RUNNER_TEMP/regen.patch"
-      - name: Full suite with the regenerated files
-        run: pnpm test
       - uses: actions/upload-artifact@v7
         with:
           name: regen-patch
           path: ${{ runner.temp }}/regen.patch
+      - name: Full suite with the regenerated files
+        run: pnpm test
