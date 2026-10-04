@@ -45,23 +45,33 @@ jobs:
           rm -rf "$dir"/*
           tar -xzf "$RUNNER_TEMP"/postgresql-eslint-parser-*.tgz -C "$dir" --strip-components=1
           grep '"version"' "$dir/package.json"
+      # Results are compared in the diff job; a red head run here is expected
+      # whenever the parser changes what a plugin fixture asserts.
       - name: Plugin tests
         working-directory: plugin
+        env:
+          NO_COLOR: "1"
         run: |
           set +e
-          npx -y pnpm@11.22.0 exec vitest run --reporter=verbose > "$RUNNER_TEMP/vitest.txt" 2>&1
-          code=$?
-          grep -E "^ +(✓|×)" "$RUNNER_TEMP/vitest.txt" | sed -E 's/ [0-9]+ms$//' | sort > "$RUNNER_TEMP/results-${{ matrix.parser }}.txt"
-          tail -8 "$RUNNER_TEMP/vitest.txt"
-          grep -E "^ +×" "$RUNNER_TEMP/results-${{ matrix.parser }}.txt" | head -50
-          echo "vitest exit $code"
+          npx -y pnpm@11.22.0 exec vitest run --reporter=json --outputFile="$RUNNER_TEMP/vitest.json"
+          echo "exit=$?" > "$RUNNER_TEMP/exit-${{ matrix.parser }}.txt"
+          node -e '
+            const r = require(process.argv[1]);
+            const rows = r.testResults.flatMap(f => f.assertionResults.map(a => `${a.status}\t${f.name.split("/plugin/")[1]} > ${a.fullName}`));
+            require("fs").writeFileSync(process.argv[2], rows.sort().join("\n") + "\n");
+            for (const f of r.testResults) for (const a of f.assertionResults) if (a.status !== "passed") console.log(`${a.status}: ${a.fullName}\n${a.failureMessages.join("\n").slice(0, 1500)}`);
+            console.log(`total ${r.numTotalTests}, passed ${r.numPassedTests}, failed ${r.numFailedTests}`);
+          ' "$RUNNER_TEMP/vitest.json" "$RUNNER_TEMP/results-${{ matrix.parser }}.txt"
+          cat "$RUNNER_TEMP/exit-${{ matrix.parser }}.txt"
       - name: Plugin type check
         working-directory: plugin
         run: npx -y pnpm@11.22.0 run type:check
       - uses: actions/upload-artifact@v7
         with:
           name: plugin-results-${{ matrix.parser }}
-          path: ${{ runner.temp }}/*.txt
+          path: |
+            ${{ runner.temp }}/*.txt
+            ${{ runner.temp }}/vitest.json
   diff:
     needs: plugin-tests
     runs-on: ubuntu-latest
@@ -72,8 +82,10 @@ jobs:
           merge-multiple: true
       - name: Differences between main and head
         run: |
-          wc -l results-*.txt
+          wc -l results-*.txt; cat exit-*.txt
+          test -s results-main.txt && test -s results-head.txt
           diff results-main.txt results-head.txt && echo "no differences" || true
+
   # What a user gets from a fresh install today (no lockfile), per package manager.
   fresh-consumer:
     strategy:
