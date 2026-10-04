@@ -65,13 +65,17 @@ export const createByteToCharOffset = (code: string): ByteToCharOffset => {
   };
 };
 
+// Must match ESLint's `astUtils.createGlobalLinebreakMatcher()`. ESLint
+// computes `SourceCode#lines` and `getLocFromIndex` with this pattern, so any
+// other definition makes node `loc` disagree with what ESLint (and inline
+// `eslint-disable-line` directives) consider the same line.
+const LINE_BREAK_PATTERN = /\r\n|[\r\n  ]/gu;
+
 export const createLineMap = (code: string): LineMap => {
   const lineStartOffsets = [0];
 
-  for (let i = 0; i < code.length; i++) {
-    if (code[i] === "\n") {
-      lineStartOffsets.push(i + 1);
-    }
+  for (const match of code.matchAll(LINE_BREAK_PATTERN)) {
+    lineStartOffsets.push(match.index + match[0].length);
   }
 
   const getPosition = (offset: number): { line: number; column: number } => {

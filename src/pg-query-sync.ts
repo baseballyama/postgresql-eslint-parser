@@ -469,11 +469,11 @@ export function parseSync(query: string): unknown {
   try {
     resultPtr = wasmParseQuery(queryPtr);
     const resultStr = UTF8ToString(resultPtr);
-    if (
-      resultStr.startsWith("syntax error") ||
-      resultStr.startsWith("deparse error") ||
-      resultStr.startsWith("ERROR")
-    ) {
+    // `wasm_parse_query` returns either the JSON parse tree or the bare
+    // PostgreSQL error message. Messages are not limited to "syntax error …"
+    // (e.g. "unterminated quoted string at or near …", "trailing junk after
+    // numeric literal …"), so anything that is not a JSON object is an error.
+    if (!resultStr.startsWith("{")) {
       throw new Error(resultStr);
     }
     return JSON.parse(resultStr);

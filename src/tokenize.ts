@@ -264,6 +264,53 @@ const SQL_KEYWORDS_SET = new Set([
 
 const NUMERIC_PATTERN = /^\d+(\.\d+)?([eE][+-]?\d+)?$/;
 
+// PostgreSQL's lexer (scan.l) only treats these six characters as
+// whitespace. Anything else — NBSP, U+3000, U+FEFF, U+2028 … — is a
+// high-bit byte to PostgreSQL and therefore part of an identifier, so the
+// token stream must not silently drop it.
+const isWhitespace = (char: string): boolean => /[ \t\n\r\f\v]/.test(char);
+
+// scan.l: ident_start = [A-Za-z\200-\377_], ident_cont adds [0-9$]. Every
+// non-ASCII code unit maps to UTF-8 bytes in \200-\377.
+const isNonAscii = (char: string): boolean => char.charCodeAt(0) > 0x7f;
+const isIdentStart = (char: string): boolean =>
+  /[a-zA-Z_]/.test(char) || isNonAscii(char);
+const isIdentCont = (char: string): boolean =>
+  /[a-zA-Z0-9_$]/.test(char) || isNonAscii(char);
+// Dollar-quote tags follow ident rules but cannot contain `$`.
+const isDollarTagCont = (char: string): boolean =>
+  /[a-zA-Z0-9_]/.test(char) || isNonAscii(char);
+
+// Returns the offset just past the closing quote (or `code.length` when the
+// literal is unterminated). A doubled quote is always an escaped quote.
+// Backslash escapes exist only in E'...' strings: with
+// standard_conforming_strings (the default since PostgreSQL 9.1) a
+// backslash inside '...' or "..." is an ordinary character.
+const scanQuoted = (
+  code: string,
+  openQuoteIndex: number,
+  backslashEscapes: boolean,
+): number => {
+  const quote = code[openQuoteIndex];
+  let i = openQuoteIndex + 1;
+  while (i < code.length) {
+    const char = code[i];
+    if (char === quote) {
+      if (code[i + 1] === quote) {
+        i += 2;
+        continue;
+      }
+      return i + 1;
+    }
+    i += backslashEscapes && char === "\\" ? 2 : 1;
+  }
+  return code.length;
+};
+
+// Single-letter prefixes that turn the following '...' into one lexeme:
+// E'' (escape string), B'' / X'' (bit strings) and N'' (national char).
+const STRING_PREFIX_PATTERN = /^[eEbBxXnN]$/;
+
 const isKeyword = (value: string): boolean =>
   SQL_KEYWORDS_SET.has(value.toUpperCase());
 
@@ -281,17 +328,17 @@ export const tokenizeSQL = (
     const char = code[i];
     if (!char) break;
 
-    // skip whitespace
-    if (/\s/.test(char)) {
+    if (isWhitespace(char)) {
       i++;
       continue;
     }
 
     // comment
     if (char === "-" && i + 1 < length && code[i + 1] === "-") {
-      // line comment
+      // scan.l: comment = "--"{non_newline}*, non_newline = [^\n\r]. The
+      // terminating CR / LF belongs to the line break, not the comment.
       const start = i;
-      while (i < length && code[i] !== "\n") {
+      while (i < length && code[i] !== "\n" && code[i] !== "\r") {
         i++;
       }
       const rawValue = code.slice(start, i);
@@ -310,53 +357,43 @@ export const tokenizeSQL = (
     }
 
     if (char === "/" && i + 1 < length && code[i + 1] === "*") {
-      // block comment
+      // Unlike C / JavaScript, PostgreSQL block comments nest:
+      // `/* a /* b */ c */` is a single comment.
       const start = i;
+      let depth = 1;
       i += 2;
-      while (i < length - 1 && !(code[i] === "*" && code[i + 1] === "/")) {
-        i++;
+      while (i < length && depth > 0) {
+        if (code[i] === "/" && code[i + 1] === "*") {
+          depth++;
+          i += 2;
+        } else if (code[i] === "*" && code[i + 1] === "/") {
+          depth--;
+          i += 2;
+        } else {
+          i++;
+        }
       }
-      i += 2;
-      const rawValue = code.slice(start, i);
+      // An unterminated comment (a syntax error) runs to EOF and has no
+      // closing "*/" to strip.
+      const valueEnd = depth === 0 ? i - 2 : i;
       const { range, loc } = calculateLocationFromOffset(
         lineMap,
         start,
-        rawValue.length,
+        i - start,
       );
       comments.push({
         type: "Block",
-        value: rawValue.slice(2, -2), // strip leading "/*" and trailing "*/"
+        value: code.slice(start + 2, valueEnd),
         range,
         loc,
       });
       continue;
     }
 
-    // string literal
+    // string literal, or quoted identifier (also emitted as "String")
     if (char === "'" || char === '"') {
-      const quote = char;
       const start = i;
-      i++;
-
-      while (i < length) {
-        const currentChar = code[i];
-        if (!currentChar) break;
-
-        if (currentChar === quote) {
-          if (i + 1 < length && code[i + 1] === quote) {
-            // escaped quote
-            i += 2;
-          } else {
-            i++;
-            break;
-          }
-        } else if (currentChar === "\\") {
-          // backslash escape
-          i += 2;
-        } else {
-          i++;
-        }
-      }
+      i = scanQuoted(code, i, false);
 
       const value = code.slice(start, i);
       const { range, loc } = calculateLocationFromOffset(
@@ -379,9 +416,9 @@ export const tokenizeSQL = (
     // parameters and are intentionally not handled here.
     if (char === "$") {
       let j = i + 1;
-      if (j < length && code[j] && /[a-zA-Z_]/.test(code[j]!)) {
+      if (j < length && isIdentStart(code[j]!)) {
         j++;
-        while (j < length && code[j] && /[a-zA-Z0-9_]/.test(code[j]!)) {
+        while (j < length && isDollarTagCont(code[j]!)) {
           j++;
         }
       }
@@ -448,7 +485,7 @@ export const tokenizeSQL = (
     }
 
     // identifier, keyword, numeric
-    if (/[a-zA-Z_0-9]/.test(char)) {
+    if (/\d/.test(char) || isIdentStart(char)) {
       const start = i;
       let type: string;
 
@@ -475,10 +512,33 @@ export const tokenizeSQL = (
           : "Identifier";
       } else {
         // identifier or keyword
-        while (i < length && code[i] && /[a-zA-Z0-9_]/.test(code[i]!)) {
+        while (i < length && isIdentCont(code[i]!)) {
           i++;
         }
-        type = isKeyword(code.slice(start, i)) ? "Keyword" : "Identifier";
+        const word = code.slice(start, i);
+        const isUnicodeEscapePrefix =
+          (word === "U" || word === "u") &&
+          code[i] === "&" &&
+          (code[i + 1] === "'" || code[i + 1] === '"');
+        if (
+          (STRING_PREFIX_PATTERN.test(word) && code[i] === "'") ||
+          isUnicodeEscapePrefix
+        ) {
+          // The prefix and the quoted body are one lexeme, and libpg-query
+          // anchors the A_Const `location` on the prefix. Splitting them
+          // would give the constant node a range covering only "E" / "U".
+          const quoteIndex = isUnicodeEscapePrefix ? i + 1 : i;
+          i = scanQuoted(code, quoteIndex, word === "E" || word === "e");
+          const value = code.slice(start, i);
+          const { range, loc } = calculateLocationFromOffset(
+            lineMap,
+            start,
+            value.length,
+          );
+          tokens.push({ type: "String", value, range, loc });
+          continue;
+        }
+        type = isKeyword(word) ? "Keyword" : "Identifier";
       }
 
       const value = code.slice(start, i);
