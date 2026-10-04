@@ -326,6 +326,14 @@ describe("top-level statement ranges", () => {
     ]);
   });
 
+  it("keep characters that have no token, such as `$1`", () => {
+    const code = "SELECT $1 /* c */;\nSELECT 2 -- tail\n";
+    expect(locatedOf(code, "SelectStmt")).toEqual([
+      { range: [0, 9], loc: { start: at(1, 0), end: at(1, 9) } },
+      { range: [19, 27], loc: { start: at(2, 0), end: at(2, 8) } },
+    ]);
+  });
+
   it("exclude comments before the first statement", () => {
     expect(locatedOf("-- head\nSELECT 1;", "SelectStmt")).toEqual([
       { range: [8, 16], loc: { start: at(2, 0), end: at(2, 8) } },
