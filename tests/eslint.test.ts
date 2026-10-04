@@ -186,6 +186,11 @@ describe("processor with a BOM-prefixed file", () => {
     },
     {
       files: ["**/*.js"],
+      // A PLV8 body is a function body, so its top-level `return` is valid.
+      languageOptions: {
+        sourceType: "script",
+        parserOptions: { ecmaFeatures: { globalReturn: true } },
+      },
       plugins: { test: { rules: { "one-to-two": oneToTwo } } },
       rules: { "test/one-to-two": "error" },
     },
