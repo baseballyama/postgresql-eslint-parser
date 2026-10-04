@@ -175,21 +175,56 @@ describe("createPlProcessor's postprocess called directly", () => {
     expect(processor.postprocess(lists, "unknown.sql")).toEqual([]);
   });
 
-  it("needs a PlProcessor annotation to hold a hand-written processor", () => {
+  // Assigning to an overloaded function type compares each target overload
+  // with generics erased, so the generic overload accepts any postprocess
+  // that PlProcessor accepts, however it is written.
+  it("can be replaced by a hand-written PlProcessor", () => {
+    const customMeta = { name: "custom", version: "1" };
+    const preprocess = (text: string, filename: string) => [{ text, filename }];
+    const annotated: PlProcessor = {
+      meta: customMeta,
+      supportsAutofix: false,
+      preprocess,
+      postprocess: (lists) => lists.flat(),
+    };
+    const methodSyntax = {
+      meta: customMeta,
+      supportsAutofix: false,
+      preprocess,
+      postprocess(lists: ProcessorMessage[][]): ProcessorMessage[] {
+        return lists.flat();
+      },
+    };
+    class Custom implements PlProcessor {
+      meta = customMeta;
+      supportsAutofix = false;
+      preprocess = preprocess;
+      postprocess(lists: ProcessorMessage[][]): ProcessorMessage[] {
+        return lists.flat();
+      }
+    }
+
+    let inferred = createPlProcessor({ languages: { plv8: ".js" } });
+    inferred = annotated;
+    expect(inferred).toBe(annotated);
+    inferred = methodSyntax;
+    expect(inferred).toBe(methodSyntax);
+    inferred = new Custom();
+    expect(inferred).toBeInstanceOf(Custom);
+    const named: ReturnType<typeof createPlProcessor> = annotated;
+    expect(named).toBe(annotated);
+  });
+
+  it("leaves a hand-written PlProcessor unassignable to Linter.Processor", () => {
     const custom: PlProcessor = {
       meta: { name: "custom", version: "1" },
       supportsAutofix: false,
       preprocess: (text, filename) => [{ text, filename }],
       postprocess: (lists) => lists.flat(),
     };
-    let inferred = createPlProcessor({ languages: { plv8: ".js" } });
-    // @ts-expect-error A plain PlProcessor's postprocess does not accept
-    // LintMessage, which the inferred type requires.
-    inferred = custom;
-    let annotated: PlProcessor = createPlProcessor({
-      languages: { plv8: ".js" },
-    });
-    annotated = custom;
-    expect([inferred, annotated]).toEqual([custom, custom]);
+    // @ts-expect-error As before, PlProcessor's postprocess does not accept
+    // LintMessage. Only createPlProcessor's result does.
+    const processor: Linter.Processor = custom;
+    expect(processor).toBe(custom);
   });
 });
