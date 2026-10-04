@@ -1,0 +1,38 @@
+# Temporary, not for merge: on #264 after merging main, regenerates and dedupes
+# the lockfile, formats with prettier 3.9, uploads both as artifacts, then runs
+# the quality gate and every test with them.
+name: tmp-264-fmt
+on:
+  push:
+    branches: [verify/parser-264-fmt-0263f00]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate, dedupe and format
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          pnpm format:fix
+          git diff --stat
+          git diff -- . ':!pnpm-lock.yaml' ':!.github' > "$RUNNER_TEMP/format.patch"
+          cp pnpm-lock.yaml "$RUNNER_TEMP/pnpm-lock.yaml"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pr264-lock-and-format
+          path: |
+            ${{ runner.temp }}/pnpm-lock.yaml
+            ${{ runner.temp }}/format.patch
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests (Node 24)
+        run: pnpm test
