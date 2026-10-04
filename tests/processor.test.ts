@@ -130,3 +130,66 @@ describe("PlProcessor as published", () => {
     expect(processor.postprocess(lists, "unknown.sql")).toEqual([]);
   });
 });
+
+// Calling createPlProcessor's result directly must type-check as it did when
+// it returned a plain PlProcessor, while ESLint's LintMessage also goes in.
+describe("createPlProcessor's postprocess called directly", () => {
+  it("returns LintMessage for LintMessage input", () => {
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+    processor.preprocess(code, "fn.sql");
+    const input: Linter.LintMessage[][] = [
+      [{ ruleId: "r", message: "m", severity: 2, line: 1, column: 9 }],
+    ];
+    const output: Linter.LintMessage[] = processor.postprocess(input, "fn.sql");
+    expect(output).toEqual([
+      { ruleId: "r", message: "m", severity: 2, line: 1, column: 46 },
+    ]);
+  });
+
+  it("returns ProcessorMessage for an unannotated literal", () => {
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+    const output = processor.postprocess(
+      [[{ line: 1, column: 1 }]],
+      "unknown.sql",
+    );
+    const severity: number | undefined = output[0]?.severity;
+    expect(severity).toBeUndefined();
+  });
+
+  it("accepts messages without position fields", () => {
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+    const input: { ruleId: string; message: string }[][] = [
+      [{ ruleId: "r", message: "m" }],
+    ];
+    const output: ProcessorMessage[] = processor.postprocess(
+      input,
+      "unknown.sql",
+    );
+    expect(output).toEqual([]);
+  });
+
+  it("keeps the parameter type derived from its return type", () => {
+    type Postprocess = ReturnType<typeof createPlProcessor>["postprocess"];
+    const lists: Parameters<Postprocess>[0] = [[{ line: 1, custom: "kept" }]];
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+    expect(processor.postprocess(lists, "unknown.sql")).toEqual([]);
+  });
+
+  it("needs a PlProcessor annotation to hold a hand-written processor", () => {
+    const custom: PlProcessor = {
+      meta: { name: "custom", version: "1" },
+      supportsAutofix: false,
+      preprocess: (text, filename) => [{ text, filename }],
+      postprocess: (lists) => lists.flat(),
+    };
+    let inferred = createPlProcessor({ languages: { plv8: ".js" } });
+    // @ts-expect-error A plain PlProcessor's postprocess does not accept
+    // LintMessage, which the inferred type requires.
+    inferred = custom;
+    let annotated: PlProcessor = createPlProcessor({
+      languages: { plv8: ".js" },
+    });
+    annotated = custom;
+    expect([inferred, annotated]).toEqual([custom, custom]);
+  });
+});
