@@ -167,7 +167,10 @@ export const createPlProcessor = (
     },
     supportsAutofix: true,
     preprocess(text, filename) {
-      const { ast } = parseForESLint(text);
+      // ESLint hands processors the raw file (BOM included) but resolves the
+      // fix ranges and positions we return against the BOM-stripped text, the
+      // same text a parser receives. libpg-query also rejects a leading BOM.
+      const { ast } = parseForESLint(text.replace(/^\uFEFF/u, ""));
       const bodies = extractEmbeddedCode(ast);
       const blocks: Array<{ body: EmbeddedCode; ext: string }> = [];
 

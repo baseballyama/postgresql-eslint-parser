@@ -12,6 +12,12 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
+import {
+  assertLoaderExports,
+  parseExportLetters,
+  parseImportLetters,
+} from "./emscripten-shim.ts";
+
 // ---------------------------------------------------------------------------
 // Resolve the WASM binary and Emscripten JS shim from the installed package.
 //
@@ -29,29 +35,7 @@ const shimSource = readFileSync(shimPath, "utf8");
 
 const importLetterBySymbol = parseImportLetters(shimSource);
 const exportLetterBySymbol = parseExportLetters(shimSource);
-
-function parseImportLetters(src: string): Record<string, string> {
-  const match = src.match(/wasmImports\s*=\s*\{([^}]*)\}/);
-  if (!match) throw new Error("Could not locate wasmImports in libpg-query.js");
-  const out: Record<string, string> = {};
-  for (const part of match[1]!.split(",")) {
-    const m = part.match(/^\s*([A-Za-z]+)\s*:\s*([A-Za-z0-9_$]+)\s*$/);
-    if (m) out[m[2]!] = m[1]!;
-  }
-  return out;
-}
-
-function parseExportLetters(src: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  // Variable assignments: `wasmMemory=wasmExports["v"]` or `_malloc=wasmExports["y"]`.
-  const assignRe =
-    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*wasmExports\["([A-Za-z])"\]/g;
-  for (let m; (m = assignRe.exec(src));) out[m[1]!] = m[2]!;
-  // Constructor call: `wasmExports["w"]()` runs C/C++ static ctors.
-  const ctorMatch = src.match(/wasmExports\["([A-Za-z])"\]\s*\(\s*\)/);
-  if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
-  return out;
-}
+assertLoaderExports(exportLetterBySymbol);
 
 function importLetter(symbol: string): string {
   const letter = importLetterBySymbol[symbol];
@@ -74,11 +58,13 @@ function exportLetter(symbol: string): string {
 // ---------------------------------------------------------------------------
 let wasmMemory: WebAssembly.Memory;
 let HEAPU8: Uint8Array;
+let HEAP32: Int32Array;
 let HEAPU32: Uint32Array;
 
 function updateMemoryViews(): void {
   const b = wasmMemory.buffer;
   HEAPU8 = new Uint8Array(b);
+  HEAP32 = new Int32Array(b);
   HEAPU32 = new Uint32Array(b);
 }
 
@@ -437,10 +423,14 @@ wasmTable = getExport<WebAssembly.Table>("wasmTable");
 updateMemoryViews();
 
 // Bind exported functions
-const wasmParseQuery = getExport<(ptr: number) => number>("_wasm_parse_query");
+const wasmParseQueryRaw = getExport<(ptr: number) => number>(
+  "_wasm_parse_query_raw",
+);
+const wasmFreeParseResult = getExport<(ptr: number) => void>(
+  "_wasm_free_parse_result",
+);
 const wasmMalloc = getExport<(size: number) => number>("_malloc");
 const wasmFree = getExport<(ptr: number) => void>("_free");
-const wasmFreeString = getExport<(ptr: number) => void>("_wasm_free_string");
 setThrew = getExport<(flag: number, value: number) => void>("_setThrew");
 stackRestore = getExport<(val: number) => void>("__emscripten_stack_restore");
 stackSave = getExport<() => number>("_emscripten_stack_get_current");
@@ -463,24 +453,51 @@ function stringToPtr(str: string): number {
   }
 }
 
+// Field offsets in libpg_query's structs on wasm32 (4-byte pointers and
+// ints), the same ones @libpg-query/parser's own `parse()` reads:
+//   PgQueryParseResult { char *parse_tree; char *stderr_buffer; PgQueryError *error; }
+//   PgQueryError { char *message; char *funcname; char *filename; int lineno; int cursorpos; ... }
+const PARSE_RESULT_TREE_OFFSET = 0;
+const PARSE_RESULT_ERROR_OFFSET = 8;
+const ERROR_MESSAGE_OFFSET = 0;
+const ERROR_CURSORPOS_OFFSET = 16;
+
+export class PgQueryParseError extends Error {
+  // PostgreSQL's 1-based error position counted in characters (Unicode code
+  // points) of the query, or 0 when the error has no position.
+  readonly cursorPosition: number;
+
+  constructor(message: string, cursorPosition: number) {
+    super(message);
+    this.name = "PgQueryParseError";
+    this.cursorPosition = cursorPosition;
+  }
+}
+
+const readPointer = (address: number): number => HEAPU32[address >>> 2]!;
+
 export function parseSync(query: string): unknown {
   const queryPtr = stringToPtr(query);
   let resultPtr = 0;
   try {
-    resultPtr = wasmParseQuery(queryPtr);
-    const resultStr = UTF8ToString(resultPtr);
-    if (
-      resultStr.startsWith("syntax error") ||
-      resultStr.startsWith("deparse error") ||
-      resultStr.startsWith("ERROR")
-    ) {
-      throw new Error(resultStr);
+    resultPtr = wasmParseQueryRaw(queryPtr);
+    if (!resultPtr) {
+      throw new Error("libpg-query failed to allocate a parse result");
     }
-    return JSON.parse(resultStr);
+    const errorPtr = readPointer(resultPtr + PARSE_RESULT_ERROR_OFFSET);
+    if (errorPtr) {
+      throw new PgQueryParseError(
+        UTF8ToString(readPointer(errorPtr + ERROR_MESSAGE_OFFSET)),
+        HEAP32[(errorPtr + ERROR_CURSORPOS_OFFSET) >>> 2]!,
+      );
+    }
+    return JSON.parse(
+      UTF8ToString(readPointer(resultPtr + PARSE_RESULT_TREE_OFFSET)),
+    );
   } finally {
     wasmFree(queryPtr);
     if (resultPtr) {
-      wasmFreeString(resultPtr);
+      wasmFreeParseResult(resultPtr);
     }
   }
 }

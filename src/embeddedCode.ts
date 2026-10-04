@@ -90,13 +90,19 @@ const findBodyToken = (
       return { innerStart, innerEnd, quoteStyle: "dollar" };
     }
 
-    if (raw.startsWith("'")) {
-      // Single-quoted body. The source has `''` escapes resolved; the
-      // absolute range still spans the raw literal contents so callers
-      // know where to find it. If the body contains `''`, source length
-      // will be smaller than (innerEnd - innerStart) — sourceMap support
-      // is intentionally deferred.
-      const innerStart = token.range[0] + 1;
+    // The tokenizer keeps an escape-string prefix in the same token (`E'...'`).
+    const openQuoteLength = raw.startsWith("'")
+      ? 1
+      : /^[eE]'/u.test(raw)
+        ? 2
+        : 0;
+    if (openQuoteLength > 0) {
+      // Single-quoted body. The source has `''` (and, for E'', backslash)
+      // escapes resolved; the absolute range still spans the raw literal
+      // contents so callers know where to find it. If the body contains
+      // escapes, source length will be smaller than (innerEnd - innerStart)
+      // — sourceMap support is intentionally deferred.
+      const innerStart = token.range[0] + openQuoteLength;
       const innerEnd = token.range[1] - 1;
       return { innerStart, innerEnd, quoteStyle: "single" };
     }

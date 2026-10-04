@@ -1,10 +1,10 @@
 import type { Program, SQLParseError } from "./ast.ts";
 import { attachEmbeddedCode } from "./embeddedCode.ts";
 import { manipulate } from "./manipulate.ts";
-import { parseSync } from "./pg-query-sync.ts";
+import { parseSync, PgQueryParseError } from "./pg-query-sync.ts";
 import { tokenizeSQL } from "./tokenize.ts";
 import type { ParseResult, RawPostgreSQLAst } from "./types.ts";
-import { createLineMap } from "./utils.ts";
+import { codePointToCharOffset, createLineMap } from "./utils.ts";
 import { buildVisitorKeys } from "./visitorKeys.ts";
 
 export const parseForESLint = (code: string): ParseResult => {
@@ -25,7 +25,7 @@ export const parseForESLint = (code: string): ParseResult => {
   let body: Program["body"];
   try {
     const pgAst = parseSync(code) as unknown as RawPostgreSQLAst;
-    body = manipulate(pgAst, tokens, lineMap);
+    body = manipulate(pgAst, tokens, comments, lineMap);
   } catch (err) {
     const errorNode: SQLParseError = {
       type: "SQLParseError",
@@ -34,6 +34,10 @@ export const parseForESLint = (code: string): ParseResult => {
       error: err instanceof Error ? err.message : "Unknown SQL parsing error",
       raw: code,
     };
+    if (err instanceof PgQueryParseError && err.cursorPosition > 0) {
+      const index = codePointToCharOffset(code, err.cursorPosition - 1);
+      errorNode.errorPosition = { index, ...lineMap.getPosition(index) };
+    }
     body = [errorNode];
   }
 

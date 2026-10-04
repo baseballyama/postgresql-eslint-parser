@@ -46,7 +46,7 @@ export const parseSQL = async (code: string): Promise<BrowserParseResult> => {
   let body: Program["body"];
   try {
     const pgAst = parseQuerySync(code) as RawPostgreSQLAst;
-    body = manipulate(pgAst, tokens, lineMap);
+    body = manipulate(pgAst, tokens, comments, lineMap);
   } catch (err) {
     const errorNode: SQLParseError = {
       type: "SQLParseError",

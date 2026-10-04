@@ -15,7 +15,7 @@ export interface RawPostgreSQLAst {
     // descendant min/max aggregation cannot recover them when some
     // child node lacks its own `location`.
     stmt_location?: number;
-    stmt_len: number;
+    stmt_len?: number;
   }[];
 }
 
