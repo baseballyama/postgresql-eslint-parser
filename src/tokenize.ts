@@ -309,7 +309,8 @@ const operatorLength = (code: string, start: number): number => {
 // whitespace. Anything else — NBSP, U+3000, U+FEFF, U+2028 … — is a
 // high-bit byte to PostgreSQL and therefore part of an identifier, so the
 // token stream must not silently drop it.
-const isWhitespace = (char: string): boolean => /[ \t\n\r\f\v]/.test(char);
+export const isWhitespace = (char: string): boolean =>
+  /[ \t\n\r\f\v]/.test(char);
 
 // scan.l: ident_start = [A-Za-z\200-\377_], ident_cont adds [0-9$]. Every
 // non-ASCII code unit maps to UTF-8 bytes in \200-\377.

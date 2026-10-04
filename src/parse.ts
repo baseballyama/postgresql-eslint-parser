@@ -25,7 +25,7 @@ export const parseForESLint = (code: string): ParseResult => {
   let body: Program["body"];
   try {
     const pgAst = parseSync(code) as unknown as RawPostgreSQLAst;
-    body = manipulate(pgAst, tokens, lineMap);
+    body = manipulate(pgAst, tokens, comments, lineMap);
   } catch (err) {
     const errorNode: SQLParseError = {
       type: "SQLParseError",

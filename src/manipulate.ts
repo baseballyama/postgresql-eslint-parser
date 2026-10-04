@@ -1,5 +1,10 @@
 import type { Program, SourceLocation } from "./ast.ts";
-import type { ESLintToken, RawPostgreSQLAst } from "./types.ts";
+import { isWhitespace } from "./tokenize.ts";
+import type {
+  ESLintComment,
+  ESLintToken,
+  RawPostgreSQLAst,
+} from "./types.ts";
 import { createByteToCharOffset, type LineMap } from "./utils.ts";
 
 const specialKeys = ["parent", "type", "range", "loc"];
@@ -512,11 +517,46 @@ const resolveAliasRanges = (
   }
 };
 
+interface Trivia {
+  code: string;
+  commentByStart: Map<number, ESLintComment>;
+  commentByEnd: Map<number, ESLintComment>;
+}
+
+// Shrinks [start, end) past leading / trailing whitespace and comments.
+const trimTrivia = (
+  start: number,
+  end: number,
+  { code, commentByStart, commentByEnd }: Trivia,
+): [number, number] => {
+  let s = start;
+  let e = end;
+  for (;;) {
+    while (s < e && isWhitespace(code[s]!)) s++;
+    const comment = commentByStart.get(s);
+    if (comment === undefined || s >= e) break;
+    s = comment.range[1];
+  }
+  for (;;) {
+    while (e > s && isWhitespace(code[e - 1]!)) e--;
+    const comment = commentByEnd.get(e);
+    if (comment === undefined || e <= s) break;
+    e = comment.range[0];
+  }
+  return [s, e];
+};
+
 export const manipulate = (
   pgAst: RawPostgreSQLAst,
   tokens: ESLintToken[],
+  comments: ESLintComment[],
   lineMap: LineMap,
 ): Program["body"] => {
+  const trivia: Trivia = {
+    code: lineMap.code,
+    commentByStart: new Map(comments.map((c) => [c.range[0], c])),
+    commentByEnd: new Map(comments.map((c) => [c.range[1], c])),
+  };
   const startEndMap = buildStartEndMap(tokens);
   const result: unknown[] = [];
   const byteToChar = createByteToCharOffset(lineMap.code);
@@ -547,19 +587,18 @@ export const manipulate = (
     const startChar = byteToChar(stmtLocation);
     const endChar =
       stmtLen > 0 ? byteToChar(stmtLocation + stmtLen) : lineMap.code.length;
-    // `stmt_location` points just past the previous `;`, so the span also
-    // holds the whitespace and comments in between. Trim it to the
-    // statement's own tokens so reports (and `eslint-disable-next-line`
-    // directives) land on the line where the statement starts.
-    const firstIdx = findFirstTokenAtOrAfter(tokens, startChar);
-    const lastIdx = findFirstTokenAtOrAfter(tokens, endChar) - 1;
-    const first = tokens[firstIdx];
-    const last = tokens[lastIdx];
-    if (first && last && firstIdx <= lastIdx) {
-      stmtNode["range"] = [first.range[0], last.range[1]];
+    // `stmt_location` points just past the previous `;` and `stmt_len`
+    // runs up to the next one, so the span also holds the whitespace and
+    // comments around the statement. Trim them so reports (and
+    // `eslint-disable-next-line` directives) land where the statement is.
+    const [start, end] = trimTrivia(startChar, endChar, trivia);
+    if (start < end) {
+      const startPos = lineMap.getPosition(start);
+      const endPos = lineMap.getPosition(end);
+      stmtNode["range"] = [start, end];
       stmtNode["loc"] = {
-        start: { line: first.loc.start.line, column: first.loc.start.column },
-        end: { line: last.loc.end.line, column: last.loc.end.column },
+        start: { line: startPos.line, column: startPos.column },
+        end: { line: endPos.line, column: endPos.column },
       };
     }
     // Propagate the resolved statement loc down into descendants whose
