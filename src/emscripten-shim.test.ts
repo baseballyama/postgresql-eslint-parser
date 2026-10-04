@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { parseExportLetters, parseImportLetters } from "./emscripten-shim.ts";
+import {
+  assertLoaderExports,
+  parseExportLetters,
+  parseImportLetters,
+} from "./emscripten-shim.ts";
 
 // Excerpts copied verbatim from `wasm/libpg-query.js` of the published
 // @libpg-query/parser tarballs (only the statements the loader reads).
@@ -8,6 +12,16 @@ const SHIM_17_6_10 = [
   `function receiveInstance(instance){wasmExports=instance.exports;wasmMemory=wasmExports["v"];updateMemoryViews();wasmTable=wasmExports["z"];assignWasmExports(wasmExports)}`,
   `function initRuntime(){FS.init();TTY.init();wasmExports["w"]();FS.ignorePermissions=false}`,
   `function assignWasmExports(wasmExports){_malloc=wasmExports["y"];_free=wasmExports["A"];_wasm_parse_query_raw=wasmExports["B"];_wasm_free_parse_result=wasmExports["C"];_setThrew=wasmExports["N"];__emscripten_stack_restore=wasmExports["O"];_emscripten_stack_get_current=wasmExports["P"]}`,
+  `var wasmImports={c:___assert_fail,u:__abort_js,p:__emscripten_throw_longjmp,q:_emscripten_resize_heap,o:_exit,t:_fd_close,r:_fd_read,s:_fd_seek,m:_fd_write,g:invoke_i,b:invoke_ii,a:invoke_iii,d:invoke_iiii,h:invoke_iiiii,l:invoke_iiiiii,n:invoke_ji,f:invoke_v,e:invoke_vi,i:invoke_vii,k:invoke_viii,j:invoke_viiii}`,
+].join("");
+
+// Like 17.6.3 and 17.6.4, 17.6.5 predates `_wasm_parse_query_raw` and
+// `_wasm_free_parse_result`. It assigns exports as
+// `Module["…"]=name=wasmExports["…"]`.
+const SHIM_17_6_5 = [
+  `function receiveInstance(instance,module){wasmExports=instance.exports;wasmMemory=wasmExports["v"];updateMemoryViews();wasmTable=wasmExports["z"];assignWasmExports(wasmExports);removeRunDependency("wasm-instantiate");return wasmExports}`,
+  `function initRuntime(){runtimeInitialized=true;if(!Module["noFSInit"]&&!FS.initialized)FS.init();TTY.init();wasmExports["w"]();FS.ignorePermissions=false}`,
+  `function assignWasmExports(wasmExports){Module["_wasm_parse_query"]=_wasm_parse_query=wasmExports["x"];Module["_malloc"]=_malloc=wasmExports["y"];Module["_free"]=_free=wasmExports["A"];Module["_wasm_deparse_protobuf"]=_wasm_deparse_protobuf=wasmExports["B"];Module["_wasm_parse_plpgsql"]=_wasm_parse_plpgsql=wasmExports["C"];Module["_wasm_fingerprint"]=_wasm_fingerprint=wasmExports["D"];Module["_wasm_parse_query_protobuf"]=_wasm_parse_query_protobuf=wasmExports["E"];Module["_wasm_get_protobuf_len"]=_wasm_get_protobuf_len=wasmExports["F"];Module["_wasm_normalize_query"]=_wasm_normalize_query=wasmExports["G"];Module["_wasm_parse_query_detailed"]=_wasm_parse_query_detailed=wasmExports["H"];Module["_wasm_free_detailed_result"]=_wasm_free_detailed_result=wasmExports["I"];Module["_wasm_scan"]=_wasm_scan=wasmExports["J"];Module["_wasm_free_string"]=_wasm_free_string=wasmExports["K"];_setThrew=wasmExports["L"];__emscripten_stack_restore=wasmExports["M"];_emscripten_stack_get_current=wasmExports["N"]}`,
   `var wasmImports={c:___assert_fail,u:__abort_js,p:__emscripten_throw_longjmp,q:_emscripten_resize_heap,o:_exit,t:_fd_close,r:_fd_read,s:_fd_seek,m:_fd_write,g:invoke_i,b:invoke_ii,a:invoke_iii,d:invoke_iiii,h:invoke_iiiii,l:invoke_iiiiii,n:invoke_ji,f:invoke_v,e:invoke_vi,i:invoke_vii,k:invoke_viii,j:invoke_viiii}`,
 ].join("");
 
@@ -71,9 +85,29 @@ describe("parseExportLetters", () => {
   });
 });
 
+describe("assertLoaderExports", () => {
+  it.each([
+    ["17.6.10", SHIM_17_6_10],
+    ["17.8.0", SHIM_17_8_0],
+  ])("accepts the %s shim", (_, shim) => {
+    expect(() => assertLoaderExports(parseExportLetters(shim))).not.toThrow();
+  });
+
+  it("names the exports 17.6.5 lacks and the version it needs", () => {
+    const letters = parseExportLetters(SHIM_17_6_5);
+    expect(() => assertLoaderExports(letters)).toThrow(
+      new Error(
+        "libpg-query.js does not export _wasm_parse_query_raw, _wasm_free_parse_result. " +
+          "postgresql-eslint-parser requires @libpg-query/parser 17.6.6 or later.",
+      ),
+    );
+  });
+});
+
 describe("parseImportLetters", () => {
   it.each([
     ["17.6.10", SHIM_17_6_10, { invoke_i: "g", invoke_iiiii: "h" }],
+    ["17.6.5", SHIM_17_6_5, { invoke_i: "g", invoke_iiiii: "h" }],
     ["17.8.0", SHIM_17_8_0, { invoke_i: "h", invoke_iiiii: "g" }],
   ])("maps import symbols to letters in %s", (_, shim, expected) => {
     const letters = parseImportLetters(shim);

@@ -12,7 +12,11 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
-import { parseExportLetters, parseImportLetters } from "./emscripten-shim.ts";
+import {
+  assertLoaderExports,
+  parseExportLetters,
+  parseImportLetters,
+} from "./emscripten-shim.ts";
 
 // ---------------------------------------------------------------------------
 // Resolve the WASM binary and Emscripten JS shim from the installed package.
@@ -31,6 +35,7 @@ const shimSource = readFileSync(shimPath, "utf8");
 
 const importLetterBySymbol = parseImportLetters(shimSource);
 const exportLetterBySymbol = parseExportLetters(shimSource);
+assertLoaderExports(exportLetterBySymbol);
 
 function importLetter(symbol: string): string {
   const letter = importLetterBySymbol[symbol];
