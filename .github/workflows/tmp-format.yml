@@ -1,0 +1,26 @@
+# Temporary, not for merge: runs prettier --write for #264 on a runner and
+# uploads the result as a patch.
+name: tmp-format
+on:
+  push:
+    branches: [verify/parser-format]
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:fix
+      - run: git diff --stat && git diff -- . ':!.github' > "$RUNNER_TEMP/format.patch"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: format-patch
+          path: ${{ runner.temp }}/format.patch
+      - name: Quality gate after formatting
+        run: pnpm check:all
