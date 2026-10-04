@@ -560,6 +560,9 @@ describe("parse error position", () => {
     ["SELECT 1\nFROM FROM", `syntax error at or near "FROM"`, 14, 2, 5],
     ["SELECT 'abc", `unterminated quoted string at or near "'abc"`, 7, 1, 7],
     ["SELECT 1 FROM", "syntax error at end of input", 13, 1, 13],
+    // The tokenizer alone lexes `1..2` as one Identifier; PostgreSQL rejects
+    // it, so the only thing exposed is this error.
+    ["SELECT 1..2", `syntax error at or near ".."`, 8, 1, 8],
   ] as const)(
     "reports %j at the offending token",
     (code, error, index, line, column) => {
