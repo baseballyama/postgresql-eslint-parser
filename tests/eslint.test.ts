@@ -77,7 +77,7 @@ describe("SourceCode agrees with tokens and comments", () => {
   const code =
     "SELECT 名前, E'a\\\\', U&\"x\" -- c\r\n" +
     "FROM t /* a /* b */ c */\r" +
-    "WHERE x ->> 'k ' = '𝒳';";
+    "WHERE x ->> 'k\u2029' = '𝒳';";
 
   const observe = () => {
     const seen: Array<() => void> = [];
@@ -132,7 +132,7 @@ describe("SourceCode agrees with tokens and comments", () => {
 
 describe("processor with a BOM-prefixed file", () => {
   const code =
-    "﻿CREATE FUNCTION x() RETURNS int AS $$ return 1; $$ LANGUAGE plv8;";
+    "\uFEFFCREATE FUNCTION x() RETURNS int AS $$ return 1; $$ LANGUAGE plv8;";
 
   const oneToTwo: Rule.RuleModule = {
     meta: { fixable: "code" },
@@ -206,7 +206,7 @@ describe("processor with a BOM-prefixed file", () => {
     });
     expect(result.fixed).toBe(true);
     expect(result.output).toBe(
-      "﻿CREATE FUNCTION x() RETURNS int AS $$ return 2; $$ LANGUAGE plv8;",
+      "\uFEFFCREATE FUNCTION x() RETURNS int AS $$ return 2; $$ LANGUAGE plv8;",
     );
     expect(result.messages).toEqual([]);
   });
