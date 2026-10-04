@@ -1,9 +1,9 @@
 # Temporary verification for #264, not for merge: runs eslint-plugin-postgresql's
 # full test suite against the parser built from main (baseline) and from the PR head.
-name: tmp-264-fixture-diff
+name: tmp-264-prisma
 on:
   push:
-    branches: [verify/parser-264-fixture-diff-080a4cc]
+    branches: [verify/parser-264-prisma-080a4cc]
 permissions:
   contents: read
 jobs:
@@ -96,6 +96,21 @@ jobs:
           console.log(`messages ${messages.length}`);
           JS
           node "$RUNNER_TEMP/example.mjs" | tee "$RUNNER_TEMP/example-${{ matrix.parser }}.txt"
+          cat > "$RUNNER_TEMP/prisma.mjs" <<'JS'
+          // Same input and config as the plugin's "lints Prisma's raw-query tags" test.
+          import { Linter } from "eslint";
+          import { pathToFileURL } from "node:url";
+          const plugin = (await import(pathToFileURL(process.cwd() + "/dist/index.js"))).default;
+          const parser = (await import(pathToFileURL(process.cwd() + "/node_modules/postgresql-eslint-parser/dist/index.js"))).default;
+          const code = ["const rows = await prisma.$queryRaw`SELECT * FROM users`;", "await prisma.$executeRaw`DELETE FROM sessions`;"].join("\n");
+          const config = [
+            { files: ["**/*.ts"], processor: plugin.processors["embedded-sql"] },
+            { files: ["**/*.sql"], plugins: { postgresql: plugin }, languageOptions: { parser }, rules: { "postgresql/no-select-star": "error", "postgresql/require-where-in-delete": "error" } },
+          ];
+          const messages = new Linter({ configType: "flat" }).verify(code, config, { filename: "db.ts", filterCodeBlock: (f) => f.endsWith(".sql") });
+          for (const m of messages) console.log(`${m.ruleId} ${m.line}:${m.column}-${m.endLine}:${m.endColumn} | ${JSON.stringify(code.split("\n")[m.line - 1].slice(m.column - 1, m.column + 14))}`);
+          JS
+          node "$RUNNER_TEMP/prisma.mjs" | tee "$RUNNER_TEMP/prisma-${{ matrix.parser }}.txt"
       - uses: actions/upload-artifact@v7
         with:
           name: plugin-results-${{ matrix.parser }}
@@ -118,103 +133,6 @@ jobs:
           diff results-main.txt results-head.txt && echo "no differences" || true
           echo "--- playground default example: main vs head"
           diff example-main.txt example-head.txt && echo "no differences" || true
+          echo "--- Prisma raw-query test input: main vs head"
+          cat prisma-main.txt; echo "vs"; cat prisma-head.txt
 
-  # What a user gets from a fresh install today (no lockfile), per package manager.
-  fresh-consumer:
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        pm: [npm, pnpm, yarn]
-        node: [22, 24]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Fresh install of the published plugin
-        working-directory: ${{ runner.temp }}
-        run: |
-          mkdir app && cd app && echo '{"name":"app","private":true,"type":"module"}' > package.json
-          case "${{ matrix.pm }}" in
-            npm) npm install eslint@10 eslint-plugin-postgresql@0.24.0 ;;
-            pnpm) npx -y pnpm@12.9.1 add eslint@10 eslint-plugin-postgresql@0.24.0 --config.strict-dep-builds=false ;;
-            yarn) corepack enable && yarn set version stable && printf 'nodeLinker: node-modules\n' >> .yarnrc.yml && yarn add eslint@10 eslint-plugin-postgresql@0.24.0 ;;
-          esac
-      - name: Import and lint
-        working-directory: ${{ runner.temp }}/app
-        run: cp "$GITHUB_WORKSPACE/.github/tmp-consumer/check.mjs" . && node check.mjs
-  # eslint-plugin-postgresql bundles the parser into dist/, so the #264 parser only
-  # reaches users through a plugin build. Build plugin main against the packed
-  # parser and install that plugin fresh, on each @libpg-query/parser 17.x.
-  fixed-parser-consumer:
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        libpg: [17.6.10, 17.7.0, 17.8.0]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          path: parser
-      - uses: actions/checkout@v7
-        with:
-          repository: baseballyama/eslint-plugin-postgresql
-          ref: main
-          path: plugin
-      - uses: pnpm/action-setup@v6.1.0
-        with:
-          package_json_file: parser/package.json
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-      - name: Build and pack the parser
-        working-directory: parser
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm run build
-          npm pack --pack-destination "$RUNNER_TEMP"
-      - name: Build and pack the plugin with the packed parser
-        working-directory: plugin
-        run: |
-          npx -y pnpm@12.9.1 install --frozen-lockfile
-          dir=$(realpath node_modules/postgresql-eslint-parser)
-          rm -rf "$dir"/*
-          tar -xzf "$RUNNER_TEMP"/postgresql-eslint-parser-*.tgz -C "$dir" --strip-components=1
-          npx -y pnpm@12.9.1 run build
-          grep -c "Unknown libpg-query export symbol" dist/index.js
-          mkdir -p "$RUNNER_TEMP/plugin" && npm pack --pack-destination "$RUNNER_TEMP/plugin"
-      - name: Install the built plugin fresh
-        working-directory: ${{ runner.temp }}
-        run: |
-          mkdir app && cd app
-          tgz=$(ls "$RUNNER_TEMP"/plugin/eslint-plugin-postgresql-*.tgz)
-          echo '{"name":"app","private":true,"type":"module","overrides":{"@libpg-query/parser":"${{ matrix.libpg }}"}}' > package.json
-          npm install eslint@10 "$tgz"
-      - name: Import and lint
-        working-directory: ${{ runner.temp }}/app
-        run: cp "$GITHUB_WORKSPACE/parser/.github/tmp-consumer/check.mjs" . && node check.mjs
-  # Baseline for the matrix above: the published parser 0.5.4 pinned to each 17.x.
-  published-parser-consumer:
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        libpg: [17.6.10, 17.7.0, 17.8.0]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-      - name: Install the published plugin and parser
-        working-directory: ${{ runner.temp }}
-        run: |
-          mkdir app && cd app
-          echo '{"name":"app","private":true,"type":"module","overrides":{"@libpg-query/parser":"${{ matrix.libpg }}"}}' > package.json
-          npm install eslint@10 eslint-plugin-postgresql@0.24.0
-      - name: Import and lint
-        working-directory: ${{ runner.temp }}/app
-        run: cp "$GITHUB_WORKSPACE/.github/tmp-consumer/check.mjs" . && node check.mjs
