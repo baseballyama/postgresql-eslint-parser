@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v6.1.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -31,24 +31,14 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # changesets/action v1 wrote NPM_TOKEN to ~/.npmrc and fell back to
-      # trusted publishing (OIDC) when the secret was empty; v2 no longer
-      # touches ~/.npmrc, so keep the same behaviour here.
-      - name: Configure npm token
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -n "$NPM_TOKEN" ]; then
-            printf '\n//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" >> "$HOME/.npmrc"
-          fi
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v2
         with:
           version-script: pnpm update:version
-          publish-script: pnpm release
+          publish-script: bash .github/scripts/publish.sh
           commit-message: "chore: release postgresql-eslint-parser"
           pr-title: "chore: release postgresql-eslint-parser"
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
