@@ -1,4 +1,4 @@
-import { highlight } from "$lib/highlight";
+import { highlight } from "#lib/highlight.ts";
 
 const eslintExample = `// eslint.config.js
 import postgresqlParser from "postgresql-eslint-parser";

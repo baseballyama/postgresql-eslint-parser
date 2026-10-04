@@ -1,4 +1,4 @@
-import { highlight } from "$lib/highlight";
+import { highlight } from "#lib/highlight.ts";
 
 const install = `npm install --save-dev postgresql-eslint-parser
 # or
