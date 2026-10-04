@@ -1,0 +1,41 @@
+# Temporary, not for merge: regenerates and dedupes the lockfile for #264 at
+# e4eafd3 (main 2e33f20 merged, docs fix, eslint ^10.11.0), then runs the
+# quality gate, the tests and the docs type check with it.
+name: tmp-264-lock
+on:
+  push:
+    branches: [verify/parser-264-lock-e4eafd3]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          # Resolve only versions older than 72 hours (npm:unpublishSafe), so
+          # eslint stays on 10.11.0 until 10.12.0 leaves the unpublish window.
+          pnpm install --no-frozen-lockfile --config.minimum-release-age=4320
+          pnpm dedupe --config.minimum-release-age=4320
+          pnpm dedupe --check
+          git diff --stat -- pnpm-lock.yaml
+          grep -A2 -E "^      '(@libpg-query/parser|eslint)':" pnpm-lock.yaml
+          grep -E "^  eslint@" pnpm-lock.yaml
+          grep -qE "^  eslint@10\.11\.0:" pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pr264-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Docs type check
+        working-directory: docs
+        run: pnpm run check
