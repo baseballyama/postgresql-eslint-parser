@@ -541,15 +541,25 @@ export const manipulate = (
     // and every downstream rule reports against `line 1, column 0`.
     const stmtLocation =
       typeof stmt.stmt_location === "number" ? stmt.stmt_location : 0;
-    if (stmt.stmt_len > 0) {
-      const startChar = byteToChar(stmtLocation);
-      const endChar = byteToChar(stmtLocation + stmt.stmt_len);
-      const startPos = lineMap.getPosition(startChar);
-      const endPos = lineMap.getPosition(endChar);
-      stmtNode["range"] = [startChar, endChar];
+    // `stmt_len` is likewise omitted when it is 0, which libpg-query uses
+    // for "runs to the end of the input" (a last statement without `;`).
+    const stmtLen = stmt.stmt_len ?? 0;
+    const startChar = byteToChar(stmtLocation);
+    const endChar =
+      stmtLen > 0 ? byteToChar(stmtLocation + stmtLen) : lineMap.code.length;
+    // `stmt_location` points just past the previous `;`, so the span also
+    // holds the whitespace and comments in between. Trim it to the
+    // statement's own tokens so reports (and `eslint-disable-next-line`
+    // directives) land on the line where the statement starts.
+    const firstIdx = findFirstTokenAtOrAfter(tokens, startChar);
+    const lastIdx = findFirstTokenAtOrAfter(tokens, endChar) - 1;
+    const first = tokens[firstIdx];
+    const last = tokens[lastIdx];
+    if (first && last && firstIdx <= lastIdx) {
+      stmtNode["range"] = [first.range[0], last.range[1]];
       stmtNode["loc"] = {
-        start: { line: startPos.line, column: startPos.column },
-        end: { line: endPos.line, column: endPos.column },
+        start: { line: first.loc.start.line, column: first.loc.start.column },
+        end: { line: last.loc.end.line, column: last.loc.end.column },
       };
     }
     // Propagate the resolved statement loc down into descendants whose

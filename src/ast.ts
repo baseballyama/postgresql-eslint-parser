@@ -437,6 +437,11 @@ export interface SQLParseError extends BaseNode {
   type: "SQLParseError";
   error: string;
   raw: string;
+  // Where PostgreSQL located the error. `range` / `loc` keep spanning the
+  // whole program; this narrows it down for reporters. `index` is a UTF-16
+  // offset like `range`, `line` / `column` follow `loc` (1-based / 0-based).
+  // Absent when libpg-query reports no position.
+  errorPosition?: { index: number; line: number; column: number };
 }
 
 export interface Program extends BaseNode {

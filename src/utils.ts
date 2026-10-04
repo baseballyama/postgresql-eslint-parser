@@ -65,6 +65,20 @@ export const createByteToCharOffset = (code: string): ByteToCharOffset => {
   };
 };
 
+// PostgreSQL reports error positions in characters (code points), while
+// ranges are UTF-16 offsets: an astral character is one of the former and
+// two of the latter.
+export const codePointToCharOffset = (
+  code: string,
+  codePointOffset: number,
+): number => {
+  let charOffset = 0;
+  for (let n = 0; n < codePointOffset && charOffset < code.length; n++) {
+    charOffset += code.codePointAt(charOffset)! > 0xffff ? 2 : 1;
+  }
+  return charOffset;
+};
+
 // Must match ESLint's `astUtils.createGlobalLinebreakMatcher()`. ESLint
 // computes `SourceCode#lines` and `getLocFromIndex` with this pattern, so any
 // other definition makes node `loc` disagree with what ESLint (and inline

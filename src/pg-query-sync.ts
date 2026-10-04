@@ -78,11 +78,13 @@ function exportLetter(symbol: string): string {
 // ---------------------------------------------------------------------------
 let wasmMemory: WebAssembly.Memory;
 let HEAPU8: Uint8Array;
+let HEAP32: Int32Array;
 let HEAPU32: Uint32Array;
 
 function updateMemoryViews(): void {
   const b = wasmMemory.buffer;
   HEAPU8 = new Uint8Array(b);
+  HEAP32 = new Int32Array(b);
   HEAPU32 = new Uint32Array(b);
 }
 
@@ -441,10 +443,14 @@ wasmTable = getExport<WebAssembly.Table>("wasmTable");
 updateMemoryViews();
 
 // Bind exported functions
-const wasmParseQuery = getExport<(ptr: number) => number>("_wasm_parse_query");
+const wasmParseQueryRaw = getExport<(ptr: number) => number>(
+  "_wasm_parse_query_raw",
+);
+const wasmFreeParseResult = getExport<(ptr: number) => void>(
+  "_wasm_free_parse_result",
+);
 const wasmMalloc = getExport<(size: number) => number>("_malloc");
 const wasmFree = getExport<(ptr: number) => void>("_free");
-const wasmFreeString = getExport<(ptr: number) => void>("_wasm_free_string");
 setThrew = getExport<(flag: number, value: number) => void>("_setThrew");
 stackRestore = getExport<(val: number) => void>("__emscripten_stack_restore");
 stackSave = getExport<() => number>("_emscripten_stack_get_current");
@@ -467,24 +473,51 @@ function stringToPtr(str: string): number {
   }
 }
 
+// Field offsets in libpg_query's structs on wasm32 (4-byte pointers and
+// ints), the same ones @libpg-query/parser's own `parse()` reads:
+//   PgQueryParseResult { char *parse_tree; char *stderr_buffer; PgQueryError *error; }
+//   PgQueryError { char *message; char *funcname; char *filename; int lineno; int cursorpos; ... }
+const PARSE_RESULT_TREE_OFFSET = 0;
+const PARSE_RESULT_ERROR_OFFSET = 8;
+const ERROR_MESSAGE_OFFSET = 0;
+const ERROR_CURSORPOS_OFFSET = 16;
+
+export class PgQueryParseError extends Error {
+  // PostgreSQL's 1-based error position counted in characters (Unicode code
+  // points) of the query, or 0 when the error has no position.
+  readonly cursorPosition: number;
+
+  constructor(message: string, cursorPosition: number) {
+    super(message);
+    this.name = "PgQueryParseError";
+    this.cursorPosition = cursorPosition;
+  }
+}
+
+const readPointer = (address: number): number => HEAPU32[address >>> 2]!;
+
 export function parseSync(query: string): unknown {
   const queryPtr = stringToPtr(query);
   let resultPtr = 0;
   try {
-    resultPtr = wasmParseQuery(queryPtr);
-    const resultStr = UTF8ToString(resultPtr);
-    // `wasm_parse_query` returns either the JSON parse tree or the bare
-    // PostgreSQL error message. Messages are not limited to "syntax error …"
-    // (e.g. "unterminated quoted string at or near …", "trailing junk after
-    // numeric literal …"), so anything that is not a JSON object is an error.
-    if (!resultStr.startsWith("{")) {
-      throw new Error(resultStr);
+    resultPtr = wasmParseQueryRaw(queryPtr);
+    if (!resultPtr) {
+      throw new Error("libpg-query failed to allocate a parse result");
     }
-    return JSON.parse(resultStr);
+    const errorPtr = readPointer(resultPtr + PARSE_RESULT_ERROR_OFFSET);
+    if (errorPtr) {
+      throw new PgQueryParseError(
+        UTF8ToString(readPointer(errorPtr + ERROR_MESSAGE_OFFSET)),
+        HEAP32[(errorPtr + ERROR_CURSORPOS_OFFSET) >>> 2]!,
+      );
+    }
+    return JSON.parse(
+      UTF8ToString(readPointer(resultPtr + PARSE_RESULT_TREE_OFFSET)),
+    );
   } finally {
     wasmFree(queryPtr);
     if (resultPtr) {
-      wasmFreeString(resultPtr);
+      wasmFreeParseResult(resultPtr);
     }
   }
 }
