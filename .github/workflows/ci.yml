@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Duplicate copies of a package can break code that relies on a single
+      # instance (two @codemirror/state copies broke the docs playground).
+      - name: Check that the lockfile is deduplicated
+        run: pnpm dedupe --check
+
       - name: Run check:all
         run: pnpm check:all
 
