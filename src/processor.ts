@@ -39,6 +39,17 @@ export interface ProcessorMessage {
   [key: string]: unknown;
 }
 
+// The fields postprocess reads and rewrites. Optional fields allow
+// `undefined` and there is no index signature, so both ESLint's
+// `Linter.LintMessage` and `ProcessorMessage` satisfy it.
+interface TranslatableMessage {
+  line?: number | undefined;
+  column?: number | undefined;
+  endLine?: number | undefined;
+  endColumn?: number | undefined;
+  fix?: FixDescriptor | undefined;
+}
+
 export interface PlProcessor {
   meta: { name: string; version: string };
   supportsAutofix: boolean;
@@ -46,10 +57,13 @@ export interface PlProcessor {
     text: string,
     filename: string,
   ) => Array<{ text: string; filename: string }>;
-  postprocess: (
-    messageLists: ProcessorMessage[][],
+  // Generic so the processor fits ESLint's `Processor` type (which passes and
+  // expects `LintMessage`) while direct callers keep getting back the
+  // message type they passed in.
+  postprocess: <M extends TranslatableMessage>(
+    messageLists: M[][],
     filename: string,
-  ) => ProcessorMessage[];
+  ) => M[];
 }
 
 interface CachedBlock {
@@ -74,16 +88,19 @@ const translateLineColumn = (
   return { line: sqlLine, column: sqlColumn };
 };
 
-const translateMessage = (
-  message: ProcessorMessage,
+const translateMessage = <M extends TranslatableMessage>(
+  message: M,
   body: EmbeddedCode,
-): ProcessorMessage => {
-  const translated: ProcessorMessage = { ...message };
+): M => {
+  const translated = { ...message };
+  // Write through the constraint: `M` may declare narrower field types, but
+  // these fields always hold plain numbers and fix descriptors.
+  const fields: TranslatableMessage = translated;
 
   if (typeof message.line === "number" && typeof message.column === "number") {
     const start = translateLineColumn(body, message.line, message.column);
-    translated.line = start.line;
-    translated.column = start.column;
+    fields.line = start.line;
+    fields.column = start.column;
   }
 
   if (
@@ -91,8 +108,8 @@ const translateMessage = (
     typeof message.endColumn === "number"
   ) {
     const end = translateLineColumn(body, message.endLine, message.endColumn);
-    translated.endLine = end.line;
-    translated.endColumn = end.column;
+    fields.endLine = end.line;
+    fields.endColumn = end.column;
   }
 
   // Fix ranges are absolute character offsets in the file ESLint linted —
@@ -103,7 +120,7 @@ const translateMessage = (
   // rather than report wrong ranges.
   if (message.fix) {
     if (body.quoteStyle === "dollar") {
-      translated.fix = {
+      fields.fix = {
         range: [
           body.range[0] + message.fix.range[0],
           body.range[0] + message.fix.range[1],
@@ -111,7 +128,7 @@ const translateMessage = (
         text: message.fix.text,
       };
     } else {
-      delete translated.fix;
+      delete fields.fix;
     }
   }
 
@@ -159,11 +176,14 @@ export const createPlProcessor = (options: PlProcessorOptions): PlProcessor => {
         filename: `${index}${ext}`,
       }));
     },
-    postprocess(messageLists, filename) {
+    postprocess<M extends TranslatableMessage>(
+      messageLists: M[][],
+      filename: string,
+    ): M[] {
       const blocks = blockCache.get(filename) ?? [];
       blockCache.delete(filename);
 
-      const result: ProcessorMessage[] = [];
+      const result: M[] = [];
       for (let i = 0; i < messageLists.length; i++) {
         const block = blocks[i];
         const messages = messageLists[i];
