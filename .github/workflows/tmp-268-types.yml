@@ -1,0 +1,153 @@
+# Temporary, not for merge: packs the release PR's head (npm pack, no
+# publish) and type-checks an external consumer against the packed
+# dist/*.d.ts through the public `postgresql-eslint-parser/processor` export.
+# Matrix: TypeScript 6 and 7, exactOptionalPropertyTypes on and off. The
+# published 0.5.4 runs as a baseline: its existing-usage file must pass and
+# the ESLint-usage file must fail (the bug #269 fixes).
+name: tmp-268-types
+on:
+  push:
+    branches: [verify/parser-268-types-52bccc4]
+permissions:
+  contents: read
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build and pack (no publish)
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          mkdir -p "$RUNNER_TEMP/pack"
+          npm pack --pack-destination "$RUNNER_TEMP/pack"
+          tar -tzf "$RUNNER_TEMP"/pack/*.tgz | sort
+          tar -xzOf "$RUNNER_TEMP"/pack/*.tgz package/package.json | node -e 'const p=JSON.parse(require("fs").readFileSync(0));console.log(p.name,p.version,JSON.stringify(p.exports),JSON.stringify(p.dependencies))'
+      - uses: actions/upload-artifact@v7
+        with:
+          name: packed
+          path: ${{ runner.temp }}/pack/*.tgz
+  consumer:
+    needs: pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        typescript: ["6.0.3", "7.0.2"]
+        exact: [true, false]
+        package: [packed, published-0.5.4]
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v7
+        if: matrix.package == 'packed'
+        with:
+          name: packed
+          path: ${{ runner.temp }}/pack
+      - name: Set up the consumer
+        working-directory: ${{ runner.temp }}
+        run: |
+          mkdir consumer && cd consumer
+          npm init -y >/dev/null
+          npm pkg set type=module
+          if [ "${{ matrix.package }}" = packed ]; then pkg=$(ls "$RUNNER_TEMP"/pack/*.tgz); else pkg=postgresql-eslint-parser@0.5.4; fi
+          npm install --no-audit --no-fund "$pkg" eslint@10.11.0 typescript@${{ matrix.typescript }} >/dev/null
+          npm ls postgresql-eslint-parser eslint typescript
+          cat > tsconfig.json <<EOF
+          {
+            "compilerOptions": {
+              "target": "es2022",
+              "module": "nodenext",
+              "moduleResolution": "nodenext",
+              "strict": true,
+              "exactOptionalPropertyTypes": ${{ matrix.exact }},
+              "skipLibCheck": false,
+              "noEmit": true,
+              "types": []
+            }
+          }
+          EOF
+          # Usage from the README: hand the processor to ESLint, no cast.
+          cat > eslint-usage.ts <<'TS'
+          import type { ESLint, Linter } from "eslint";
+          import { createPlProcessor } from "postgresql-eslint-parser/processor";
+
+          const options = { languages: { plv8: ".js" } };
+          export const config: Linter.Config = { files: ["**/*.sql"], processor: createPlProcessor(options) };
+          export const processor: Linter.Processor = createPlProcessor(options);
+          export const plugin: ESLint.Plugin = { processors: { pl: createPlProcessor(options) } };
+          export const configs: Linter.Config[] = [{ plugins: { sql: plugin }, processor: "sql/pl" }];
+          TS
+          # Usage written against the published PlProcessor / ProcessorMessage
+          # types (K1-K4, R1-R4 in tests/processor.test.ts). Must keep compiling.
+          cat > existing-usage.ts <<'TS'
+          import {
+            createPlProcessor,
+            type PlProcessor,
+            type ProcessorMessage,
+          } from "postgresql-eslint-parser/processor";
+
+          const options = { languages: { plv8: ".js" } };
+          const processor = createPlProcessor(options);
+
+          // K: a hand-written PlProcessor and types derived from PlProcessor.
+          export const custom: PlProcessor = {
+            meta: { name: "custom", version: "1" },
+            supportsAutofix: false,
+            preprocess: (text, filename) => [{ text, filename }],
+            postprocess: (lists) => lists.flat(),
+          };
+          export const fromPublished: Parameters<PlProcessor["postprocess"]>[0] = [[{ line: 1 }]];
+
+          // R1: types derived from createPlProcessor's postprocess.
+          type Postprocess = ReturnType<typeof createPlProcessor>["postprocess"];
+          const lists: Parameters<Postprocess>[0] = [[{ line: 1, column: 1, message: "m" }]];
+          declare const returned: ReturnType<Postprocess>;
+          export const asMessages: ProcessorMessage[] = returned;
+          export const direct: ProcessorMessage[] = processor.postprocess(lists, "a.sql");
+
+          // R2: the inferred variable can hold a hand-written PlProcessor.
+          let inferred = createPlProcessor(options);
+          inferred = custom;
+          export { inferred };
+
+          // R3: an unannotated literal returns ProcessorMessage fields.
+          const out = processor.postprocess([[{ ruleId: "r", message: "m", line: 1, column: 1 }]], "a.sql");
+          export const severity: number | undefined = out[0]?.severity;
+
+          // R4: messages without any position field.
+          export const noPosition: ProcessorMessage[] = processor.postprocess([[{ ruleId: "r", message: "m" }]], "a.sql");
+
+          // The processor is also a PlProcessor.
+          export const asPublished: PlProcessor = processor;
+          TS
+      - name: Type-check
+        working-directory: ${{ runner.temp }}/consumer
+        run: |
+          set +e
+          check() {
+            printf '{"extends":"./tsconfig.json","files":["%s"]}\n' "$1" > "tsconfig.$1.json"
+            npx tsc -p "tsconfig.$1.json" > "$1.out" 2>&1
+            echo "$?"
+          }
+          npx tsc --version
+          usage=$(check eslint-usage.ts); existing=$(check existing-usage.ts)
+          echo "== eslint-usage.ts exit $usage"; cat eslint-usage.ts.out
+          echo "== existing-usage.ts exit $existing"; cat existing-usage.ts.out
+          # The packed build must pass both; 0.5.4 must pass the existing
+          # usage and fail the ESLint usage on the processor assignment.
+          if [ "${{ matrix.package }}" = packed ]; then
+            [ "$usage" = 0 ] && [ "$existing" = 0 ]
+          else
+            [ "$existing" = 0 ] && [ "$usage" != 0 ] && grep -q "eslint-usage.ts" eslint-usage.ts.out && ! grep -v "eslint-usage.ts" eslint-usage.ts.out | grep -q "error TS"
+          fi
+          ok=$?
+          echo "result: ${{ matrix.package }} ts ${{ matrix.typescript }} exact ${{ matrix.exact }} -> $([ $ok = 0 ] && echo as-expected || echo UNEXPECTED)"
+          exit $ok
