@@ -3,20 +3,21 @@
 // for valid SQL, or if the plugin cannot be loaded.
 import { createRequire } from "node:module";
 import { ESLint } from "eslint";
-import { writeFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
-const require = createRequire(import.meta.url);
-const version = (name, from) => {
-  const req = from ? createRequire(require.resolve(`${from}/package.json`)) : require;
-  return req(`${name}/package.json`).version;
+// Packages here do not export ./package.json, so find each one's directory
+// from its resolved entry point, starting where the dependent package lives.
+const pkgOf = (name, fromFile) => {
+  let dir = dirname(createRequire(fromFile).resolve(name));
+  while (!existsSync(join(dir, "package.json")) || JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).name !== name) dir = dirname(dir);
+  return { dir, version: JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).version };
 };
-const parserVersion = version("postgresql-eslint-parser", "eslint-plugin-postgresql");
-const libpgVersion = createRequire(
-  createRequire(require.resolve("eslint-plugin-postgresql/package.json")).resolve(
-    "postgresql-eslint-parser/package.json",
-  ),
-)("@libpg-query/parser/package.json").version;
-console.log(`plugin ${version("eslint-plugin-postgresql")}, parser ${parserVersion}, @libpg-query/parser ${libpgVersion}, eslint ${version("eslint")}`);
+const app = join(process.cwd(), "package.json");
+const pluginPkg = pkgOf("eslint-plugin-postgresql", app);
+const parserPkg = pkgOf("postgresql-eslint-parser", join(realpathSync(pluginPkg.dir), "package.json"));
+const libpgPkg = pkgOf("@libpg-query/parser", join(realpathSync(parserPkg.dir), "package.json"));
+console.log(`plugin ${pluginPkg.version}, parser ${parserPkg.version}, @libpg-query/parser ${libpgPkg.version}, eslint ${pkgOf("eslint", app).version}`);
 
 const { default: plugin } = await import("eslint-plugin-postgresql");
 console.log(`rules: ${Object.keys(plugin.rules).length}`);
