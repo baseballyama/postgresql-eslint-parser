@@ -104,7 +104,12 @@ describe("SourceCode agrees with tokens and comments", () => {
             const sourceCode = context.sourceCode;
             const { tokens, comments } = sourceCode.ast;
             for (const item of [...tokens, ...comments]) {
-              const text = sourceCode.getText(item);
+              // Same as `sourceCode.getText(item)`, which ESLint implements as
+              // this slice; eslint 10.11's types accept only nodes there.
+              const text = sourceCode.text.slice(
+                item.range![0],
+                item.range![1],
+              );
               const start = sourceCode.getLocFromIndex(item.range![0]);
               const end = sourceCode.getLocFromIndex(item.range![1]);
               const index = sourceCode.getIndexFromLoc(item.loc!.start);
