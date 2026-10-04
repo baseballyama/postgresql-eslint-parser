@@ -1,0 +1,32 @@
+# Temporary, not for merge: regenerates pnpm-lock.yaml for build/deps-latest on
+# a runner, then runs the full quality gate and tests with it.
+name: tmp-lock
+on:
+  push:
+    branches: [verify/parser-deps-lock]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate the lockfile
+        run: |
+          pnpm --version
+          pnpm install --no-frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: deps-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Packed files
+        run: npm pack --dry-run 2>&1 | tail -25
