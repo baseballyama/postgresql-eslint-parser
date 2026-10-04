@@ -285,9 +285,6 @@
     line-height: 1.55;
     color: var(--fg);
   }
-  .code code {
-    white-space: pre;
-  }
 
   @media (max-width: 760px) {
     .usage-grid {
