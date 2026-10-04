@@ -1,0 +1,35 @@
+# Temporary, not for merge: regenerates pnpm-lock.yaml and the fixture
+# snapshots for #264 on a runner, and uploads them as a patch.
+name: tmp-regen
+on:
+  push:
+    branches: [verify/parser-regen]
+permissions:
+  contents: read
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+      - name: Fixture snapshots
+        run: |
+          pnpm update-fixtures
+          git diff --stat -- tests/fixtures | tail -5
+      - name: Patch
+        run: |
+          git diff -- pnpm-lock.yaml tests/fixtures > "$RUNNER_TEMP/regen.patch"
+          wc -l "$RUNNER_TEMP/regen.patch"
+      - name: Full suite with the regenerated files
+        run: pnpm test
+      - uses: actions/upload-artifact@v7
+        with:
+          name: regen-patch
+          path: ${{ runner.temp }}/regen.patch
