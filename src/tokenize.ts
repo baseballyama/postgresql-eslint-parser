@@ -308,8 +308,10 @@ const scanQuoted = (
 };
 
 // Single-letter prefixes that turn the following '...' into one lexeme:
-// E'' (escape string), B'' / X'' (bit strings) and N'' (national char).
-const STRING_PREFIX_PATTERN = /^[eEbBxXnN]$/;
+// E'' (escape string) and B'' / X'' (bit strings). N'' is deliberately absent:
+// scan.l emits `N` as its own NCHAR keyword token and anchors the A_Const on
+// the quote, so merging it would leave the constant without a token.
+const STRING_PREFIX_PATTERN = /^[eEbBxX]$/;
 
 const isKeyword = (value: string): boolean =>
   SQL_KEYWORDS_SET.has(value.toUpperCase());

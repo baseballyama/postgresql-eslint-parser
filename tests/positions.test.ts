@@ -206,6 +206,16 @@ describe("tokens: string literals", () => {
     ]);
   });
 
+  it("keeps N'' as a separate token, as PostgreSQL's lexer does", () => {
+    const code = "SELECT N'x'";
+    expect(tokensOf(code)).toEqual([
+      ["Keyword", "SELECT", 0, 6],
+      ["Identifier", "N", 7, 8],
+      ["String", "'x'", 8, 11],
+    ]);
+    expect(rangesOf(code, "A_Const")).toEqual([[8, 11]]);
+  });
+
   it("accepts non-ASCII dollar-quote tags", () => {
     const code = "SELECT $ä$x$ä$ AS v";
     expect(tokensOf(code)).toEqual([
