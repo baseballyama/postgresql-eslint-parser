@@ -386,10 +386,10 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [0, 186],
+      range: [23, 186],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -629,11 +629,11 @@ export default {
           subtype: "AT_DropColumn",
           name: "email",
           behavior: "DROP_RESTRICT",
-          range: [187, 305],
+          range: [189, 305],
           loc: {
             start: {
-              line: 7,
-              column: 2,
+              line: 9,
+              column: 0,
             },
             end: {
               line: 12,
@@ -643,11 +643,11 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [187, 305],
+      range: [189, 305],
       loc: {
         start: {
-          line: 7,
-          column: 2,
+          line: 9,
+          column: 0,
         },
         end: {
           line: 12,
@@ -678,11 +678,11 @@ export default {
       subname: "name",
       newname: "full_name",
       behavior: "DROP_RESTRICT",
-      range: [306, 357],
+      range: [308, 357],
       loc: {
         start: {
-          line: 12,
-          column: 18,
+          line: 14,
+          column: 0,
         },
         end: {
           line: 15,
@@ -716,11 +716,11 @@ export default {
           name: "status",
           ordering: "SORTBY_DEFAULT",
           nulls_ordering: "SORTBY_NULLS_DEFAULT",
-          range: [358, 406],
+          range: [360, 406],
           loc: {
             start: {
-              line: 15,
-              column: 32,
+              line: 17,
+              column: 0,
             },
             end: {
               line: 17,
@@ -729,11 +729,11 @@ export default {
           },
         },
       ],
-      range: [358, 406],
+      range: [360, 406],
       loc: {
         start: {
-          line: 15,
-          column: 32,
+          line: 17,
+          column: 0,
         },
         end: {
           line: 17,
@@ -767,11 +767,11 @@ export default {
           name: "email",
           ordering: "SORTBY_DEFAULT",
           nulls_ordering: "SORTBY_NULLS_DEFAULT",
-          range: [407, 459],
+          range: [408, 459],
           loc: {
             start: {
-              line: 17,
-              column: 47,
+              line: 18,
+              column: 0,
             },
             end: {
               line: 18,
@@ -781,11 +781,11 @@ export default {
         },
       ],
       unique: true,
-      range: [407, 459],
+      range: [408, 459],
       loc: {
         start: {
-          line: 17,
-          column: 47,
+          line: 18,
+          column: 0,
         },
         end: {
           line: 18,
@@ -802,11 +802,11 @@ export default {
             {
               type: "String",
               sval: "old_table",
-              range: [460, 492],
+              range: [462, 492],
               loc: {
                 start: {
-                  line: 18,
-                  column: 52,
+                  line: 20,
+                  column: 0,
                 },
                 end: {
                   line: 20,
@@ -815,11 +815,11 @@ export default {
               },
             },
           ],
-          range: [460, 492],
+          range: [462, 492],
           loc: {
             start: {
-              line: 18,
-              column: 52,
+              line: 20,
+              column: 0,
             },
             end: {
               line: 20,
@@ -831,11 +831,11 @@ export default {
       removeType: "OBJECT_TABLE",
       behavior: "DROP_RESTRICT",
       missing_ok: true,
-      range: [460, 492],
+      range: [462, 492],
       loc: {
         start: {
-          line: 18,
-          column: 52,
+          line: 20,
+          column: 0,
         },
         end: {
           line: 20,
@@ -849,11 +849,11 @@ export default {
         {
           type: "String",
           sval: "user_status",
-          range: [493, 560],
+          range: [495, 560],
           loc: {
             start: {
-              line: 20,
-              column: 31,
+              line: 22,
+              column: 0,
             },
             end: {
               line: 22,
@@ -866,11 +866,11 @@ export default {
         {
           type: "String",
           sval: "active",
-          range: [493, 560],
+          range: [495, 560],
           loc: {
             start: {
-              line: 20,
-              column: 31,
+              line: 22,
+              column: 0,
             },
             end: {
               line: 22,
@@ -881,11 +881,11 @@ export default {
         {
           type: "String",
           sval: "inactive",
-          range: [493, 560],
+          range: [495, 560],
           loc: {
             start: {
-              line: 20,
-              column: 31,
+              line: 22,
+              column: 0,
             },
             end: {
               line: 22,
@@ -896,11 +896,11 @@ export default {
         {
           type: "String",
           sval: "pending",
-          range: [493, 560],
+          range: [495, 560],
           loc: {
             start: {
-              line: 20,
-              column: 31,
+              line: 22,
+              column: 0,
             },
             end: {
               line: 22,
@@ -909,11 +909,11 @@ export default {
           },
         },
       ],
-      range: [493, 560],
+      range: [495, 560],
       loc: {
         start: {
-          line: 20,
-          column: 31,
+          line: 22,
+          column: 0,
         },
         end: {
           line: 22,
@@ -927,11 +927,11 @@ export default {
         {
           type: "String",
           sval: "user_status",
-          range: [561, 607],
+          range: [563, 607],
           loc: {
             start: {
-              line: 22,
-              column: 66,
+              line: 24,
+              column: 0,
             },
             end: {
               line: 24,
@@ -942,11 +942,11 @@ export default {
       ],
       newVal: "suspended",
       newValIsAfter: true,
-      range: [561, 607],
+      range: [563, 607],
       loc: {
         start: {
-          line: 22,
-          column: 66,
+          line: 24,
+          column: 0,
         },
         end: {
           line: 24,

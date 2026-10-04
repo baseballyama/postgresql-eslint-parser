@@ -21,10 +21,10 @@ export default {
         {
           type: "String",
           sval: "get_user_count",
-          range: [0, 418],
+          range: [40, 418],
           loc: {
             start: {
-              line: 1,
+              line: 2,
               column: 0,
             },
             end: {
@@ -237,10 +237,10 @@ export default {
           },
         },
       ],
-      range: [0, 418],
+      range: [40, 418],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -275,11 +275,11 @@ export default {
         {
           type: "String",
           sval: "update_user_status",
-          range: [419, 780],
+          range: [421, 780],
           loc: {
             start: {
-              line: 15,
-              column: 20,
+              line: 17,
+              column: 0,
             },
             end: {
               line: 34,
@@ -492,11 +492,11 @@ export default {
           },
         },
       ],
-      range: [419, 780],
+      range: [421, 780],
       loc: {
         start: {
-          line: 15,
-          column: 20,
+          line: 17,
+          column: 0,
         },
         end: {
           line: 34,
@@ -529,11 +529,11 @@ export default {
         {
           type: "String",
           sval: "factorial",
-          range: [781, 1000],
+          range: [805, 1000],
           loc: {
             start: {
-              line: 34,
-              column: 3,
+              line: 37,
+              column: 0,
             },
             end: {
               line: 46,
@@ -730,11 +730,11 @@ export default {
           },
         },
       ],
-      range: [781, 1000],
+      range: [805, 1000],
       loc: {
         start: {
-          line: 34,
-          column: 3,
+          line: 37,
+          column: 0,
         },
         end: {
           line: 46,
@@ -767,11 +767,11 @@ export default {
         {
           type: "String",
           sval: "get_user_info",
-          range: [1001, 1297],
+          range: [1042, 1297],
           loc: {
             start: {
-              line: 46,
-              column: 20,
+              line: 49,
+              column: 0,
             },
             end: {
               line: 57,
@@ -1152,11 +1152,11 @@ export default {
           },
         },
       ],
-      range: [1001, 1297],
+      range: [1042, 1297],
       loc: {
         start: {
-          line: 46,
-          column: 20,
+          line: 49,
+          column: 0,
         },
         end: {
           line: 57,

@@ -18,10 +18,10 @@ export default {
       type: "CreateExtensionStmt",
       extname: "uuid-ossp",
       if_not_exists: true,
-      range: [0, 93],
+      range: [51, 93],
       loc: {
         start: {
-          line: 1,
+          line: 3,
           column: 0,
         },
         end: {
@@ -34,11 +34,11 @@ export default {
       type: "CreateExtensionStmt",
       extname: "hstore",
       if_not_exists: true,
-      range: [94, 134],
+      range: [95, 134],
       loc: {
         start: {
-          line: 3,
-          column: 43,
+          line: 4,
+          column: 0,
         },
         end: {
           line: 4,
@@ -50,11 +50,11 @@ export default {
       type: "CreateExtensionStmt",
       extname: "ltree",
       if_not_exists: true,
-      range: [135, 174],
+      range: [136, 174],
       loc: {
         start: {
-          line: 4,
-          column: 40,
+          line: 5,
+          column: 0,
         },
         end: {
           line: 5,
@@ -66,11 +66,11 @@ export default {
       type: "CreateExtensionStmt",
       extname: "pg_trgm",
       if_not_exists: true,
-      range: [175, 216],
+      range: [176, 216],
       loc: {
         start: {
-          line: 5,
-          column: 39,
+          line: 6,
+          column: 0,
         },
         end: {
           line: 6,
@@ -82,11 +82,11 @@ export default {
       type: "CreateExtensionStmt",
       extname: "postgis",
       if_not_exists: true,
-      range: [217, 258],
+      range: [218, 258],
       loc: {
         start: {
-          line: 6,
-          column: 41,
+          line: 7,
+          column: 0,
         },
         end: {
           line: 7,
@@ -671,11 +671,11 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [259, 509],
+      range: [275, 509],
       loc: {
         start: {
-          line: 7,
-          column: 41,
+          line: 10,
+          column: 0,
         },
         end: {
           line: 17,
@@ -1052,11 +1052,11 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [510, 851],
+      range: [533, 851],
       loc: {
         start: {
-          line: 17,
-          column: 2,
+          line: 20,
+          column: 0,
         },
         end: {
           line: 22,
@@ -1122,7 +1122,7 @@ export default {
               {
                 type: "String",
                 sval: "->",
-                range: [875, 876],
+                range: [875, 877],
                 loc: {
                   start: {
                     line: 24,
@@ -1130,7 +1130,7 @@ export default {
                   },
                   end: {
                     line: 24,
-                    column: 22,
+                    column: 23,
                   },
                 },
               },
@@ -1183,7 +1183,7 @@ export default {
                 },
               },
             },
-            range: [875, 876],
+            range: [875, 877],
             loc: {
               start: {
                 line: 24,
@@ -1191,7 +1191,7 @@ export default {
               },
               end: {
                 line: 24,
-                column: 22,
+                column: 23,
               },
             },
           },
@@ -1217,7 +1217,7 @@ export default {
               {
                 type: "String",
                 sval: "->",
-                range: [903, 904],
+                range: [903, 905],
                 loc: {
                   start: {
                     line: 24,
@@ -1225,7 +1225,7 @@ export default {
                   },
                   end: {
                     line: 24,
-                    column: 50,
+                    column: 51,
                   },
                 },
               },
@@ -1278,7 +1278,7 @@ export default {
                 },
               },
             },
-            range: [903, 904],
+            range: [903, 905],
             loc: {
               start: {
                 line: 24,
@@ -1286,7 +1286,7 @@ export default {
               },
               end: {
                 line: 24,
-                column: 50,
+                column: 51,
               },
             },
           },
@@ -1333,7 +1333,7 @@ export default {
               {
                 type: "String",
                 sval: "?",
-                range: [951, 951],
+                range: [951, 952],
                 loc: {
                   start: {
                     line: 26,
@@ -1341,7 +1341,7 @@ export default {
                   },
                   end: {
                     line: 26,
-                    column: 15,
+                    column: 16,
                   },
                 },
               },
@@ -1394,7 +1394,7 @@ export default {
                 },
               },
             },
-            range: [951, 951],
+            range: [951, 952],
             loc: {
               start: {
                 line: 26,
@@ -1402,7 +1402,7 @@ export default {
               },
               end: {
                 line: 26,
-                column: 15,
+                column: 16,
               },
             },
           },
@@ -1433,7 +1433,7 @@ export default {
                 {
                   type: "String",
                   sval: "->",
-                  range: [973, 974],
+                  range: [973, 975],
                   loc: {
                     start: {
                       line: 26,
@@ -1441,7 +1441,7 @@ export default {
                     },
                     end: {
                       line: 26,
-                      column: 38,
+                      column: 39,
                     },
                   },
                 },
@@ -1494,7 +1494,7 @@ export default {
                   },
                 },
               },
-              range: [973, 974],
+              range: [973, 975],
               loc: {
                 start: {
                   line: 26,
@@ -1502,7 +1502,7 @@ export default {
                 },
                 end: {
                   line: 26,
-                  column: 38,
+                  column: 39,
                 },
               },
             },
@@ -1550,11 +1550,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [852, 991],
+      range: [854, 991],
       loc: {
         start: {
-          line: 22,
-          column: 128,
+          line: 24,
+          column: 0,
         },
         end: {
           line: 26,
@@ -1806,11 +1806,11 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [992, 1135],
+      range: [1025, 1135],
       loc: {
         start: {
-          line: 26,
-          column: 56,
+          line: 29,
+          column: 0,
         },
         end: {
           line: 33,
@@ -2137,11 +2137,11 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [1136, 1389],
+      range: [1138, 1389],
       loc: {
         start: {
-          line: 33,
-          column: 2,
+          line: 35,
+          column: 0,
         },
         end: {
           line: 40,
@@ -2223,7 +2223,7 @@ export default {
           {
             type: "String",
             sval: "~",
-            range: [1445, 1445],
+            range: [1445, 1446],
             loc: {
               start: {
                 line: 43,
@@ -2231,7 +2231,7 @@ export default {
               },
               end: {
                 line: 43,
-                column: 36,
+                column: 37,
               },
             },
           },
@@ -2284,7 +2284,7 @@ export default {
             },
           },
         },
-        range: [1445, 1445],
+        range: [1445, 1446],
         loc: {
           start: {
             line: 43,
@@ -2292,17 +2292,17 @@ export default {
           },
           end: {
             line: 43,
-            column: 36,
+            column: 37,
           },
         },
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1390, 1462],
+      range: [1409, 1462],
       loc: {
         start: {
-          line: 40,
-          column: 43,
+          line: 43,
+          column: 0,
         },
         end: {
           line: 43,
@@ -2384,7 +2384,7 @@ export default {
           {
             type: "String",
             sval: "<@",
-            range: [1500, 1501],
+            range: [1500, 1502],
             loc: {
               start: {
                 line: 44,
@@ -2392,7 +2392,7 @@ export default {
               },
               end: {
                 line: 44,
-                column: 37,
+                column: 38,
               },
             },
           },
@@ -2445,7 +2445,7 @@ export default {
             },
           },
         },
-        range: [1500, 1501],
+        range: [1500, 1502],
         loc: {
           start: {
             line: 44,
@@ -2453,17 +2453,17 @@ export default {
           },
           end: {
             line: 44,
-            column: 37,
+            column: 38,
           },
         },
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1463, 1526],
+      range: [1464, 1526],
       loc: {
         start: {
-          line: 43,
-          column: 54,
+          line: 44,
+          column: 0,
         },
         end: {
           line: 44,
@@ -2499,11 +2499,11 @@ export default {
             {
               type: "String",
               sval: "gin_trgm_ops",
-              range: [1527, 1638],
+              range: [1562, 1638],
               loc: {
                 start: {
-                  line: 44,
-                  column: 63,
+                  line: 47,
+                  column: 0,
                 },
                 end: {
                   line: 47,
@@ -2514,11 +2514,11 @@ export default {
           ],
           ordering: "SORTBY_DEFAULT",
           nulls_ordering: "SORTBY_NULLS_DEFAULT",
-          range: [1527, 1638],
+          range: [1562, 1638],
           loc: {
             start: {
-              line: 44,
-              column: 63,
+              line: 47,
+              column: 0,
             },
             end: {
               line: 47,
@@ -2527,11 +2527,11 @@ export default {
           },
         },
       ],
-      range: [1527, 1638],
+      range: [1562, 1638],
       loc: {
         start: {
-          line: 44,
-          column: 63,
+          line: 47,
+          column: 0,
         },
         end: {
           line: 47,
@@ -2835,11 +2835,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1639, 1741],
+      range: [1641, 1741],
       loc: {
         start: {
-          line: 47,
-          column: 77,
+          line: 49,
+          column: 0,
         },
         end: {
           line: 52,
@@ -3481,11 +3481,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1742, 1997],
+      range: [1771, 1997],
       loc: {
         start: {
-          line: 52,
-          column: 18,
+          line: 55,
+          column: 0,
         },
         end: {
           line: 62,
@@ -3701,11 +3701,11 @@ export default {
         },
       ],
       oncommit: "ONCOMMIT_NOOP",
-      range: [1998, 2145],
+      range: [2043, 2145],
       loc: {
         start: {
-          line: 62,
-          column: 47,
+          line: 65,
+          column: 0,
         },
         end: {
           line: 69,
@@ -3980,11 +3980,11 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [2146, 2440],
+      range: [2148, 2440],
       loc: {
         start: {
-          line: 69,
-          column: 2,
+          line: 71,
+          column: 0,
         },
         end: {
           line: 73,
@@ -4050,7 +4050,7 @@ export default {
               {
                 type: "String",
                 sval: "->",
-                range: [2484, 2485],
+                range: [2484, 2486],
                 loc: {
                   start: {
                     line: 76,
@@ -4058,7 +4058,7 @@ export default {
                   },
                   end: {
                     line: 76,
-                    column: 25,
+                    column: 26,
                   },
                 },
               },
@@ -4111,7 +4111,7 @@ export default {
                 },
               },
             },
-            range: [2484, 2485],
+            range: [2484, 2486],
             loc: {
               start: {
                 line: 76,
@@ -4119,7 +4119,7 @@ export default {
               },
               end: {
                 line: 76,
-                column: 25,
+                column: 26,
               },
             },
           },
@@ -4182,7 +4182,7 @@ export default {
             {
               type: "String",
               sval: "->>",
-              range: [2539, 2540],
+              range: [2539, 2542],
               loc: {
                 start: {
                   line: 78,
@@ -4190,7 +4190,7 @@ export default {
                 },
                 end: {
                   line: 78,
-                  column: 15,
+                  column: 17,
                 },
               },
             },
@@ -4243,7 +4243,7 @@ export default {
               },
             },
           },
-          range: [2539, 2540],
+          range: [2539, 2542],
           loc: {
             start: {
               line: 78,
@@ -4251,7 +4251,7 @@ export default {
             },
             end: {
               line: 78,
-              column: 15,
+              column: 17,
             },
           },
         },
@@ -4286,11 +4286,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [2441, 2559],
+      range: [2460, 2559],
       loc: {
         start: {
-          line: 73,
-          column: 112,
+          line: 76,
+          column: 0,
         },
         end: {
           line: 78,
@@ -4373,7 +4373,7 @@ export default {
           {
             type: "String",
             sval: "@>",
-            range: [2614, 2614],
+            range: [2614, 2616],
             loc: {
               start: {
                 line: 82,
@@ -4381,7 +4381,7 @@ export default {
               },
               end: {
                 line: 82,
-                column: 15,
+                column: 17,
               },
             },
           },
@@ -4434,7 +4434,7 @@ export default {
             },
           },
         },
-        range: [2614, 2614],
+        range: [2614, 2616],
         loc: {
           start: {
             line: 82,
@@ -4442,17 +4442,17 @@ export default {
           },
           end: {
             line: 82,
-            column: 15,
+            column: 17,
           },
         },
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [2560, 2653],
+      range: [2562, 2653],
       loc: {
         start: {
-          line: 78,
-          column: 35,
+          line: 80,
+          column: 0,
         },
         end: {
           line: 82,
@@ -4610,11 +4610,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [2654, 2740],
+      range: [2676, 2740],
       loc: {
         start: {
-          line: 82,
-          column: 55,
+          line: 85,
+          column: 0,
         },
         end: {
           line: 87,
@@ -4772,11 +4772,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [2741, 2800],
+      range: [2743, 2800],
       loc: {
         start: {
-          line: 87,
-          column: 28,
+          line: 89,
+          column: 0,
         },
         end: {
           line: 90,
@@ -6001,11 +6001,11 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [2801, 3560],
+      range: [2832, 3560],
       loc: {
         start: {
-          line: 90,
-          column: 22,
+          line: 93,
+          column: 0,
         },
         end: {
           line: 111,
@@ -6609,11 +6609,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [3561, 3788],
+      range: [3580, 3788],
       loc: {
         start: {
-          line: 111,
-          column: 16,
+          line: 114,
+          column: 0,
         },
         end: {
           line: 122,
@@ -6900,11 +6900,11 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [3789, 3954],
+      range: [3816, 3954],
       loc: {
         start: {
-          line: 122,
-          column: 16,
+          line: 125,
+          column: 0,
         },
         end: {
           line: 126,
@@ -7021,11 +7021,11 @@ export default {
         },
       ],
       objtype: "OBJECT_TABLE",
-      range: [3955, 4100],
+      range: [3983, 4100],
       loc: {
         start: {
-          line: 126,
-          column: 79,
+          line: 129,
+          column: 0,
         },
         end: {
           line: 131,
@@ -8972,27 +8972,12 @@ export default {
     },
     {
       type: "Operator",
-      value: "-",
-      range: [875, 876],
+      value: "->",
+      range: [875, 877],
       loc: {
         start: {
           line: 24,
           column: 21,
-        },
-        end: {
-          line: 24,
-          column: 22,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [876, 877],
-      loc: {
-        start: {
-          line: 24,
-          column: 22,
         },
         end: {
           line: 24,
@@ -9077,27 +9062,12 @@ export default {
     },
     {
       type: "Operator",
-      value: "-",
-      range: [903, 904],
+      value: "->",
+      range: [903, 905],
       loc: {
         start: {
           line: 24,
           column: 49,
-        },
-        end: {
-          line: 24,
-          column: 50,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [904, 905],
-      loc: {
-        start: {
-          line: 24,
-          column: 50,
         },
         end: {
           line: 24,
@@ -9211,6 +9181,21 @@ export default {
       },
     },
     {
+      type: "Operator",
+      value: "?",
+      range: [951, 952],
+      loc: {
+        start: {
+          line: 26,
+          column: 15,
+        },
+        end: {
+          line: 26,
+          column: 16,
+        },
+      },
+    },
+    {
       type: "String",
       value: "'brand'",
       range: [953, 960],
@@ -9257,27 +9242,12 @@ export default {
     },
     {
       type: "Operator",
-      value: "-",
-      range: [973, 974],
+      value: "->",
+      range: [973, 975],
       loc: {
         start: {
           line: 26,
           column: 37,
-        },
-        end: {
-          line: 26,
-          column: 38,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [974, 975],
-      loc: {
-        start: {
-          line: 26,
-          column: 38,
         },
         end: {
           line: 26,
@@ -10366,6 +10336,21 @@ export default {
       },
     },
     {
+      type: "Operator",
+      value: "~",
+      range: [1445, 1446],
+      loc: {
+        start: {
+          line: 43,
+          column: 36,
+        },
+        end: {
+          line: 43,
+          column: 37,
+        },
+      },
+    },
+    {
       type: "String",
       value: "'*.computers.*'",
       range: [1447, 1462],
@@ -10487,8 +10472,8 @@ export default {
     },
     {
       type: "Operator",
-      value: "<",
-      range: [1500, 1501],
+      value: "<@",
+      range: [1500, 1502],
       loc: {
         start: {
           line: 44,
@@ -10496,7 +10481,7 @@ export default {
         },
         end: {
           line: 44,
-          column: 37,
+          column: 38,
         },
       },
     },
@@ -12062,6 +12047,36 @@ export default {
     },
     {
       type: "Punctuator",
+      value: "[",
+      range: [2141, 2142],
+      loc: {
+        start: {
+          line: 68,
+          column: 13,
+        },
+        end: {
+          line: 68,
+          column: 14,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: "]",
+      range: [2142, 2143],
+      loc: {
+        start: {
+          line: 68,
+          column: 14,
+        },
+        end: {
+          line: 68,
+          column: 15,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
       value: ")",
       range: [2144, 2145],
       loc: {
@@ -12347,6 +12362,21 @@ export default {
       },
     },
     {
+      type: "Punctuator",
+      value: "[",
+      range: [2307, 2308],
+      loc: {
+        start: {
+          line: 72,
+          column: 97,
+        },
+        end: {
+          line: 72,
+          column: 98,
+        },
+      },
+    },
+    {
       type: "String",
       value: "'premium'",
       range: [2308, 2317],
@@ -12388,6 +12418,21 @@ export default {
         end: {
           line: 72,
           column: 115,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: "]",
+      range: [2325, 2326],
+      loc: {
+        start: {
+          line: 72,
+          column: 115,
+        },
+        end: {
+          line: 72,
+          column: 116,
         },
       },
     },
@@ -12513,6 +12558,21 @@ export default {
       },
     },
     {
+      type: "Punctuator",
+      value: "[",
+      range: [2427, 2428],
+      loc: {
+        start: {
+          line: 73,
+          column: 98,
+        },
+        end: {
+          line: 73,
+          column: 99,
+        },
+      },
+    },
+    {
       type: "String",
       value: "'standard'",
       range: [2428, 2438],
@@ -12524,6 +12584,21 @@ export default {
         end: {
           line: 73,
           column: 109,
+        },
+      },
+    },
+    {
+      type: "Punctuator",
+      value: "]",
+      range: [2438, 2439],
+      loc: {
+        start: {
+          line: 73,
+          column: 109,
+        },
+        end: {
+          line: 73,
+          column: 110,
         },
       },
     },
@@ -12619,27 +12694,12 @@ export default {
     },
     {
       type: "Operator",
-      value: "-",
-      range: [2484, 2485],
+      value: "->",
+      range: [2484, 2486],
       loc: {
         start: {
           line: 76,
           column: 24,
-        },
-        end: {
-          line: 76,
-          column: 25,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [2485, 2486],
-      loc: {
-        start: {
-          line: 76,
-          column: 25,
         },
         end: {
           line: 76,
@@ -12754,42 +12814,12 @@ export default {
     },
     {
       type: "Operator",
-      value: "-",
-      range: [2539, 2540],
+      value: "->>",
+      range: [2539, 2542],
       loc: {
         start: {
           line: 78,
           column: 14,
-        },
-        end: {
-          line: 78,
-          column: 15,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [2540, 2541],
-      loc: {
-        start: {
-          line: 78,
-          column: 15,
-        },
-        end: {
-          line: 78,
-          column: 16,
-        },
-      },
-    },
-    {
-      type: "Operator",
-      value: ">",
-      range: [2541, 2542],
-      loc: {
-        start: {
-          line: 78,
-          column: 16,
         },
         end: {
           line: 78,
@@ -12949,12 +12979,12 @@ export default {
     },
     {
       type: "Operator",
-      value: ">",
-      range: [2615, 2616],
+      value: "@>",
+      range: [2614, 2616],
       loc: {
         start: {
           line: 82,
-          column: 16,
+          column: 15,
         },
         end: {
           line: 82,

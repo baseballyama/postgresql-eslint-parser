@@ -183,11 +183,11 @@ export default {
         },
       },
       override: "OVERRIDING_NOT_SET",
-      range: [21, 64],
+      range: [22, 64],
       loc: {
         start: {
-          line: 1,
-          column: 21,
+          line: 2,
+          column: 0,
         },
         end: {
           line: 2,
@@ -325,11 +325,11 @@ export default {
           },
         },
       },
-      range: [65, 110],
+      range: [66, 110],
       loc: {
         start: {
-          line: 2,
-          column: 43,
+          line: 3,
+          column: 0,
         },
         end: {
           line: 3,

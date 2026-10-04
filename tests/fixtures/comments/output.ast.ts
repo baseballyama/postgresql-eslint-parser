@@ -83,10 +83,10 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [0, 62],
+      range: [43, 62],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -165,11 +165,11 @@ export default {
       ],
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [63, 116],
+      range: [95, 116],
       loc: {
         start: {
-          line: 2,
-          column: 20,
+          line: 4,
+          column: 0,
         },
         end: {
           line: 4,

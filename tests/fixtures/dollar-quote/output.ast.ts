@@ -178,11 +178,11 @@ export default {
         {
           type: "String",
           sval: "tagged_body",
-          range: [90, 206],
+          range: [92, 206],
           loc: {
             start: {
-              line: 5,
-              column: 20,
+              line: 7,
+              column: 0,
             },
             end: {
               line: 11,
@@ -301,11 +301,11 @@ export default {
           },
         },
       ],
-      range: [90, 206],
+      range: [92, 206],
       loc: {
         start: {
-          line: 5,
-          column: 20,
+          line: 7,
+          column: 0,
         },
         end: {
           line: 11,
