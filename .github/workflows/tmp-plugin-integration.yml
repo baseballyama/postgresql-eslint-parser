@@ -1,0 +1,76 @@
+# Temporary verification for #264, not for merge: runs eslint-plugin-postgresql's
+# full test suite against the parser built from main (baseline) and from the PR head.
+name: tmp-plugin-integration
+on:
+  push:
+    branches: [verify/plugin-integration]
+permissions:
+  contents: read
+jobs:
+  plugin-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        parser: [main, head]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ matrix.parser == 'main' && 'main' || github.sha }}
+          path: parser
+      - uses: actions/checkout@v6
+        with:
+          repository: baseballyama/eslint-plugin-postgresql
+          ref: main
+          path: plugin
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: parser/package.json
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Build and pack the parser
+        working-directory: parser
+        run: |
+          git log --oneline -1
+          pnpm install --frozen-lockfile
+          pnpm run build
+          npm pack --pack-destination "$RUNNER_TEMP"
+      - name: Install the plugin and swap in the packed parser
+        working-directory: plugin
+        run: |
+          git log --oneline -1
+          npx -y pnpm@11.22.0 install --frozen-lockfile
+          dir=$(realpath node_modules/postgresql-eslint-parser)
+          rm -rf "$dir"/*
+          tar -xzf "$RUNNER_TEMP"/postgresql-eslint-parser-*.tgz -C "$dir" --strip-components=1
+          grep '"version"' "$dir/package.json"
+      - name: Plugin tests
+        working-directory: plugin
+        run: |
+          set +e
+          npx -y pnpm@11.22.0 exec vitest run --reporter=verbose > "$RUNNER_TEMP/vitest.txt" 2>&1
+          code=$?
+          grep -E "^ +(✓|×)" "$RUNNER_TEMP/vitest.txt" | sed -E 's/ [0-9]+ms$//' | sort > "$RUNNER_TEMP/results-${{ matrix.parser }}.txt"
+          tail -8 "$RUNNER_TEMP/vitest.txt"
+          grep -E "^ +×" "$RUNNER_TEMP/results-${{ matrix.parser }}.txt" | head -50
+          echo "vitest exit $code"
+      - name: Plugin type check
+        working-directory: plugin
+        run: npx -y pnpm@11.22.0 run type:check
+      - uses: actions/upload-artifact@v7
+        with:
+          name: plugin-results-${{ matrix.parser }}
+          path: ${{ runner.temp }}/*.txt
+  diff:
+    needs: plugin-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: plugin-results-*
+          merge-multiple: true
+      - name: Differences between main and head
+        run: |
+          wc -l results-*.txt
+          diff results-main.txt results-head.txt && echo "no differences" || true
