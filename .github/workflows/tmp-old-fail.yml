@@ -4,7 +4,7 @@
 name: tmp-old-fail
 on:
   push:
-    branches: [verify/parser-264-old-fail-6023aee]
+    branches: [verify/parser-264-old-fail2-6023aee]
 permissions:
   contents: read
 jobs:
@@ -21,4 +21,4 @@ jobs:
       - name: Current position tests against the pre-6023aee code
         run: |
           set +e
-          pnpm exec vitest run tests/positions.test.ts --reporter=verbose 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "✓|×|Tests |Test Files|AssertionError|Expected|Received|^\s+[-+] " | head -150
+          pnpm exec vitest run tests/positions.test.ts --reporter=verbose 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "^ +×|Tests |Test Files|AssertionError" | head -80
