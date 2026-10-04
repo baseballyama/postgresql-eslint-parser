@@ -52,11 +52,11 @@ jobs:
       matrix:
         commit:
           - 2e33f20023783d0dc6a5033419fdf1ab4f17e812 # main
-          - c8bbf95 # test: use createPlProcessor as an ESLint processor without a cast
-          - 541138f # test: assign createPlProcessor to Linter.Processor directly
-          - 4d2efd9 # fix: accept createPlProcessor where ESLint expects a processor
-          - f0fd3eb # test: keep the published PlProcessor type working for existing code
-          - a7034b9 # fix: keep PlProcessor as published and type createPlProcessor's result
+          - c8bbf95dcbab1d557c9d63d8e2810908e286e29a # test: use createPlProcessor as an ESLint processor without a cast
+          - 541138f9c4a7bd671cb99f2d74e74411b306e484 # test: assign createPlProcessor to Linter.Processor directly
+          - 4d2efd97bbbf47a0f045ce1c61df75160b4fabb6 # fix: accept createPlProcessor where ESLint expects a processor
+          - f0fd3eb2199883c01dca5cce5b4239a06778665c # test: keep the published PlProcessor type working for existing code
+          - a7034b97310e0503631c4185785c00c25ac408c1 # fix: keep PlProcessor as published and type createPlProcessor's result
     steps:
       - uses: actions/checkout@v7
         with:
