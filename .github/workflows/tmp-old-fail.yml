@@ -1,0 +1,24 @@
+# Temporary, not for merge: runs #264's current tests/positions.test.ts against
+# the code at e331ac8 (before the statement-span fix 6023aee) to show which
+# assertions fail without that fix.
+name: tmp-old-fail
+on:
+  push:
+    branches: [verify/parser-264-old-fail-6023aee]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Current position tests against the pre-6023aee code
+        run: |
+          set +e
+          pnpm exec vitest run tests/positions.test.ts --reporter=verbose 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "✓|×|Tests |Test Files|AssertionError|Expected|Received|^\s+[-+] " | head -150
