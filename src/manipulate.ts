@@ -18,14 +18,20 @@ const isArray = (value: unknown): value is unknown[] => {
   return Array.isArray(value);
 };
 
+// A positional parameter (`$1`) has no token, so a node anchored on one would
+// otherwise be zero-width. Cover the parameter text instead.
+const POSITIONAL_PARAMETER = /\$\d+/y;
+
 const createLocationFromPosition = (
   position: number,
   lineMap: LineMap,
 ): Location => {
-  const { line, column } = lineMap.getPosition(position);
+  POSITIONAL_PARAMETER.lastIndex = position;
+  const match = POSITIONAL_PARAMETER.exec(lineMap.code);
+  const endPosition = position + (match?.[0].length ?? 0);
   return {
-    start: { position, line, column },
-    end: { position, line, column },
+    start: { position, ...lineMap.getPosition(position) },
+    end: { position: endPosition, ...lineMap.getPosition(endPosition) },
   };
 };
 
@@ -196,12 +202,12 @@ const buildAddLocation = (
         });
         updateCurrentMinMax(locationInfo, locationInfo);
       } else {
-        const { line, column } = lineMap.getPosition(location);
-        setNodeLocation(node, [location, location], {
-          start: { line, column },
-          end: { line, column },
-        });
         const locationObj = createLocationFromPosition(location, lineMap);
+        const { start, end } = locationObj;
+        setNodeLocation(node, [start.position, end.position], {
+          start: { line: start.line, column: start.column },
+          end: { line: end.line, column: end.column },
+        });
         updateCurrentMinMax(locationObj, locationObj);
       }
     }
