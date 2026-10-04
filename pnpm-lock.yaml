@@ -167,7 +167,7 @@ importers:
   .:
     dependencies:
       '@libpg-query/parser':
-        specifier: ^17.6.3
+        specifier: ^17.6.6
         version: 17.6.10
     devDependencies:
       '@changesets/changelog-github':
