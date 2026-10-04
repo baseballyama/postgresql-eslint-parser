@@ -12,6 +12,8 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
+import { parseExportLetters, parseImportLetters } from "./emscripten-shim.ts";
+
 // ---------------------------------------------------------------------------
 // Resolve the WASM binary and Emscripten JS shim from the installed package.
 //
@@ -29,33 +31,6 @@ const shimSource = readFileSync(shimPath, "utf8");
 
 const importLetterBySymbol = parseImportLetters(shimSource);
 const exportLetterBySymbol = parseExportLetters(shimSource);
-
-function parseImportLetters(src: string): Record<string, string> {
-  const match = src.match(/wasmImports\s*=\s*\{([^}]*)\}/);
-  if (!match) throw new Error("Could not locate wasmImports in libpg-query.js");
-  const out: Record<string, string> = {};
-  for (const part of match[1]!.split(",")) {
-    const m = part.match(/^\s*([A-Za-z]+)\s*:\s*([A-Za-z0-9_$]+)\s*$/);
-    if (m) out[m[2]!] = m[1]!;
-  }
-  return out;
-}
-
-function parseExportLetters(src: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  // Variable assignments: `wasmMemory=wasmExports["v"]`,
-  // `_malloc=wasmExports["y"]`, or — in shims built since
-  // @libpg-query/parser 17.8.0, which `^17.6.3` resolves to under
-  // max-satisfying resolvers — `_malloc=Module["_malloc"]=wasmExports["y"]`.
-  // Letters become multi-letter once a module has more than 52 exports.
-  const assignRe =
-    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*(?:Module\["[A-Za-z0-9_$]+"\]\s*=\s*)?wasmExports\["([A-Za-z]+)"\]/g;
-  for (let m; (m = assignRe.exec(src)); ) out[m[1]!] = m[2]!;
-  // Constructor call: `wasmExports["w"]()` runs C/C++ static ctors.
-  const ctorMatch = src.match(/wasmExports\["([A-Za-z]+)"\]\s*\(\s*\)/);
-  if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
-  return out;
-}
 
 function importLetter(symbol: string): string {
   const letter = importLetterBySymbol[symbol];
