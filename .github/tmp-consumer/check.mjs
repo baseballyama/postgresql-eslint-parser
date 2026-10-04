@@ -6,18 +6,22 @@ import { ESLint } from "eslint";
 import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-// Packages here do not export ./package.json, so find each one's directory
-// from its resolved entry point, starting where the dependent package lives.
-const pkgOf = (name, fromFile) => {
-  let dir = dirname(createRequire(fromFile).resolve(name));
-  while (!existsSync(join(dir, "package.json")) || JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).name !== name) dir = dirname(dir);
-  return { dir, version: JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).version };
+// These packages are ESM-only and do not export ./package.json, so walk the
+// node_modules directories the way Node's resolver does, from the directory
+// of the package that depends on them.
+const pkgOf = (name, fromDir) => {
+  for (let dir = realpathSync(fromDir); ; dir = dirname(dir)) {
+    const candidate = join(dir, "node_modules", name, "package.json");
+    if (existsSync(candidate)) {
+      return { dir: realpathSync(dirname(candidate)), version: JSON.parse(readFileSync(candidate, "utf8")).version };
+    }
+    if (dir === dirname(dir)) throw new Error(`${name} not found from ${fromDir}`);
+  }
 };
-const app = join(process.cwd(), "package.json");
-const pluginPkg = pkgOf("eslint-plugin-postgresql", app);
-const parserPkg = pkgOf("postgresql-eslint-parser", join(realpathSync(pluginPkg.dir), "package.json"));
-const libpgPkg = pkgOf("@libpg-query/parser", join(realpathSync(parserPkg.dir), "package.json"));
-console.log(`plugin ${pluginPkg.version}, parser ${parserPkg.version}, @libpg-query/parser ${libpgPkg.version}, eslint ${pkgOf("eslint", app).version}`);
+const pluginPkg = pkgOf("eslint-plugin-postgresql", process.cwd());
+const parserPkg = pkgOf("postgresql-eslint-parser", pluginPkg.dir);
+const libpgPkg = pkgOf("@libpg-query/parser", parserPkg.dir);
+console.log(`plugin ${pluginPkg.version}, parser ${parserPkg.version}, @libpg-query/parser ${libpgPkg.version}, eslint ${pkgOf("eslint", process.cwd()).version}`);
 
 const { default: plugin } = await import("eslint-plugin-postgresql");
 console.log(`rules: ${Object.keys(plugin.rules).length}`);
