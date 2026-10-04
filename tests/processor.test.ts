@@ -168,11 +168,16 @@ describe("createPlProcessor's postprocess called directly", () => {
     expect(output).toEqual([]);
   });
 
-  it("keeps the parameter type derived from its return type", () => {
+  it("keeps the parameter and return types derived from its return type", () => {
     type Postprocess = ReturnType<typeof createPlProcessor>["postprocess"];
     const lists: Parameters<Postprocess>[0] = [[{ line: 1, custom: "kept" }]];
     const processor = createPlProcessor({ languages: { plv8: ".js" } });
-    expect(processor.postprocess(lists, "unknown.sql")).toEqual([]);
+    const returned: ReturnType<Postprocess> = processor.postprocess(
+      lists,
+      "unknown.sql",
+    );
+    const asPublished: ProcessorMessage[] = returned;
+    expect(asPublished).toEqual([]);
   });
 
   // Assigning to an overloaded function type compares each target overload
