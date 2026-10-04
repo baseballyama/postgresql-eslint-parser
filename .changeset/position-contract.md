@@ -20,7 +20,7 @@ Changes to positions:
 
 - `loc` treats CRLF, CR, LF, U+2028 and U+2029 as line breaks, the same as ESLint. Reports and `eslint-disable-line` directives in CR-only files now land on the right line.
 - Top-level statements start at their first token and end at their last one. Previously, every statement after the first started right after the previous `;`, including any blank lines and comments, so reports landed on the previous line and `eslint-disable-next-line` placed above a statement did not apply. A final statement without `;` used to skip its first keyword.
-- Nodes anchored on a literal or operator (`A_Const`, `A_Expr`, `ColumnRef`, …) now cover the whole literal, operator or identifier.
+- Nodes anchored on a literal or operator (`A_Const`, `A_Expr`, `ColumnRef`, …) now cover the whole literal, operator or identifier. Nodes anchored on a positional parameter (`ParamRef`, and a `ResTarget` that starts with one) cover `$1` instead of being zero-width. `$1` itself still has no token of its own: the `$` is skipped and the digits are a `Numeric` token.
 
 Changes to parse errors:
 
