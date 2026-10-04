@@ -1,0 +1,37 @@
+# Temporary, not for merge: regenerates and dedupes the lockfile for #264
+# after merging main 2e33f20 (95c6ee2), then runs the quality gate, the tests
+# and the docs type check with it.
+name: tmp-264-lock
+on:
+  push:
+    branches: [verify/parser-264-lock-95c6ee2]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          git diff --stat -- pnpm-lock.yaml
+          grep -A2 "'@libpg-query/parser':" pnpm-lock.yaml | head -3
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pr264-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Docs type check
+        working-directory: docs
+        run: pnpm run check
