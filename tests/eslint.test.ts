@@ -2,7 +2,7 @@ import { Linter, type Rule } from "eslint";
 import { describe, expect, it } from "vitest";
 
 import { parseForESLint } from "../src/parse.ts";
-import { createPlProcessor, type ProcessorMessage } from "../src/processor.ts";
+import { createPlProcessor } from "../src/processor.ts";
 
 // Runs the parser through ESLint itself (SourceCode, directive comments,
 // SourceCodeFixer) instead of re-deriving ESLint's behaviour in the test.
@@ -172,55 +172,12 @@ describe("processor with a BOM-prefixed file", () => {
     },
   };
 
-  const plProcessor = createPlProcessor({ languages: { plv8: ".js" } });
-
-  // ESLint's processor types require complete LintMessage objects, while
-  // createPlProcessor works with a looser message shape.
-  const isLintMessage = (
-    message: ProcessorMessage,
-  ): message is ProcessorMessage & Linter.LintMessage =>
-    typeof message.line === "number" &&
-    typeof message.column === "number" &&
-    typeof message.message === "string" &&
-    (message.severity === 1 || message.severity === 2);
-
-  // LintMessage types its optional fields as `T | undefined`, which
-  // ProcessorMessage does not accept under exactOptionalPropertyTypes, so
-  // copy only the fields ESLint actually set.
-  const toProcessorMessage = ({
-    endLine,
-    endColumn,
-    fix,
-    ...rest
-  }: Linter.LintMessage): ProcessorMessage => ({
-    ...rest,
-    ...(endLine === undefined ? {} : { endLine }),
-    ...(endColumn === undefined ? {} : { endColumn }),
-    ...(fix === undefined ? {} : { fix }),
-  });
-
   const configs: Linter.Config[] = [
     {
       files: ["**/*.sql"],
-      processor: {
-        meta: plProcessor.meta,
-        supportsAutofix: plProcessor.supportsAutofix,
-        preprocess: (text, filename) => plProcessor.preprocess(text, filename),
-        postprocess: (messageLists, filename) =>
-          plProcessor
-            .postprocess(
-              messageLists.map((list) => list.map(toProcessorMessage)),
-              filename,
-            )
-            .map((message) => {
-              if (!isLintMessage(message)) {
-                throw new Error(
-                  `incomplete message ${JSON.stringify(message)}`,
-                );
-              }
-              return message;
-            }),
-      },
+      // Passed straight in: no cast or wrapper between the processor and
+      // ESLint's types.
+      processor: createPlProcessor({ languages: { plv8: ".js" } }),
     },
     {
       files: ["**/*.js"],

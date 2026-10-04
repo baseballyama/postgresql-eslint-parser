@@ -52,6 +52,36 @@ export interface PlProcessor {
   ) => ProcessorMessage[];
 }
 
+// The fields postprocess reads and rewrites. Optional fields allow
+// `undefined` and there is no index signature, so both ESLint's
+// `Linter.LintMessage` and `ProcessorMessage` satisfy it.
+interface TranslatableMessage {
+  line?: number | undefined;
+  column?: number | undefined;
+  endLine?: number | undefined;
+  endColumn?: number | undefined;
+  fix?: FixDescriptor | undefined;
+}
+
+// What createPlProcessor returns. `PlProcessor` stays as published, so code
+// that implements it or derives types from it keeps working.
+//
+// - The first overload is PlProcessor's, so direct calls resolve exactly as
+//   they did when createPlProcessor returned a plain PlProcessor.
+// - The generic overload is what makes the processor assignable to ESLint's
+//   `Processor`, which passes and expects `LintMessage` (an interface without
+//   an index signature, so it does not match the first overload).
+// - The last overload repeats the first on purpose: `Parameters` and
+//   `ReturnType` read the last overload, so types derived from this
+//   postprocess stay as they were for PlProcessor.
+interface EslintCompatiblePlProcessor extends PlProcessor {
+  postprocess: {
+    (messageLists: ProcessorMessage[][], filename: string): ProcessorMessage[];
+    <M extends TranslatableMessage>(messageLists: M[][], filename: string): M[];
+    (messageLists: ProcessorMessage[][], filename: string): ProcessorMessage[];
+  };
+}
+
 interface CachedBlock {
   body: EmbeddedCode;
 }
@@ -74,16 +104,19 @@ const translateLineColumn = (
   return { line: sqlLine, column: sqlColumn };
 };
 
-const translateMessage = (
-  message: ProcessorMessage,
+const translateMessage = <M extends TranslatableMessage>(
+  message: M,
   body: EmbeddedCode,
-): ProcessorMessage => {
-  const translated: ProcessorMessage = { ...message };
+): M => {
+  const translated = { ...message };
+  // Write through the constraint: `M` may declare narrower field types, but
+  // these fields always hold plain numbers and fix descriptors.
+  const fields: TranslatableMessage = translated;
 
   if (typeof message.line === "number" && typeof message.column === "number") {
     const start = translateLineColumn(body, message.line, message.column);
-    translated.line = start.line;
-    translated.column = start.column;
+    fields.line = start.line;
+    fields.column = start.column;
   }
 
   if (
@@ -91,8 +124,8 @@ const translateMessage = (
     typeof message.endColumn === "number"
   ) {
     const end = translateLineColumn(body, message.endLine, message.endColumn);
-    translated.endLine = end.line;
-    translated.endColumn = end.column;
+    fields.endLine = end.line;
+    fields.endColumn = end.column;
   }
 
   // Fix ranges are absolute character offsets in the file ESLint linted —
@@ -103,7 +136,7 @@ const translateMessage = (
   // rather than report wrong ranges.
   if (message.fix) {
     if (body.quoteStyle === "dollar") {
-      translated.fix = {
+      fields.fix = {
         range: [
           body.range[0] + message.fix.range[0],
           body.range[0] + message.fix.range[1],
@@ -111,14 +144,16 @@ const translateMessage = (
         text: message.fix.text,
       };
     } else {
-      delete translated.fix;
+      delete fields.fix;
     }
   }
 
   return translated;
 };
 
-export const createPlProcessor = (options: PlProcessorOptions): PlProcessor => {
+export const createPlProcessor = (
+  options: PlProcessorOptions,
+): EslintCompatiblePlProcessor => {
   const { languages, unknown = "skip" } = options;
   // ESLint always calls postprocess right after preprocess for the same
   // file, so caching by filename is enough — even when several files are
@@ -162,11 +197,14 @@ export const createPlProcessor = (options: PlProcessorOptions): PlProcessor => {
         filename: `${index}${ext}`,
       }));
     },
-    postprocess(messageLists, filename) {
+    postprocess<M extends TranslatableMessage>(
+      messageLists: M[][],
+      filename: string,
+    ): M[] {
       const blocks = blockCache.get(filename) ?? [];
       blockCache.delete(filename);
 
-      const result: ProcessorMessage[] = [];
+      const result: M[] = [];
       for (let i = 0; i < messageLists.length; i++) {
         const block = blocks[i];
         const messages = messageLists[i];
