@@ -105,13 +105,15 @@ jobs:
           mkdir app && cd app && echo '{"name":"app","private":true,"type":"module"}' > package.json
           case "${{ matrix.pm }}" in
             npm) npm install eslint@10 eslint-plugin-postgresql@0.24.0 ;;
-            pnpm) npx -y pnpm@11 add eslint@10 eslint-plugin-postgresql@0.24.0 ;;
+            pnpm) npx -y pnpm@11 add eslint@10 eslint-plugin-postgresql@0.24.0 --config.strict-dep-builds=false ;;
             yarn) corepack enable && yarn set version stable && printf 'nodeLinker: node-modules\n' >> .yarnrc.yml && yarn add eslint@10 eslint-plugin-postgresql@0.24.0 ;;
           esac
       - name: Import and lint
         working-directory: ${{ runner.temp }}/app
         run: cp "$GITHUB_WORKSPACE/.github/tmp-consumer/check.mjs" . && node check.mjs
-  # The same consumer with the #264 parser, on each @libpg-query/parser 17.x a fresh install can pick.
+  # eslint-plugin-postgresql bundles the parser into dist/, so the #264 parser only
+  # reaches users through a plugin build. Build plugin main against the packed
+  # parser and install that plugin fresh, on each @libpg-query/parser 17.x.
   fixed-parser-consumer:
     strategy:
       fail-fast: false
@@ -120,28 +122,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          path: parser
+      - uses: actions/checkout@v6
+        with:
+          repository: baseballyama/eslint-plugin-postgresql
+          ref: main
+          path: plugin
       - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: parser/package.json
       - uses: actions/setup-node@v6
         with:
           node-version: 22
       - name: Build and pack the parser
+        working-directory: parser
         run: |
           pnpm install --frozen-lockfile
           pnpm run build
           npm pack --pack-destination "$RUNNER_TEMP"
-      - name: Install the published plugin with the packed parser
+      - name: Build and pack the plugin with the packed parser
+        working-directory: plugin
+        run: |
+          npx -y pnpm@11.22.0 install --frozen-lockfile
+          dir=$(realpath node_modules/postgresql-eslint-parser)
+          rm -rf "$dir"/*
+          tar -xzf "$RUNNER_TEMP"/postgresql-eslint-parser-*.tgz -C "$dir" --strip-components=1
+          npx -y pnpm@11.22.0 run build
+          grep -c "Unknown libpg-query export symbol" dist/index.js
+          mkdir -p "$RUNNER_TEMP/plugin" && npm pack --pack-destination "$RUNNER_TEMP/plugin"
+      - name: Install the built plugin fresh
         working-directory: ${{ runner.temp }}
         run: |
           mkdir app && cd app
-          tgz=$(ls "$RUNNER_TEMP"/postgresql-eslint-parser-*.tgz)
-          cat > package.json <<JSON
-          {"name":"app","private":true,"type":"module",
-           "overrides":{"postgresql-eslint-parser":"file:$tgz","@libpg-query/parser":"${{ matrix.libpg }}"}}
-          JSON
-          npm install eslint@10 eslint-plugin-postgresql@0.24.0
+          tgz=$(ls "$RUNNER_TEMP"/plugin/eslint-plugin-postgresql-*.tgz)
+          echo '{"name":"app","private":true,"type":"module","overrides":{"@libpg-query/parser":"${{ matrix.libpg }}"}}' > package.json
+          npm install eslint@10 "$tgz"
       - name: Import and lint
         working-directory: ${{ runner.temp }}/app
-        run: cp "$GITHUB_WORKSPACE/.github/tmp-consumer/check.mjs" . && node check.mjs
+        run: cp "$GITHUB_WORKSPACE/parser/.github/tmp-consumer/check.mjs" . && node check.mjs
   # Baseline for the matrix above: the published parser 0.5.4 pinned to each 17.x.
   published-parser-consumer:
     strategy:
