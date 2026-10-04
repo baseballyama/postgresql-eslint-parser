@@ -68,6 +68,25 @@ describe("inline directives", () => {
   });
 });
 
+describe("nodes anchored on a positional parameter", () => {
+  it("report at the parameter and expose its text", () => {
+    const reportParams: Rule.RuleModule = {
+      create(context) {
+        return {
+          ParamRef(node: Rule.Node) {
+            context.report({ node, message: context.sourceCode.getText(node) });
+          },
+        };
+      },
+    };
+    const code = "SELECT $1 + 1;\nSELECT a FROM t WHERE id = $2;";
+    expect(summarize(lintSql(code, { params: reportParams }))).toEqual([
+      [1, 8, 1, 10, "$1"],
+      [2, 28, 2, 30, "$2"],
+    ]);
+  });
+});
+
 describe("SourceCode agrees with tokens and comments", () => {
   // Multi-byte and astral characters, CRLF, CR, U+2029, nested comments and
   // prefixed strings in one file.

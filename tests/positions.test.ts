@@ -432,26 +432,37 @@ describe("top-level statement ranges", () => {
   });
 });
 
-// Positional parameters have no token type yet (it is an open design
-// question): the tokenizer skips the `$` and lexes the digits as a Numeric,
-// and ParamRef is zero-width at the `$`. The statement still covers it.
-// Update these expectations when `$n` gets a token.
-describe("positional parameters (current behaviour)", () => {
-  const code = "SELECT $1";
-
+// Positional parameters have no token type yet (an open design question):
+// the tokenizer skips the `$` and lexes the digits as a Numeric. Nodes
+// anchored on a parameter still cover its text, like nodes anchored on a
+// token do. Update the token expectations when `$n` gets a token.
+describe("positional parameters", () => {
   it("emits no token for the `$`", () => {
-    expect(tokensOf(code)).toEqual([
+    expect(tokensOf("SELECT $1 + 1")).toEqual([
       ["Keyword", "SELECT", 0, 6],
       ["Numeric", "1", 8, 9],
+      ["Operator", "+", 10, 11],
+      ["Numeric", "1", 12, 13],
     ]);
   });
 
-  it("leaves ParamRef zero-width inside the statement range", () => {
+  it("gives ParamRef the range of the parameter text", () => {
+    const code = "SELECT $1 + 1";
     expect(locatedOf(code, "ParamRef")).toEqual([
-      { range: [7, 7], loc: { start: at(1, 7), end: at(1, 7) } },
+      { range: [7, 9], loc: { start: at(1, 7), end: at(1, 9) } },
+    ]);
+    // ResTarget is anchored on the start of its expression, here `$1`.
+    expect(locatedOf(code, "ResTarget")).toEqual([
+      { range: [7, 9], loc: { start: at(1, 7), end: at(1, 9) } },
     ]);
     expect(locatedOf(code, "SelectStmt")).toEqual([
-      { range: [0, 9], loc: { start: at(1, 0), end: at(1, 9) } },
+      { range: [0, 13], loc: { start: at(1, 0), end: at(1, 13) } },
+    ]);
+  });
+
+  it("covers a multi-digit parameter in a WHERE clause", () => {
+    expect(locatedOf("SELECT a FROM t WHERE id = $12", "ParamRef")).toEqual([
+      { range: [27, 30], loc: { start: at(1, 27), end: at(1, 30) } },
     ]);
   });
 });
