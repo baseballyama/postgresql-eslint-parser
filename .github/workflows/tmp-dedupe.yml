@@ -1,0 +1,173 @@
+# Temporary, not for merge: dedupes the lockfile of build/deps-latest on a
+# runner, re-runs the quality gate with it, compares the package packed from it
+# (frozen) with main, and checks that the docs playground works.
+name: tmp-dedupe
+on:
+  push:
+    branches: [verify/parser-deps-dedupe]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Dedupe the lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          git diff --stat -- pnpm-lock.yaml
+          grep -E "^  '@codemirror/(state|view|language)@" pnpm-lock.yaml | sort -u
+      - uses: actions/upload-artifact@v7
+        with:
+          name: deduped-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+  dist:
+    needs: lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: head
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: base
+      - uses: actions/download-artifact@v7
+        with:
+          name: deduped-lockfile
+          path: head
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: head/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build and pack both with frozen lockfiles
+        run: |
+          (cd base && npx -y pnpm@11.5.3 install --frozen-lockfile && npx -y pnpm@11.5.3 run build && mkdir -p "$RUNNER_TEMP/base" && npm pack --pack-destination "$RUNNER_TEMP/base")
+          (cd head && pnpm install --frozen-lockfile && pnpm run build && mkdir -p "$RUNNER_TEMP/head" && npm pack --pack-destination "$RUNNER_TEMP/head")
+          for v in base head; do mkdir -p "$RUNNER_TEMP/x-$v" && tar -xzf "$RUNNER_TEMP"/$v/*.tgz -C "$RUNNER_TEMP/x-$v"; done
+      - name: Package differences
+        working-directory: ${{ runner.temp }}
+        run: |
+          diff <(cd x-base/package && find . -type f | sort) <(cd x-head/package && find . -type f | sort) || true
+          for f in $(cd x-head/package && find dist -name '*.d.ts' | sort); do diff -u "x-base/package/$f" "x-head/package/$f" || true; done
+          diff x-base/package/package.json x-head/package/package.json || true
+      - name: Parse every fixture with both builds
+        working-directory: ${{ runner.temp }}
+        run: |
+          cat > cmp.mjs <<'JS'
+          import { readFileSync, readdirSync } from "node:fs";
+          import { join } from "node:path";
+          const [fixtures] = process.argv.slice(2);
+          const load = async (v) => (await import(`./x-${v}/package/dist/index.js`)).parseForESLint;
+          const [base, head] = [await load("base"), await load("head")];
+          const out = (p, code) => { try { const r = p(code); return JSON.stringify({ ast: r.ast, visitorKeys: r.visitorKeys }); } catch (e) { return `throws ${e.message}`; } };
+          let same = 0, diff = 0;
+          for (const dir of readdirSync(fixtures)) {
+            const code = readFileSync(join(fixtures, dir, "input.sql"), "utf8");
+            if (out(base, code) === out(head, code)) same++; else { diff++; console.log(`DIFF ${dir}`); }
+          }
+          console.log(`fixtures: ${same} same, ${diff} different`);
+          process.exitCode = diff ? 1 : 0;
+          JS
+          for v in base head; do (cd x-$v/package && npm install --omit=dev --ignore-scripts --no-package-lock >/dev/null); done
+          node cmp.mjs "$GITHUB_WORKSPACE/head/tests/fixtures"
+  playground:
+    needs: lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: head
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: base
+      - uses: actions/download-artifact@v7
+        with:
+          name: deduped-lockfile
+          path: head
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: head/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build both docs sites as deploy-docs.yml does
+        env:
+          NODE_ENV: production
+          BASE_PATH: /postgresql-eslint-parser
+        run: |
+          (cd base && npx -y pnpm@11.5.3 install --frozen-lockfile && cd docs && npx -y pnpm@11.5.3 run build)
+          (cd head && pnpm install --frozen-lockfile && cd docs && pnpm build)
+      - name: Check the playground (main build, deduped head build, live site)
+        timeout-minutes: 10
+        run: |
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y >/dev/null && npm install playwright@1.63.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > smoke.mjs <<'JS'
+          import { chromium } from "playwright";
+          import { createServer } from "node:http";
+          import { readFileSync, statSync } from "node:fs";
+          import { extname, join } from "node:path";
+          const base = "/postgresql-eslint-parser/";
+          const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".wasm": "application/wasm", ".json": "application/json", ".svg": "image/svg+xml" };
+          const servers = [];
+          const serve = (root, port) => new Promise((done) => {
+            const server = createServer((req, res) => {
+              const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+              let file = join(root, path.slice(base.length));
+              try {
+                if (statSync(file).isDirectory()) file = join(file, "index.html");
+                res.writeHead(200, { "content-type": types[extname(file)] ?? "application/octet-stream" }).end(readFileSync(file));
+              } catch { res.writeHead(404).end(); }
+            });
+            servers.push(server);
+            server.listen(port, "127.0.0.1", done);
+          });
+          const [mainDir, headDir] = process.argv.slice(2);
+          const targets = { main: "http://127.0.0.1:8001", head: "http://127.0.0.1:8002", live: "https://baseballyama.github.io" };
+          let failed = false;
+          const browser = await chromium.launch();
+          try {
+            await serve(mainDir, 8001);
+            await serve(headDir, 8002);
+            for (const [name, origin] of Object.entries(targets)) {
+              const page = await browser.newPage();
+              const errors = [];
+              page.on("pageerror", (e) => errors.push(e.message));
+              const res = await page.goto(origin + base + "playground/", { waitUntil: "networkidle", timeout: 60000 });
+              await page.waitForTimeout(5000);
+              const text = await page.locator("main").innerText();
+              const ok = res.status() === 200 && errors.length === 0 && !text.includes("Loading parser") && /type\s*:\s*"SelectStmt"/.test(text);
+              console.log(`${ok ? "OK  " : "FAIL"} ${name}: status ${res.status()}, errors [${errors.join(" | ")}], output ${JSON.stringify(text.slice(-300))}`);
+              if (name !== "main" && !ok) failed = true;
+              await page.screenshot({ path: `${process.env.RUNNER_TEMP}/playground-${name}.png`, fullPage: true });
+              await page.close();
+            }
+          } finally {
+            await browser.close();
+            for (const s of servers) s.close();
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+          node smoke.mjs "$GITHUB_WORKSPACE/base/docs/build" "$GITHUB_WORKSPACE/head/docs/build"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playground-shots
+          path: ${{ runner.temp }}/playground-*.png
