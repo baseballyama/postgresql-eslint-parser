@@ -64,15 +64,22 @@ interface TranslatableMessage {
 }
 
 // What createPlProcessor returns. `PlProcessor` stays as published, so code
-// that implements it or derives types from it keeps working. This subtype's
-// generic postprocess also fits ESLint's `Processor` type, which passes and
-// expects `LintMessage`, and still returns `ProcessorMessage[]` when given
-// `ProcessorMessage[][]`.
+// that implements it or derives types from it keeps working.
+//
+// - The first overload is PlProcessor's, so direct calls resolve exactly as
+//   they did when createPlProcessor returned a plain PlProcessor.
+// - The generic overload is what makes the processor assignable to ESLint's
+//   `Processor`, which passes and expects `LintMessage` (an interface without
+//   an index signature, so it does not match the first overload).
+// - The last overload repeats the first on purpose: `Parameters` and
+//   `ReturnType` read the last overload, so types derived from this
+//   postprocess stay as they were for PlProcessor.
 interface EslintCompatiblePlProcessor extends PlProcessor {
-  postprocess: <M extends TranslatableMessage>(
-    messageLists: M[][],
-    filename: string,
-  ) => M[];
+  postprocess: {
+    (messageLists: ProcessorMessage[][], filename: string): ProcessorMessage[];
+    <M extends TranslatableMessage>(messageLists: M[][], filename: string): M[];
+    (messageLists: ProcessorMessage[][], filename: string): ProcessorMessage[];
+  };
 }
 
 interface CachedBlock {
