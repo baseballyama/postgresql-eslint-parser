@@ -46,7 +46,7 @@ function parseExportLetters(src: string): Record<string, string> {
   // Variable assignments: `wasmMemory=wasmExports["v"]` or `_malloc=wasmExports["y"]`.
   const assignRe =
     /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*wasmExports\["([A-Za-z])"\]/g;
-  for (let m; (m = assignRe.exec(src)); ) out[m[1]!] = m[2]!;
+  for (let m; (m = assignRe.exec(src));) out[m[1]!] = m[2]!;
   // Constructor call: `wasmExports["w"]()` runs C/C++ static ctors.
   const ctorMatch = src.match(/wasmExports\["([A-Za-z])"\]\s*\(\s*\)/);
   if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
