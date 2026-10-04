@@ -1,0 +1,164 @@
+# Temporary, not for merge: builds the docs site from main (before) and from
+# #264's head (after) with the Pages base path, then drives the playground in
+# both: the built-in examples plus SQL with a PL/V8 body, positional
+# parameters and comments. Records the output text of every view, diffs it,
+# and takes AST screenshots on desktop and mobile.
+name: tmp-264-docs
+on:
+  push:
+    branches: [verify/parser-264-final-06aca36]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: after
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: before
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          package_json_file: after/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build both sites as deploy-docs.yml does
+        env:
+          NODE_ENV: production
+          BASE_PATH: /postgresql-eslint-parser
+        run: |
+          set -o pipefail
+          for v in before after; do
+            echo "== $v $(git -C $v log --oneline -1)"
+            (cd $v && pnpm install --frozen-lockfile && cd docs && pnpm build)
+          done
+      - name: Drive the playground and compare
+        timeout-minutes: 15
+        run: |
+          set -o pipefail
+          mkdir -p "$GITHUB_WORKSPACE/pw" && cd "$GITHUB_WORKSPACE/pw"
+          npm init -y >/dev/null && npm install playwright@1.63.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > play.mjs <<'JS'
+          // Serves both builds under the Pages base path and drives the
+          // playground: every example button, then typed SQL. For each case
+          // it records the AST, JSON and Tokens views and page errors.
+          import { chromium, devices } from "playwright";
+          import { createServer } from "node:http";
+          import { mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+          import { extname, join } from "node:path";
+          const [beforeDir, afterDir, out] = process.argv.slice(2);
+          const base = "/postgresql-eslint-parser/";
+          const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".wasm": "application/wasm", ".json": "application/json", ".svg": "image/svg+xml" };
+          const servers = [];
+          const serve = (root, port) => new Promise((done) => {
+            const server = createServer((req, res) => {
+              const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+              if (!path.startsWith(base)) return res.writeHead(404).end();
+              let file = join(root, path.slice(base.length));
+              try {
+                if (statSync(file).isDirectory()) file = join(file, "index.html");
+                res.writeHead(200, { "content-type": types[extname(file)] ?? "application/octet-stream" }).end(readFileSync(file));
+              } catch {
+                res.writeHead(404).end();
+              }
+            });
+            servers.push(server);
+            server.listen(port, "127.0.0.1", done);
+          });
+          const typed = {
+            "plv8-function": "CREATE FUNCTION add_one(n integer) RETURNS integer AS $$\n  // PL/V8 body\n  return n + 1;\n$$ LANGUAGE plv8;\n",
+            "positional-parameters": "-- find one user\nSELECT $1 AS id, name\nFROM users\nWHERE id = $12; /* trailing */\n",
+          };
+          const sites = { before: "http://127.0.0.1:8001", after: "http://127.0.0.1:8002" };
+          const viewports = { desktop: { viewport: { width: 1440, height: 900 } }, mobile: devices["Pixel 7"] };
+          const report = {};
+          let failed = false;
+          const browser = await chromium.launch();
+          try {
+            await serve(beforeDir, 8001);
+            await serve(afterDir, 8002);
+            mkdirSync(out, { recursive: true });
+            for (const [variant, origin] of Object.entries(sites)) {
+              for (const [vp, options] of Object.entries(viewports)) {
+                const context = await browser.newContext({ ...options, colorScheme: "light" });
+                const page = await context.newPage();
+                const errors = [];
+                page.on("pageerror", (e) => errors.push(e.message));
+                await page.goto(origin + base + "playground/", { waitUntil: "networkidle", timeout: 60000 });
+                const output = page.locator(".pane-body.output");
+                const settle = async () => {
+                  await page.waitForFunction(() => !document.querySelector(".live.working"), null, { timeout: 30000 });
+                  await page.waitForTimeout(500);
+                };
+                const capture = async (name) => {
+                  await settle();
+                  const views = {};
+                  for (const view of ["AST", "JSON", "Tokens"]) {
+                    await page.getByRole("tab", { name: view, exact: true }).click();
+                    await page.waitForTimeout(300);
+                    views[view] = await output.innerText();
+                  }
+                  await page.getByRole("tab", { name: "AST", exact: true }).click();
+                  await page.waitForTimeout(300);
+                  await page.screenshot({ path: `${out}/${variant}-${vp}-${name}.png`, fullPage: true });
+                  (report[`${vp}:${name}`] ??= {})[variant] = { ...views, errors: [...errors] };
+                  errors.length = 0;
+                };
+                const names = await page.locator(".ex-btn").allInnerTexts();
+                for (const [i, name] of names.entries()) {
+                  await page.locator(".ex-btn").nth(i).click();
+                  await capture(`example-${i}-${name.trim().replace(/[^A-Za-z0-9]+/g, "-")}`);
+                }
+                for (const [name, sql] of Object.entries(typed)) {
+                  const editor = page.locator(".cm-content");
+                  await editor.click();
+                  await page.keyboard.press("ControlOrMeta+A");
+                  await page.keyboard.press("Delete");
+                  await page.keyboard.insertText(sql);
+                  await capture(name);
+                }
+                await context.close();
+              }
+            }
+            for (const [key, { before, after }] of Object.entries(report)) {
+              const changed = ["AST", "JSON", "Tokens"].filter((v) => before[v] !== after[v]);
+              console.log(`${changed.length ? "CHANGED" : "same   "} ${key}: [${changed}] errors [${before.errors}] / [${after.errors}]`);
+              if (after.errors.length) failed = true;
+              // Valid SQL must still parse in the after build.
+              if (!key.includes("Broken") && /SQLParseError/.test(after.JSON)) {
+                failed = true;
+                console.log(`  after build reports SQLParseError for ${key}`);
+              }
+              for (const v of changed) {
+                writeFileSync(`${out}/${key.replace(/[:]/g, "-")}-${v}-before.txt`, before[v]);
+                writeFileSync(`${out}/${key.replace(/[:]/g, "-")}-${v}-after.txt`, after[v]);
+              }
+            }
+            writeFileSync(`${out}/report.json`, JSON.stringify(report, null, 1));
+          } finally {
+            await browser.close();
+            for (const s of servers) s.close();
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+          node play.mjs "$GITHUB_WORKSPACE/before/docs/build" "$GITHUB_WORKSPACE/after/docs/build" "$GITHUB_WORKSPACE/shots"
+      - name: Diff the JSON view of each case (desktop)
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE/shots" 2>/dev/null || exit 0
+          for f in desktop-*-JSON-before.txt; do
+            [ -e "$f" ] || continue
+            echo "== ${f%-JSON-before.txt}"
+            diff -U1 "$f" "${f%-before.txt}-after.txt" | head -80
+          done
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: docs-playground-264
+          path: ${{ github.workspace }}/shots
