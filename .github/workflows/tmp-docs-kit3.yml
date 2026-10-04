@@ -1,0 +1,188 @@
+# Temporary, not for merge: regenerates and dedupes the lockfile for
+# build/docs-kit3, runs the quality gate, and compares the docs site built from
+# main (before) and from this branch (after) with the Pages environment.
+name: tmp-docs-kit3
+on:
+  push:
+    branches: [verify/parser-docs-kit3-572fb62]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install with the committed lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm dedupe --check
+          grep -E "^  '@codemirror/(state|view)@" pnpm-lock.yaml | sort -u
+      - uses: actions/upload-artifact@v7
+        with:
+          name: docs-kit3-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Docs type check
+        working-directory: docs
+        run: pnpm run check
+  compare:
+    needs: lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: after
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: before
+      - uses: actions/download-artifact@v7
+        with:
+          name: docs-kit3-lockfile
+          path: after
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          package_json_file: after/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build both sites as deploy-docs.yml does
+        env:
+          NODE_ENV: production
+          BASE_PATH: /postgresql-eslint-parser
+        run: |
+          (cd before && pnpm install --frozen-lockfile && cd docs && pnpm build)
+          (cd after && pnpm install --frozen-lockfile && cd docs && pnpm build)
+          for v in before after; do echo "== $v"; (cd $v/docs/build && find . -type f | grep -v _app/immutable | sort); done
+      - name: Docs type check on both
+        run: |
+          set +e
+          (cd before/docs && pnpm run check > "$RUNNER_TEMP/check-before.txt" 2>&1; echo "before exit $?")
+          (cd after/docs && pnpm run check > "$RUNNER_TEMP/check-after.txt" 2>&1; echo "after exit $?")
+          tail -3 "$RUNNER_TEMP/check-before.txt"; echo ---; tail -3 "$RUNNER_TEMP/check-after.txt"
+      - name: Capture and compare
+        timeout-minutes: 10
+        run: |
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y >/dev/null && npm install playwright@1.63.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > shots.mjs <<'JS'
+          // Serves both builds under the Pages base path like a static host
+          // (directory -> index.html, missing directory slash -> 301, else 404
+          // with the site's 404.html when there is one), then compares what a
+          // visitor gets from each page.
+          import { chromium, devices } from "playwright";
+          import { createServer } from "node:http";
+          import { mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+          import { extname, join } from "node:path";
+          const [beforeDir, afterDir, out] = process.argv.slice(2);
+          const base = "/postgresql-eslint-parser/";
+          const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".wasm": "application/wasm", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png" };
+          const servers = [];
+          const serve = (root, port) => new Promise((done) => {
+            const server = createServer((req, res) => {
+              const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+              if (!path.startsWith(base)) return res.writeHead(404).end();
+              let file = join(root, path.slice(base.length));
+              try {
+                if (statSync(file).isDirectory()) {
+                  if (!path.endsWith("/")) return res.writeHead(301, { location: path + "/" }).end();
+                  file = join(file, "index.html");
+                }
+                res.writeHead(200, { "content-type": types[extname(file)] ?? "application/octet-stream" }).end(readFileSync(file));
+              } catch {
+                let body = "";
+                try { body = readFileSync(join(root, "404.html")); } catch {}
+                res.writeHead(404, { "content-type": "text/html" }).end(body);
+              }
+            });
+            servers.push(server);
+            server.listen(port, "127.0.0.1", done);
+          });
+          const sites = { before: "http://127.0.0.1:8001", after: "http://127.0.0.1:8002" };
+          const pages = ["", "docs/", "playground/", "docs/does-not-exist/deeper/"];
+          const viewports = { desktop: { viewport: { width: 1440, height: 900 } }, mobile: devices["Pixel 7"] };
+          // Kit 3 links straight to the trailing-slash URL the static host
+          // serves, where the old links relied on a 301 to add the slash.
+          const withSlash = (u) => (u.startsWith(base) && !/[#?]/.test(u) && !u.endsWith("/") && !extname(u) ? u + "/" : u);
+          const report = {};
+          let failed = false;
+          const browser = await chromium.launch();
+          try {
+            await serve(beforeDir, 8001);
+            await serve(afterDir, 8002);
+            mkdirSync(out, { recursive: true });
+            for (const [variant, origin] of Object.entries(sites)) {
+              for (const [vp, options] of Object.entries(viewports)) {
+                const context = await browser.newContext({ ...options, colorScheme: "light" });
+                for (const path of pages) {
+                  const page = await context.newPage();
+                  const errors = [];
+                  page.on("pageerror", (e) => errors.push(e.message));
+                  const res = await page.goto(origin + base + path, { waitUntil: "networkidle", timeout: 60000 });
+                  if (path === "playground/") await page.waitForTimeout(5000);
+                  const data = await page.evaluate(() => ({
+                    title: document.title,
+                    links: [...document.querySelectorAll("a[href]")].map((a) => a.href.replace(location.origin, "")),
+                    active: [...document.querySelectorAll("a.active")].map((a) => a.textContent.trim()),
+                    text: document.body.innerText.length,
+                    main: document.querySelector("main")?.innerText ?? "",
+                  }));
+                  report[`${vp}:${path || "home"}`] ??= {};
+                  report[`${vp}:${path || "home"}`][variant] = { status: res.status(), errors, ...data };
+                  await page.screenshot({ path: `${out}/${variant}-${vp}-${(path || "home").replaceAll("/", "_")}.png`, fullPage: true });
+                  await page.close();
+                }
+                await context.close();
+              }
+            }
+            for (const [key, { before, after }] of Object.entries(report)) {
+              const same =
+                before.status === after.status &&
+                before.title === after.title &&
+                JSON.stringify(before.links.map(withSlash)) === JSON.stringify(after.links) &&
+                JSON.stringify(before.active) === JSON.stringify(after.active) &&
+                before.main === after.main &&
+                JSON.stringify(before.errors) === JSON.stringify(after.errors);
+              console.log(`${same ? "same" : "DIFF"} ${key}: status ${before.status}/${after.status}, links ${after.links.length}, active [${after.active}], text ${before.text}/${after.text}, errors [${before.errors}] / [${after.errors}]`);
+              if (!same) {
+                failed = true;
+                console.log(JSON.stringify({ before: { ...before, main: before.main.slice(0, 500) }, after: { ...after, main: after.main.slice(0, 500) } }, null, 1));
+              }
+              if (key.endsWith("playground/") && !/type\s*:\s*"SelectStmt"/.test(after.main)) {
+                failed = true;
+                console.log(`playground on ${key} shows no AST`);
+              }
+            }
+            // Old slash-less links still reach the same page through the 301.
+            const internal = new Set(Object.values(report).flatMap((r) => [...r.before.links, ...r.after.links].filter((u) => u.startsWith(base))));
+            for (const u of internal) {
+              const r = await fetch(sites.after + u);
+              await r.arrayBuffer();
+              if (r.status !== 200) { failed = true; console.log(`link ${u} -> ${r.status}`); }
+            }
+            console.log(`checked ${internal.size} internal links (before and after) on the after build`);
+            writeFileSync(`${out}/report.json`, JSON.stringify(report, null, 1));
+          } finally {
+            await browser.close();
+            for (const s of servers) s.close();
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+          node shots.mjs "$GITHUB_WORKSPACE/before/docs/build" "$GITHUB_WORKSPACE/after/docs/build" "$RUNNER_TEMP/shots"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: docs-shots
+          path: |
+            ${{ runner.temp }}/shots
+            ${{ runner.temp }}/check-*.txt
