@@ -52,6 +52,13 @@ const configs: Linter.Config[] = [
 ];
 
 describe("createPlProcessor as an ESLint processor", () => {
+  it("is assignable to Linter.Processor", () => {
+    const processor: Linter.Processor = createPlProcessor({
+      languages: { plv8: ".js" },
+    });
+    expect(processor.supportsAutofix).toBe(true);
+  });
+
   it("is accepted by a plugin's `processors`", () => {
     const plugin: ESLint.Plugin = {
       processors: { pl: createPlProcessor({ languages: { plv8: ".js" } }) },
