@@ -432,6 +432,30 @@ describe("top-level statement ranges", () => {
   });
 });
 
+// Positional parameters have no token type yet (it is an open design
+// question): the tokenizer skips the `$` and lexes the digits as a Numeric,
+// and ParamRef is zero-width at the `$`. The statement still covers it.
+// Update these expectations when `$n` gets a token.
+describe("positional parameters (current behaviour)", () => {
+  const code = "SELECT $1";
+
+  it("emits no token for the `$`", () => {
+    expect(tokensOf(code)).toEqual([
+      ["Keyword", "SELECT", 0, 6],
+      ["Numeric", "1", 8, 9],
+    ]);
+  });
+
+  it("leaves ParamRef zero-width inside the statement range", () => {
+    expect(locatedOf(code, "ParamRef")).toEqual([
+      { range: [7, 7], loc: { start: at(1, 7), end: at(1, 7) } },
+    ]);
+    expect(locatedOf(code, "SelectStmt")).toEqual([
+      { range: [0, 9], loc: { start: at(1, 0), end: at(1, 9) } },
+    ]);
+  });
+});
+
 describe("tokens: operators and brackets", () => {
   it("lexes operators like scan.l and brackets as punctuators", () => {
     const code = "SELECT a ~ b, c[1], d->>'k', g=-1 FROM t";
