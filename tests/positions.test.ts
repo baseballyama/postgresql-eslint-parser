@@ -417,7 +417,7 @@ describe("top-level statement ranges", () => {
     ]);
   });
 
-  it("keep characters that have no token, such as `$1`", () => {
+  it("end before a trailing comment and keep a positional parameter", () => {
     const code = "SELECT $1 /* c */;\nSELECT 2 -- tail\n";
     expect(locatedOf(code, "SelectStmt")).toEqual([
       { range: [0, 9], loc: { start: at(1, 0), end: at(1, 9) } },
