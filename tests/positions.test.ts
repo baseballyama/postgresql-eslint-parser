@@ -297,53 +297,149 @@ describe("parse errors", () => {
   });
 });
 
-// Known gaps that need a fixture regeneration or a public-API decision
-// before they can be fixed. `it.fails` keeps the full expectation in place:
-// the suite turns red as soon as one of them starts passing, so the marker
-// cannot silently outlive the fix.
-describe("known position gaps", () => {
-  it.fails("covers the whole statement, including its first keyword", () => {
-    expect(rangesOf("SELECT 1", "SelectStmt")).toEqual([[0, 8]]);
+const locatedOf = (code: string, type: string) =>
+  parse(code)
+    .nodes.filter((node) => node.type === type)
+    .map(({ range, loc }) => ({ range, loc }));
+
+const at = (line: number, column: number) => ({ line, column });
+
+describe("top-level statement ranges", () => {
+  it("cover a statement without a trailing `;`, first keyword included", () => {
+    expect(locatedOf("SELECT 1", "SelectStmt")).toEqual([
+      { range: [0, 8], loc: { start: at(1, 0), end: at(1, 8) } },
+    ]);
   });
 
-  it.fails("starts a statement at its first token, not after `;`", () => {
+  it("start at the statement's first token, not after the previous `;`", () => {
     const code = "SELECT 1;\n-- c\nSELECT 2";
-    expect(rangesOf(code, "SelectStmt")).toEqual([
-      [0, 8],
-      [15, 23],
+    expect(locatedOf(code, "SelectStmt")).toEqual([
+      { range: [0, 8], loc: { start: at(1, 0), end: at(1, 8) } },
+      { range: [15, 23], loc: { start: at(3, 0), end: at(3, 8) } },
     ]);
   });
 
-  it.fails("tokenizes parameters, operators and brackets", () => {
-    expect(tokensOf("SELECT $1, a ~ b, c[1], d->>'k'")).toEqual([
+  it("exclude the separating whitespace and the `;`", () => {
+    expect(locatedOf("SELECT 1; SELECT 2;", "SelectStmt")).toEqual([
+      { range: [0, 8], loc: { start: at(1, 0), end: at(1, 8) } },
+      { range: [10, 18], loc: { start: at(1, 10), end: at(1, 18) } },
+    ]);
+  });
+
+  it("exclude comments before the first statement", () => {
+    expect(locatedOf("-- head\nSELECT 1;", "SelectStmt")).toEqual([
+      { range: [8, 16], loc: { start: at(2, 0), end: at(2, 8) } },
+    ]);
+  });
+});
+
+describe("tokens: operators and brackets", () => {
+  it("lexes operators like scan.l and brackets as punctuators", () => {
+    const code = "SELECT a ~ b, c[1], d->>'k', g=-1 FROM t";
+    expect(tokensOf(code)).toEqual([
       ["Keyword", "SELECT", 0, 6],
-      ["Parameter", "$1", 7, 9],
-      ["Punctuator", ",", 9, 10],
-      ["Identifier", "a", 11, 12],
-      ["Operator", "~", 13, 14],
-      ["Identifier", "b", 15, 16],
-      ["Punctuator", ",", 16, 17],
-      ["Identifier", "c", 18, 19],
-      ["Punctuator", "[", 19, 20],
-      ["Numeric", "1", 20, 21],
-      ["Punctuator", "]", 21, 22],
-      ["Punctuator", ",", 22, 23],
-      ["Identifier", "d", 24, 25],
-      ["Operator", "->>", 25, 28],
-      ["String", "'k'", 28, 31],
+      ["Identifier", "a", 7, 8],
+      ["Operator", "~", 9, 10],
+      ["Identifier", "b", 11, 12],
+      ["Punctuator", ",", 12, 13],
+      ["Identifier", "c", 14, 15],
+      ["Punctuator", "[", 15, 16],
+      ["Numeric", "1", 16, 17],
+      ["Punctuator", "]", 17, 18],
+      ["Punctuator", ",", 18, 19],
+      ["Identifier", "d", 20, 21],
+      ["Operator", "->>", 21, 24],
+      ["String", "'k'", 24, 27],
+      ["Punctuator", ",", 27, 28],
+      ["Identifier", "g", 29, 30],
+      ["Operator", "=", 30, 31],
+      ["Operator", "-", 31, 32],
+      ["Numeric", "1", 32, 33],
+      ["Keyword", "FROM", 34, 38],
+      ["Identifier", "t", 39, 40],
+    ]);
+    // libpg-query anchors A_Expr on the operator.
+    expect(locatedOf(code, "A_Expr")).toEqual([
+      { range: [9, 10], loc: { start: at(1, 9), end: at(1, 10) } },
+      { range: [21, 24], loc: { start: at(1, 21), end: at(1, 24) } },
+      { range: [30, 31], loc: { start: at(1, 30), end: at(1, 31) } },
     ]);
   });
 
-  it.fails("tokenizes PostgreSQL 16+ numeric literals whole", () => {
-    expect(tokensOf("SELECT 0x1F, 1_000, .5")).toEqual([
+  it("drops a trailing +/- unless the operator has a special character", () => {
+    expect(tokensOf("SELECT 2*-1, a @- b")).toEqual([
+      ["Keyword", "SELECT", 0, 6],
+      ["Numeric", "2", 7, 8],
+      ["Operator", "*", 8, 9],
+      ["Operator", "-", 9, 10],
+      ["Numeric", "1", 10, 11],
+      ["Punctuator", ",", 11, 12],
+      ["Identifier", "a", 13, 14],
+      ["Operator", "@-", 15, 17],
+      ["Identifier", "b", 18, 19],
+    ]);
+  });
+});
+
+describe("tokens: numeric literals", () => {
+  it("keeps PostgreSQL 16+ literals whole", () => {
+    const code = "SELECT 0x1F, 0o17, 0b101, 1_000, .5, 1.5e3, 1.";
+    expect(tokensOf(code)).toEqual([
       ["Keyword", "SELECT", 0, 6],
       ["Numeric", "0x1F", 7, 11],
       ["Punctuator", ",", 11, 12],
-      ["Numeric", "1_000", 13, 18],
-      ["Punctuator", ",", 18, 19],
-      ["Numeric", ".5", 20, 22],
+      ["Numeric", "0o17", 13, 17],
+      ["Punctuator", ",", 17, 18],
+      ["Numeric", "0b101", 19, 24],
+      ["Punctuator", ",", 24, 25],
+      ["Numeric", "1_000", 26, 31],
+      ["Punctuator", ",", 31, 32],
+      ["Numeric", ".5", 33, 35],
+      ["Punctuator", ",", 35, 36],
+      ["Numeric", "1.5e3", 37, 42],
+      ["Punctuator", ",", 42, 43],
+      ["Numeric", "1.", 44, 46],
+    ]);
+    expect(rangesOf(code, "A_Const")).toEqual([
+      [7, 11],
+      [13, 17],
+      [19, 24],
+      [26, 31],
+      [33, 35],
+      [37, 42],
+      [44, 46],
     ]);
   });
+});
+
+describe("parse error position", () => {
+  const errorNodeOf = (code: string) => {
+    const [node] = parseForESLint(code).ast.body;
+    return { ...node, parent: undefined };
+  };
+
+  it.each([
+    // [code, error, index, line, column]
+    ["SELECT 1 FROM FROM", `syntax error at or near "FROM"`, 14, 1, 14],
+    // libpg-query counts code points; 𝒳 is one code point, two UTF-16 units.
+    ["SELECT 𝒳 FROM FROM", `syntax error at or near "FROM"`, 15, 1, 15],
+    ["SELECT 1\nFROM FROM", `syntax error at or near "FROM"`, 14, 2, 5],
+    ["SELECT 'abc", `unterminated quoted string at or near "'abc"`, 7, 1, 7],
+    ["SELECT 1 FROM", "syntax error at end of input", 13, 1, 13],
+  ] as const)(
+    "reports %j at the offending token",
+    (code, error, index, line, column) => {
+      const end = eslintLoc(code, code.length);
+      expect(errorNodeOf(code)).toEqual({
+        type: "SQLParseError",
+        range: [0, code.length],
+        loc: { start: at(1, 0), end },
+        error,
+        raw: code,
+        errorPosition: { index, line, column },
+      });
+    },
+  );
 });
 
 // Property checks over every fixture input plus the edge cases above.
@@ -355,6 +451,9 @@ const EDGE_CASES = [
   "SELECT 1;\n-- 日本語\nSELECT 2; SELECT $ä$x$ä$",
   "SELECT 'abc",
   "SELECT 1 /* x",
+  "SELECT a ~ b, c[1], d->>'k', g=-1 FROM t WHERE x <@ y",
+  "SELECT 0x1F, 0o17, 0b101, 1_000, .5, 1.5e3, 1.",
+  "-- head\nSELECT 1; SELECT 2",
 ];
 
 const fixtureInputs = (() => {
