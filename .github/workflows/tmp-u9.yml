@@ -1,0 +1,95 @@
+# Temporary, not for merge: builds the lockfile for U-9 (fix/pl-processor-types
+# at accbd35, eslint resolved to 10.11.0), runs the quality gate and tests, and
+# type-checks each commit of the branch with that lockfile to record which
+# commits fail before the fixes.
+name: tmp-u9
+on:
+  push:
+    branches: [verify/parser-u9-accbd35]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          # Resolve eslint to 10.11.0 by pinning it for one install, then put
+          # back the committed range ^10.11.0; pnpm keeps the locked version.
+          cp package.json "$RUNNER_TEMP/package.json"
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --no-frozen-lockfile
+          cp "$RUNNER_TEMP/package.json" package.json
+          git diff --exit-code -- package.json
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          pnpm install --frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+          grep -E "^  eslint@" pnpm-lock.yaml
+          grep -qE "^  eslint@10\.11\.0:" pnpm-lock.yaml
+          ! grep -qE "^  eslint@10\.12" pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: u9-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+  types-per-commit:
+    needs: lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - commit: 2e33f20023783d0dc6a5033419fdf1ab4f17e812
+            expect: pass # main
+          - commit: 541138f9c4a7bd671cb99f2d74e74411b306e484
+            expect: fail # E1: createPlProcessor as Linter.Processor (test before any fix)
+          - commit: f0fd3eb2199883c01dca5cce5b4239a06778665c
+            expect: fail # K2/K3: existing PlProcessor implementations (test on top of the generic fix)
+          - commit: f698480f34e19e407ad110379db6e60e0c6c4251
+            expect: fail # R1/R3/R4: direct postprocess calls (test before the overload)
+          - commit: ea9356f019423352fcab03bb80d9b4798eb78686
+            expect: fail # overload fix; still carries the wrong R2 @ts-expect-error (TS2578), as cfa7a21 did in run 37198081831
+          - commit: 6b4b00cafc22f00b4efb0c54f22d3bd00bc03cdf
+            expect: pass # R2 as a positive test (hand-written PlProcessor can replace the inferred result)
+          - commit: accbd35e7af663cea193092dd9bc4589483738b8
+            expect: pass # final head
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.commit }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v7
+        with:
+          name: u9-lockfile
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Type check and processor tests at this commit
+        run: |
+          set +e
+          # Older commits say ^10.12.0 (main has no eslint); use the range
+          # from ab8f844 so the frozen lockfile applies unchanged.
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="^10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --frozen-lockfile > /dev/null || exit 1
+          git log --oneline -1
+          pnpm exec tsc --noEmit 2>&1 | tee "$RUNNER_TEMP/tsc.txt"
+          echo "tsc exit ${PIPESTATUS[0]}"
+          pnpm exec vitest run tests/processor.test.ts 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "Tests |Test Files|×|FAIL"
+          echo "vitest exit ${PIPESTATUS[0]}"
+          errors=$(grep -c "error TS" "$RUNNER_TEMP/tsc.txt")
+          echo "expected ${{ matrix.expect }}, type errors: $errors"
+          if [ "${{ matrix.expect }}" = pass ]; then [ "$errors" = 0 ]; else [ "$errors" != 0 ]; fi
+          exit $?
