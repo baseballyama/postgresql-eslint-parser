@@ -1,0 +1,82 @@
+# Temporary, not for merge: opens the deployed docs playground and checks that
+# it runs the parser from #264 (306ed14): a positional parameter's ParamRef
+# covers "$1", and a statement after a leading comment starts at the
+# statement. Before #264, ParamRef was zero-width and the statement started
+# at offset 0.
+name: tmp-live-docs
+on:
+  push:
+    branches: [verify/parser-live-docs-306ed14]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Drive the deployed playground
+        timeout-minutes: 10
+        run: |
+          set -o pipefail
+          mkdir -p "$GITHUB_WORKSPACE/pw" && cd "$GITHUB_WORKSPACE/pw"
+          npm init -y >/dev/null && npm install playwright@1.63.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > live.mjs <<'JS'
+          import { chromium } from "playwright";
+          import { mkdirSync } from "node:fs";
+          const url = "https://baseballyama.github.io/postgresql-eslint-parser/playground/";
+          const sql = "-- c\nSELECT $1 + 1";
+          const out = process.argv[2];
+          mkdirSync(out, { recursive: true });
+          const browser = await chromium.launch();
+          let failed = false;
+          try {
+            const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+            const errors = [];
+            page.on("pageerror", (e) => errors.push(e.message));
+            const scripts = [];
+            page.on("response", (r) => { if (r.url().endsWith(".js")) scripts.push(r.url().split("/").pop()); });
+            await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
+            await page.locator(".cm-content").click();
+            await page.keyboard.press("ControlOrMeta+A");
+            await page.keyboard.press("Delete");
+            await page.keyboard.insertText(sql);
+            await page.waitForFunction(() => !document.querySelector(".live.working"), null, { timeout: 30000 });
+            await page.waitForTimeout(500);
+            await page.getByRole("tab", { name: "JSON", exact: true }).click();
+            await page.waitForTimeout(300);
+            const json = JSON.parse(await page.locator(".pane-body.output").innerText());
+            const found = [];
+            const walk = (v, path) => {
+              if (Array.isArray(v)) return v.forEach((x, i) => walk(x, `${path}[${i}]`));
+              if (v && typeof v === "object") {
+                if (typeof v.type === "string" && Array.isArray(v.range)) found.push({ path, type: v.type, range: v.range });
+                for (const [k, x] of Object.entries(v)) walk(x, `${path}.${k}`);
+              }
+            };
+            walk(json, "$");
+            for (const f of found) console.log(`${f.type} [${f.range}] ${f.path}`);
+            const param = found.find((f) => f.type === "ParamRef");
+            const first = found.find((f) => f.type !== "Program");
+            console.log(`ParamRef range: ${JSON.stringify(param?.range)} (expected [12,14])`);
+            console.log(`first statement range: ${JSON.stringify(first?.range)} (expected to start at 5)`);
+            console.log(`scripts: ${scripts.join(" ")}`);
+            console.log(`page errors: [${errors}]`);
+            if (JSON.stringify(param?.range) !== "[12,14]" || first?.range?.[0] !== 5 || errors.length) failed = true;
+            await page.getByRole("tab", { name: "AST", exact: true }).click();
+            await page.waitForTimeout(300);
+            await page.screenshot({ path: `${out}/live-playground.png`, fullPage: true });
+          } finally {
+            await browser.close();
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+          node live.mjs "$GITHUB_WORKSPACE/shots"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: live-docs-306ed14
+          path: ${{ github.workspace }}/shots
