@@ -1,0 +1,39 @@
+# Temporary, not for merge: regenerates the lockfile for build/eslint-10-12
+# (eslint ^10.12.0), then runs the quality gate, the tests and the docs type
+# check with it.
+name: tmp-eslint-lock
+on:
+  push:
+    branches: [verify/parser-eslint-10-12-4d251eb]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Regenerate and dedupe the lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
+          pnpm dedupe --check
+          pnpm install --frozen-lockfile
+          git diff --stat -- pnpm-lock.yaml
+          grep -E "^  eslint@" pnpm-lock.yaml
+          grep -qE "^  eslint@10\.12\.0:" pnpm-lock.yaml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: eslint-lockfile
+          path: pnpm-lock.yaml
+      - name: Quality gate
+        run: pnpm check:all
+      - name: Tests
+        run: pnpm test
+      - name: Docs type check
+        working-directory: docs
+        run: pnpm run check
