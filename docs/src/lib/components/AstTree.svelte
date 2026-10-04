@@ -10,6 +10,8 @@
 
   let { value, name, depth = 0, expanded }: Props = $props();
 
+  // Only the initial value matters: after mounting, the toggle owns `open`.
+  // svelte-ignore state_referenced_locally
   let open = $state(expanded ?? depth < 3);
 
   const kind = (v: unknown): "null" | "string" | "number" | "boolean" | "array" | "object" => {

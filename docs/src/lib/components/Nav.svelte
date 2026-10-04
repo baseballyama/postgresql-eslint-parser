@@ -1,20 +1,22 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { base } from "$app/paths";
-  import { createThemeStore, type Theme } from "$lib/theme.svelte";
+  import { resolve } from "$app/paths";
+  import { createThemeStore, type Theme } from "#lib/theme.svelte.ts";
 
+  // `trailingSlash: "always"` in +layout.ts makes `/docs/` and
+  // `/playground/` the prerendered pages, so link there without a redirect.
   const items = [
-    { href: "/", label: "Home" },
-    { href: "/docs", label: "Docs" },
-    { href: "/playground", label: "Playground" },
+    { href: resolve("/"), route: "/", label: "Home" },
+    { href: resolve("docs/"), route: "/docs", label: "Docs" },
+    { href: resolve("playground/"), route: "/playground", label: "Playground" },
   ];
 
-  const isActive = (href: string) => {
-    const pathname = page.url.pathname;
-    const target = `${base}${href}`;
-    if (href === "/") return pathname === `${base}/` || pathname === base;
-    return pathname.startsWith(target);
-  };
+  // Compared by route ID: during prerendering `resolve` returns a relative
+  // path, which never equals the absolute `page.url.pathname`.
+  const isActive = (route: string) =>
+    route === "/"
+      ? page.route.id === "/"
+      : (page.route.id?.startsWith(route) ?? false);
 
   const theme = createThemeStore();
   const label: Record<Theme, string> = {
@@ -26,7 +28,7 @@
 
 <header class="nav">
   <div class="shell row">
-    <a class="brand" href="{base}/">
+    <a class="brand" href={resolve("/")}>
       <span class="mark" aria-hidden="true">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
@@ -55,8 +57,8 @@
       {#each items as item (item.href)}
         <a
           class="link"
-          class:active={isActive(item.href)}
-          href="{base}{item.href === '/' ? '/' : item.href}"
+          class:active={isActive(item.route)}
+          href={item.href}
         >
           {item.label}
         </a>

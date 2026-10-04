@@ -41,6 +41,12 @@ jobs:
       - name: Run check:all
         run: pnpm check:all
 
+      # svelte-kit sync + svelte-check for the docs site (TypeScript 6 there,
+      # because svelte-check does not support the root's TypeScript 7).
+      - name: Type check docs
+        working-directory: docs
+        run: pnpm run check
+
   test:
     name: Quick Test on Node.js ${{ matrix.node }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
