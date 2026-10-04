@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
-  import { browser } from "$app/environment";
-  import Editor from "$lib/components/Editor.svelte";
-  import AstTree from "$lib/components/AstTree.svelte";
+  import { browser } from "$app/env";
+  import Editor from "#lib/components/Editor.svelte";
+  import AstTree from "#lib/components/AstTree.svelte";
   import type { Program } from "$parser/ast.ts";
 
   const examples: { name: string; sql: string }[] = [
@@ -78,7 +78,7 @@ RETURNING id, expires_at;`,
     if (!browser) return;
     working = true;
     try {
-      const { parseSQL, stripParents } = await import("$lib/parser");
+      const { parseSQL, stripParents } = await import("#lib/parser.ts");
       const { program, visitorKeys, durationMs } = await parseSQL(code);
       stripParents(program);
       const safe = JSON.parse(JSON.stringify(program)) as Program;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import "../app.css";
-  import Nav from "$lib/components/Nav.svelte";
+  import Nav from "#lib/components/Nav.svelte";
   import { base } from "$app/paths";
 
   let { children } = $props();

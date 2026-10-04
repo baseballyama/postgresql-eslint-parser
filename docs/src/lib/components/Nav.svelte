@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { base } from "$app/paths";
-  import { createThemeStore, type Theme } from "$lib/theme.svelte";
+  import { createThemeStore, type Theme } from "#lib/theme.svelte.ts";
 
   const items = [
     { href: "/", label: "Home" },
