@@ -1,0 +1,51 @@
+# Temporary, not for merge: checks the deployed docs playground after #265.
+name: tmp-live
+on:
+  push:
+    branches: [verify/parser-live-docs-5e9532a]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Open the live playground
+        timeout-minutes: 10
+        run: |
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y >/dev/null && npm install playwright@1.63.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > live.mjs <<'JS'
+          import { chromium } from "playwright";
+          const browser = await chromium.launch();
+          let failed = false;
+          try {
+            for (const path of ["", "docs/", "playground/"]) {
+              const page = await browser.newPage();
+              const errors = [];
+              page.on("pageerror", (e) => errors.push(e.message));
+              const res = await page.goto(`https://baseballyama.github.io/postgresql-eslint-parser/${path}`, { waitUntil: "networkidle", timeout: 60000 });
+              if (path === "playground/") await page.waitForTimeout(5000);
+              const main = await page.locator("main").innerText();
+              const ok = res.status() === 200 && errors.length === 0 && (path !== "playground/" || /type\s*:\s*"SelectStmt"/.test(main));
+              const scripts = await page.evaluate(() => [...document.querySelectorAll("link[rel=modulepreload],script[src]")].map((e) => e.href || e.src).filter((u) => u.includes("start.")));
+              console.log(`${ok ? "OK  " : "FAIL"} /${path}: status ${res.status()}, errors [${errors.join(" | ")}], entry ${scripts[0] ?? "-"}`);
+              if (!ok) failed = true;
+              await page.screenshot({ path: `${process.env.RUNNER_TEMP}/live-${path.replaceAll("/", "_") || "home"}.png`, fullPage: true });
+              await page.close();
+            }
+          } finally {
+            await browser.close();
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+          node live.mjs
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: live-shots
+          path: ${{ runner.temp }}/live-*.png
