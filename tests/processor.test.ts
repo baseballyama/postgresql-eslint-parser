@@ -1,0 +1,94 @@
+import { type ESLint, Linter, type Rule } from "eslint";
+import { describe, expect, it } from "vitest";
+
+import { parseForESLint } from "../src/parse.ts";
+import { createPlProcessor, type ProcessorMessage } from "../src/processor.ts";
+
+// The type annotations below are part of the test: `pnpm type:check` fails if
+// the processor cannot be used where ESLint expects one, without a cast or a
+// wrapper.
+
+const sqlParser = {
+  meta: { name: "postgresql-eslint-parser" },
+  parseForESLint,
+};
+
+const code =
+  "CREATE FUNCTION x() RETURNS int AS $$ return 1; $$ LANGUAGE plv8;";
+
+const oneToTwo: Rule.RuleModule = {
+  meta: { fixable: "code" },
+  create(context) {
+    return {
+      Literal(node) {
+        if (node.value === 1) {
+          context.report({
+            node,
+            message: "one",
+            fix: (fixer) => fixer.replaceText(node, "2"),
+          });
+        }
+      },
+    };
+  },
+};
+
+const configs: Linter.Config[] = [
+  {
+    files: ["**/*.sql"],
+    languageOptions: { parser: sqlParser },
+    processor: createPlProcessor({ languages: { plv8: ".js" } }),
+  },
+  {
+    files: ["**/*.js"],
+    // A PLV8 body is a function body, so its top-level `return` is valid.
+    languageOptions: {
+      sourceType: "script",
+      parserOptions: { ecmaFeatures: { globalReturn: true } },
+    },
+    plugins: { test: { rules: { "one-to-two": oneToTwo } } },
+    rules: { "test/one-to-two": "error" },
+  },
+];
+
+describe("createPlProcessor as an ESLint processor", () => {
+  it("is accepted by a plugin's `processors`", () => {
+    const plugin: ESLint.Plugin = {
+      processors: { pl: createPlProcessor({ languages: { plv8: ".js" } }) },
+    };
+    expect(Object.keys(plugin.processors ?? {})).toEqual(["pl"]);
+  });
+
+  it("reports at the body's position in the SQL file", () => {
+    const messages = new Linter().verify(code, configs, {
+      filename: "fn.sql",
+    });
+    // "CREATE FUNCTION x() RETURNS int AS $$" is 37 characters, so the `1`
+    // at body offset 8 sits at index 45: column 46 (1-based).
+    expect(
+      messages.map((m) => [m.line, m.column, m.endLine, m.endColumn]),
+    ).toEqual([[1, 46, 1, 47]]);
+  });
+
+  it("applies the fix at the body's offset", () => {
+    const result = new Linter().verifyAndFix(code, configs, {
+      filename: "fn.sql",
+    });
+    expect(result.output).toBe(
+      "CREATE FUNCTION x() RETURNS int AS $$ return 2; $$ LANGUAGE plv8;",
+    );
+    expect(result.messages).toEqual([]);
+  });
+
+  it("still accepts and returns ProcessorMessage when called directly", () => {
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+    processor.preprocess(code, "fn.sql");
+    const input: ProcessorMessage[][] = [
+      [{ line: 1, column: 9, endLine: 1, endColumn: 10, custom: "kept" }],
+    ];
+    const output: ProcessorMessage[] = processor.postprocess(input, "fn.sql");
+    expect(output).toEqual([
+      { line: 1, column: 46, endLine: 1, endColumn: 47, custom: "kept" },
+    ]);
+  });
+});
