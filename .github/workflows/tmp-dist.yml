@@ -26,8 +26,8 @@ jobs:
           node-version: 24
       - name: Build and pack both
         run: |
-          (cd base && npx -y pnpm@11.5.3 install --frozen-lockfile && npx -y pnpm@11.5.3 run build && npm pack --pack-destination "$RUNNER_TEMP/base")
-          (cd head && pnpm install --no-frozen-lockfile && pnpm run build && npm pack --pack-destination "$RUNNER_TEMP/head")
+          (cd base && npx -y pnpm@11.5.3 install --frozen-lockfile && npx -y pnpm@11.5.3 run build && mkdir -p "$RUNNER_TEMP/base" && npm pack --pack-destination "$RUNNER_TEMP/base")
+          (cd head && pnpm install --no-frozen-lockfile && pnpm run build && mkdir -p "$RUNNER_TEMP/head" && npm pack --pack-destination "$RUNNER_TEMP/head")
           for v in base head; do mkdir -p "$RUNNER_TEMP/x-$v" && tar -xzf "$RUNNER_TEMP"/$v/*.tgz -C "$RUNNER_TEMP/x-$v"; done
       - name: Package differences
         working-directory: ${{ runner.temp }}
