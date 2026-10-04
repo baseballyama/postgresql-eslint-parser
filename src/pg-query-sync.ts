@@ -43,12 +43,16 @@ function parseImportLetters(src: string): Record<string, string> {
 
 function parseExportLetters(src: string): Record<string, string> {
   const out: Record<string, string> = {};
-  // Variable assignments: `wasmMemory=wasmExports["v"]` or `_malloc=wasmExports["y"]`.
+  // Variable assignments: `wasmMemory=wasmExports["v"]`,
+  // `_malloc=wasmExports["y"]`, or — in shims built since
+  // @libpg-query/parser 17.8.0, which `^17.6.3` resolves to under
+  // max-satisfying resolvers — `_malloc=Module["_malloc"]=wasmExports["y"]`.
+  // Letters become multi-letter once a module has more than 52 exports.
   const assignRe =
-    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*wasmExports\["([A-Za-z])"\]/g;
+    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*(?:Module\["[A-Za-z0-9_$]+"\]\s*=\s*)?wasmExports\["([A-Za-z]+)"\]/g;
   for (let m; (m = assignRe.exec(src)); ) out[m[1]!] = m[2]!;
   // Constructor call: `wasmExports["w"]()` runs C/C++ static ctors.
-  const ctorMatch = src.match(/wasmExports\["([A-Za-z])"\]\s*\(\s*\)/);
+  const ctorMatch = src.match(/wasmExports\["([A-Za-z]+)"\]\s*\(\s*\)/);
   if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
   return out;
 }
