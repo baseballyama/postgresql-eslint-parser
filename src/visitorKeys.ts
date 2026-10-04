@@ -1,6 +1,7 @@
 import type { Program } from "./ast.ts";
 
-const SKIP_KEYS = new Set(["type", "range", "loc", "parent"]);
+// `errorPosition` is position metadata like `range` / `loc`, not a child node.
+const SKIP_KEYS = new Set(["type", "range", "loc", "parent", "errorPosition"]);
 
 const BASE_VISITOR_KEYS: Record<string, string[]> = {
   Program: ["body", "tokens", "comments"],

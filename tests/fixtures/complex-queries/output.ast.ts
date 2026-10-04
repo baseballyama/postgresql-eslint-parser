@@ -1738,10 +1738,10 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [0, 791],
+      range: [24, 791],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -2906,11 +2906,11 @@ export default {
         },
       },
       op: "SETOP_NONE",
-      range: [792, 1247],
+      range: [811, 1247],
       loc: {
         start: {
-          line: 29,
-          column: 27,
+          line: 32,
+          column: 0,
         },
         end: {
           line: 46,
@@ -3999,11 +3999,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1248, 1896],
+      range: [1284, 1896],
       loc: {
         start: {
-          line: 46,
-          column: 47,
+          line: 49,
+          column: 0,
         },
         end: {
           line: 60,
@@ -5395,11 +5395,11 @@ export default {
       },
       limitOption: "LIMIT_OPTION_DEFAULT",
       op: "SETOP_NONE",
-      range: [1897, 2353],
+      range: [1932, 2353],
       loc: {
         start: {
-          line: 60,
-          column: 53,
+          line: 63,
+          column: 0,
         },
         end: {
           line: 80,

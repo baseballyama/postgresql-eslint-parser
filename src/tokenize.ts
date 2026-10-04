@@ -262,7 +262,102 @@ const SQL_KEYWORDS_SET = new Set([
   "WITH",
 ]);
 
-const NUMERIC_PATTERN = /^\d+(\.\d+)?([eE][+-]?\d+)?$/;
+// scan.l (PostgreSQL 16+): decinteger / hexinteger / octinteger /
+// bininteger with optional `_` digit separators, `numeric` (`1.`, `1.5`,
+// `.5`) and `real` (an exponent on either).
+const NUMBER_PATTERN =
+  /0[xX](?:_?[0-9a-fA-F])+|0[oO](?:_?[0-7])+|0[bB](?:_?[01])+|(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)(?:[eE][+-]?\d(?:_?\d)*)?/y;
+
+// What PostgreSQL rejects as "trailing junk after numeric literal" (`1a`,
+// `1e`) or splits into `1` `..` (`1..2`). Those are emitted as one
+// Identifier, as before, rather than as a Numeric plus leftovers.
+const isNumericJunk = (char: string): boolean =>
+  /[a-zA-Z0-9_$.]/.test(char) || isNonAscii(char);
+
+// scan.l `op_chars`. A run of them is one operator, cut before `--` / `/*`.
+const OPERATOR_CHARS = "~!@#^&|`?+-*/%<>=";
+// scan.l keeps a trailing `+` / `-` in a multi-character operator only when
+// the operator also contains one of these; otherwise `=-1` would lex as the
+// operator `=-`.
+const SPECIAL_OPERATOR_CHARS = "~!@#^&|`?%";
+const PUNCTUATOR_CHARS = "(),;.[]";
+
+const isSign = (char: string | undefined): boolean =>
+  char === "+" || char === "-";
+
+const operatorLength = (code: string, start: number): number => {
+  let end = start;
+  while (end < code.length && OPERATOR_CHARS.includes(code[end]!)) end++;
+  const run = code.slice(start, end);
+  let length = run.length;
+  for (const commentStart of ["--", "/*"]) {
+    const index = run.indexOf(commentStart);
+    if (index > 0 && index < length) length = index;
+  }
+  let hasSpecialChar = false;
+  for (const c of run.slice(0, length - 1)) {
+    if (SPECIAL_OPERATOR_CHARS.includes(c)) {
+      hasSpecialChar = true;
+      break;
+    }
+  }
+  if (length > 1 && isSign(run[length - 1]) && !hasSpecialChar) {
+    do {
+      length--;
+    } while (length > 1 && isSign(run[length - 1]));
+  }
+  return length;
+};
+
+// PostgreSQL's lexer (scan.l) only treats these six characters as
+// whitespace. Anything else — NBSP, U+3000, U+FEFF, U+2028 … — is a
+// high-bit byte to PostgreSQL and therefore part of an identifier, so the
+// token stream must not silently drop it.
+export const isWhitespace = (char: string): boolean =>
+  /[ \t\n\r\f\v]/.test(char);
+
+// scan.l: ident_start = [A-Za-z\200-\377_], ident_cont adds [0-9$]. Every
+// non-ASCII code unit maps to UTF-8 bytes in \200-\377.
+const isNonAscii = (char: string): boolean => char.charCodeAt(0) > 0x7f;
+const isIdentStart = (char: string): boolean =>
+  /[a-zA-Z_]/.test(char) || isNonAscii(char);
+const isIdentCont = (char: string): boolean =>
+  /[a-zA-Z0-9_$]/.test(char) || isNonAscii(char);
+// Dollar-quote tags follow ident rules but cannot contain `$`.
+const isDollarTagCont = (char: string): boolean =>
+  /[a-zA-Z0-9_]/.test(char) || isNonAscii(char);
+
+// Returns the offset just past the closing quote (or `code.length` when the
+// literal is unterminated). A doubled quote is always an escaped quote.
+// Backslash escapes exist only in E'...' strings: with
+// standard_conforming_strings (the default since PostgreSQL 9.1) a
+// backslash inside '...' or "..." is an ordinary character.
+const scanQuoted = (
+  code: string,
+  openQuoteIndex: number,
+  backslashEscapes: boolean,
+): number => {
+  const quote = code[openQuoteIndex];
+  let i = openQuoteIndex + 1;
+  while (i < code.length) {
+    const char = code[i];
+    if (char === quote) {
+      if (code[i + 1] === quote) {
+        i += 2;
+        continue;
+      }
+      return i + 1;
+    }
+    i += backslashEscapes && char === "\\" ? 2 : 1;
+  }
+  return code.length;
+};
+
+// Single-letter prefixes that turn the following '...' into one lexeme:
+// E'' (escape string) and B'' / X'' (bit strings). N'' is deliberately absent:
+// scan.l emits `N` as its own NCHAR keyword token and anchors the A_Const on
+// the quote, so merging it would leave the constant without a token.
+const STRING_PREFIX_PATTERN = /^[eEbBxX]$/;
 
 const isKeyword = (value: string): boolean =>
   SQL_KEYWORDS_SET.has(value.toUpperCase());
@@ -281,17 +376,17 @@ export const tokenizeSQL = (
     const char = code[i];
     if (!char) break;
 
-    // skip whitespace
-    if (/\s/.test(char)) {
+    if (isWhitespace(char)) {
       i++;
       continue;
     }
 
     // comment
     if (char === "-" && i + 1 < length && code[i + 1] === "-") {
-      // line comment
+      // scan.l: comment = "--"{non_newline}*, non_newline = [^\n\r]. The
+      // terminating CR / LF belongs to the line break, not the comment.
       const start = i;
-      while (i < length && code[i] !== "\n") {
+      while (i < length && code[i] !== "\n" && code[i] !== "\r") {
         i++;
       }
       const rawValue = code.slice(start, i);
@@ -310,53 +405,43 @@ export const tokenizeSQL = (
     }
 
     if (char === "/" && i + 1 < length && code[i + 1] === "*") {
-      // block comment
+      // Unlike C / JavaScript, PostgreSQL block comments nest:
+      // `/* a /* b */ c */` is a single comment.
       const start = i;
+      let depth = 1;
       i += 2;
-      while (i < length - 1 && !(code[i] === "*" && code[i + 1] === "/")) {
-        i++;
+      while (i < length && depth > 0) {
+        if (code[i] === "/" && code[i + 1] === "*") {
+          depth++;
+          i += 2;
+        } else if (code[i] === "*" && code[i + 1] === "/") {
+          depth--;
+          i += 2;
+        } else {
+          i++;
+        }
       }
-      i += 2;
-      const rawValue = code.slice(start, i);
+      // An unterminated comment (a syntax error) runs to EOF and has no
+      // closing "*/" to strip.
+      const valueEnd = depth === 0 ? i - 2 : i;
       const { range, loc } = calculateLocationFromOffset(
         lineMap,
         start,
-        rawValue.length,
+        i - start,
       );
       comments.push({
         type: "Block",
-        value: rawValue.slice(2, -2), // strip leading "/*" and trailing "*/"
+        value: code.slice(start + 2, valueEnd),
         range,
         loc,
       });
       continue;
     }
 
-    // string literal
+    // string literal, or quoted identifier (also emitted as "String")
     if (char === "'" || char === '"') {
-      const quote = char;
       const start = i;
-      i++;
-
-      while (i < length) {
-        const currentChar = code[i];
-        if (!currentChar) break;
-
-        if (currentChar === quote) {
-          if (i + 1 < length && code[i + 1] === quote) {
-            // escaped quote
-            i += 2;
-          } else {
-            i++;
-            break;
-          }
-        } else if (currentChar === "\\") {
-          // backslash escape
-          i += 2;
-        } else {
-          i++;
-        }
-      }
+      i = scanQuoted(code, i, false);
 
       const value = code.slice(start, i);
       const { range, loc } = calculateLocationFromOffset(
@@ -379,9 +464,9 @@ export const tokenizeSQL = (
     // parameters and are intentionally not handled here.
     if (char === "$") {
       let j = i + 1;
-      if (j < length && code[j] && /[a-zA-Z_]/.test(code[j]!)) {
+      if (j < length && isIdentStart(code[j]!)) {
         j++;
-        while (j < length && code[j] && /[a-zA-Z0-9_]/.test(code[j]!)) {
+        while (j < length && isDollarTagCont(code[j]!)) {
           j++;
         }
       }
@@ -414,85 +499,96 @@ export const tokenizeSQL = (
       // branch so `$1` etc. are skipped exactly as before.
     }
 
-    // punctuation or operator
-    if (/[(),;.=<>!+\-*/%|&:]/.test(char)) {
+    // numeric literal
+    if (/\d/.test(char) || (char === "." && /\d/.test(code[i + 1] ?? ""))) {
       const start = i;
-
-      // check multiple characters operator
-      if (i < length - 1) {
-        const twoChar = code.slice(i, i + 2);
-        if (["<=", ">=", "<>", "!=", "::", "||", "&&"].includes(twoChar)) {
-          i += 2;
-          const { range, loc } = calculateLocationFromOffset(lineMap, start, 2);
-          tokens.push({
-            type: "Operator",
-            value: twoChar,
-            range,
-            loc,
-          });
-          continue;
-        }
+      NUMBER_PATTERN.lastIndex = i;
+      NUMBER_PATTERN.test(code);
+      i = NUMBER_PATTERN.lastIndex;
+      let type = "Numeric";
+      if (i < length && isNumericJunk(code[i]!)) {
+        while (i < length && isNumericJunk(code[i]!)) i++;
+        type = "Identifier";
       }
-
-      i++;
-      const value = char;
-      const { range, loc } = calculateLocationFromOffset(lineMap, start, 1);
-      const type = /[(),;.]/.test(char) ? "Punctuator" : "Operator";
-      tokens.push({
-        type,
-        value,
-        range,
-        loc,
-      });
-      continue;
-    }
-
-    // identifier, keyword, numeric
-    if (/[a-zA-Z_0-9]/.test(char)) {
-      const start = i;
-      let type: string;
-
-      if (/\d/.test(char)) {
-        // numeric literal — integer / decimal / scientific
-        while (i < length && code[i] && /[\d.]/.test(code[i]!)) {
-          i++;
-        }
-        if (i < length && code[i] && /[eE]/.test(code[i]!)) {
-          i++;
-          if (i < length && code[i] && /[+-]/.test(code[i]!)) {
-            i++;
-          }
-          while (i < length && code[i] && /\d/.test(code[i]!)) {
-            i++;
-          }
-        }
-        // The scanner is permissive (e.g. it will swallow `1..2` or `1e`),
-        // so validate the final lexeme before committing to "Numeric".
-        // Malformed numerics fall through to "Identifier" to preserve the
-        // pre-refactor classification.
-        type = NUMERIC_PATTERN.test(code.slice(start, i))
-          ? "Numeric"
-          : "Identifier";
-      } else {
-        // identifier or keyword
-        while (i < length && code[i] && /[a-zA-Z0-9_]/.test(code[i]!)) {
-          i++;
-        }
-        type = isKeyword(code.slice(start, i)) ? "Keyword" : "Identifier";
-      }
-
       const value = code.slice(start, i);
       const { range, loc } = calculateLocationFromOffset(
         lineMap,
         start,
         value.length,
       );
-      tokens.push({
-        type,
-        value,
-        range,
-        loc,
-      });
+      tokens.push({ type, value, range, loc });
+      continue;
+    }
+
+    // `::` (typecast) and `:=` are lexed specially; a lone `:` (array
+    // slices) has always been reported as an Operator.
+    if (char === ":") {
+      const value =
+        code[i + 1] === ":" || code[i + 1] === "=" ? code.slice(i, i + 2) : ":";
+      const { range, loc } = calculateLocationFromOffset(
+        lineMap,
+        i,
+        value.length,
+      );
+      tokens.push({ type: "Operator", value, range, loc });
+      i += value.length;
+      continue;
+    }
+
+    if (PUNCTUATOR_CHARS.includes(char)) {
+      const { range, loc } = calculateLocationFromOffset(lineMap, i, 1);
+      tokens.push({ type: "Punctuator", value: char, range, loc });
+      i++;
+      continue;
+    }
+
+    if (OPERATOR_CHARS.includes(char)) {
+      const start = i;
+      i += operatorLength(code, start);
+      const value = code.slice(start, i);
+      const { range, loc } = calculateLocationFromOffset(
+        lineMap,
+        start,
+        value.length,
+      );
+      tokens.push({ type: "Operator", value, range, loc });
+      continue;
+    }
+
+    // identifier or keyword
+    if (isIdentStart(char)) {
+      const start = i;
+      while (i < length && isIdentCont(code[i]!)) {
+        i++;
+      }
+      const word = code.slice(start, i);
+      const isUnicodeEscapePrefix =
+        (word === "U" || word === "u") &&
+        code[i] === "&" &&
+        (code[i + 1] === "'" || code[i + 1] === '"');
+      if (
+        (STRING_PREFIX_PATTERN.test(word) && code[i] === "'") ||
+        isUnicodeEscapePrefix
+      ) {
+        // The prefix and the quoted body are one lexeme, and libpg-query
+        // anchors the A_Const `location` on the prefix. Splitting them
+        // would give the constant node a range covering only "E" / "U".
+        const quoteIndex = isUnicodeEscapePrefix ? i + 1 : i;
+        i = scanQuoted(code, quoteIndex, word === "E" || word === "e");
+      }
+      const value = code.slice(start, i);
+      const type =
+        value.length > word.length
+          ? "String"
+          : isKeyword(word)
+            ? "Keyword"
+            : "Identifier";
+      const { range, loc } = calculateLocationFromOffset(
+        lineMap,
+        start,
+        value.length,
+      );
+      tokens.push({ type, value, range, loc });
       continue;
     }
 

@@ -96,6 +96,36 @@ CREATE FUNCTION g() RETURNS int AS $$ return 1; $$ LANGUAGE plpython3u;
     expect(out[0]?.fix).toEqual({ range: [38, 44], text: "RETURN" });
   });
 
+  it("reports positions against the BOM-stripped text ESLint fixes", () => {
+    const oneLine = `CREATE FUNCTION x() RETURNS int AS $$ return 1; $$ LANGUAGE plv8;`;
+    const processor = createPlProcessor({ languages: { plv8: ".js" } });
+
+    // ESLint passes the raw file (with BOM) to preprocess but applies fix
+    // ranges to the text after stripping the BOM, so the body must still
+    // start at offset 37 / column 37.
+    expect(processor.preprocess(`\uFEFF${oneLine}`, "bom.sql")).toEqual([
+      { text: " return 1; ", filename: "0.js" },
+    ]);
+    const out = processor.postprocess(
+      [
+        [
+          {
+            ruleId: "r",
+            line: 1,
+            column: 2,
+            fix: { range: [1, 7], text: "RETURN" },
+          },
+        ],
+      ],
+      "bom.sql",
+    );
+    expect(out[0]).toMatchObject({
+      line: 1,
+      column: 39,
+      fix: { range: [38, 44], text: "RETURN" },
+    });
+  });
+
   it("drops fixes for single-quoted bodies to avoid wrong positions", () => {
     const sqlSingle = `CREATE FUNCTION p() RETURNS void AS '
   RAISE NOTICE ''hi'';

@@ -20,10 +20,10 @@ export default {
         {
           type: "String",
           sval: "py_demo",
-          range: [0, 153],
+          range: [50, 153],
           loc: {
             start: {
-              line: 1,
+              line: 2,
               column: 0,
             },
             end: {
@@ -143,10 +143,10 @@ export default {
           },
         },
       ],
-      range: [0, 153],
+      range: [50, 153],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -178,11 +178,11 @@ export default {
         {
           type: "String",
           sval: "sq_demo",
-          range: [154, 312],
+          range: [212, 312],
           loc: {
             start: {
-              line: 4,
-              column: 27,
+              line: 7,
+              column: 0,
             },
             end: {
               line: 9,
@@ -301,11 +301,11 @@ export default {
           },
         },
       ],
-      range: [154, 312],
+      range: [212, 312],
       loc: {
         start: {
-          line: 4,
-          column: 27,
+          line: 7,
+          column: 0,
         },
         end: {
           line: 9,
@@ -336,11 +336,11 @@ export default {
         {
           type: "String",
           sval: "c_demo",
-          range: [313, 454],
+          range: [384, 454],
           loc: {
             start: {
-              line: 9,
-              column: 19,
+              line: 12,
+              column: 0,
             },
             end: {
               line: 12,
@@ -489,11 +489,11 @@ export default {
           },
         },
       ],
-      range: [313, 454],
+      range: [384, 454],
       loc: {
         start: {
-          line: 9,
-          column: 19,
+          line: 12,
+          column: 0,
         },
         end: {
           line: 12,
@@ -507,11 +507,11 @@ export default {
         {
           type: "String",
           sval: "rust_demo",
-          range: [455, 619],
+          range: [538, 619],
           loc: {
             start: {
-              line: 12,
-              column: 71,
+              line: 15,
+              column: 0,
             },
             end: {
               line: 17,
@@ -645,11 +645,11 @@ export default {
           },
         },
       ],
-      range: [455, 619],
+      range: [538, 619],
       loc: {
         start: {
-          line: 12,
-          column: 71,
+          line: 15,
+          column: 0,
         },
         end: {
           line: 17,
@@ -681,11 +681,11 @@ export default {
         {
           type: "String",
           sval: "proc_demo",
-          range: [620, 770],
+          range: [678, 770],
           loc: {
             start: {
-              line: 17,
-              column: 19,
+              line: 20,
+              column: 0,
             },
             end: {
               line: 22,
@@ -774,11 +774,11 @@ export default {
           },
         },
       ],
-      range: [620, 770],
+      range: [678, 770],
       loc: {
         start: {
-          line: 17,
-          column: 19,
+          line: 20,
+          column: 0,
         },
         end: {
           line: 22,

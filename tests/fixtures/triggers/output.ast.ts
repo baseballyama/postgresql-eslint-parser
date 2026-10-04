@@ -21,10 +21,10 @@ export default {
         {
           type: "String",
           sval: "update_modified_column",
-          range: [0, 165],
+          range: [17, 165],
           loc: {
             start: {
-              line: 1,
+              line: 2,
               column: 0,
             },
             end: {
@@ -144,10 +144,10 @@ export default {
           },
         },
       ],
-      range: [0, 165],
+      range: [17, 165],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -196,11 +196,11 @@ export default {
         {
           type: "String",
           sval: "update_modified_column",
-          range: [166, 293],
+          range: [168, 293],
           loc: {
             start: {
-              line: 8,
-              column: 20,
+              line: 10,
+              column: 0,
             },
             end: {
               line: 13,
@@ -212,11 +212,11 @@ export default {
       row: true,
       timing: 2,
       events: 16,
-      range: [166, 293],
+      range: [168, 293],
       loc: {
         start: {
-          line: 8,
-          column: 20,
+          line: 10,
+          column: 0,
         },
         end: {
           line: 13,
@@ -231,11 +231,11 @@ export default {
         {
           type: "String",
           sval: "audit_changes",
-          range: [294, 1116],
+          range: [313, 1116],
           loc: {
             start: {
-              line: 13,
-              column: 46,
+              line: 16,
+              column: 0,
             },
             end: {
               line: 34,
@@ -354,11 +354,11 @@ export default {
           },
         },
       ],
-      range: [294, 1116],
+      range: [313, 1116],
       loc: {
         start: {
-          line: 13,
-          column: 46,
+          line: 16,
+          column: 0,
         },
         end: {
           line: 34,
@@ -407,11 +407,11 @@ export default {
         {
           type: "String",
           sval: "audit_changes",
-          range: [1117, 1253],
+          range: [1119, 1253],
           loc: {
             start: {
-              line: 34,
-              column: 20,
+              line: 36,
+              column: 0,
             },
             end: {
               line: 39,
@@ -422,11 +422,11 @@ export default {
       ],
       row: true,
       events: 28,
-      range: [1117, 1253],
+      range: [1119, 1253],
       loc: {
         start: {
-          line: 34,
-          column: 20,
+          line: 36,
+          column: 0,
         },
         end: {
           line: 39,
@@ -441,11 +441,11 @@ export default {
         {
           type: "String",
           sval: "check_order_total",
-          range: [1254, 1649],
+          range: [1279, 1649],
           loc: {
             start: {
-              line: 39,
-              column: 37,
+              line: 42,
+              column: 0,
             },
             end: {
               line: 56,
@@ -564,11 +564,11 @@ export default {
           },
         },
       ],
-      range: [1254, 1649],
+      range: [1279, 1649],
       loc: {
         start: {
-          line: 39,
-          column: 37,
+          line: 42,
+          column: 0,
         },
         end: {
           line: 56,
@@ -617,11 +617,11 @@ export default {
         {
           type: "String",
           sval: "check_order_total",
-          range: [1650, 1828],
+          range: [1652, 1828],
           loc: {
             start: {
-              line: 56,
-              column: 20,
+              line: 58,
+              column: 0,
             },
             end: {
               line: 62,
@@ -694,11 +694,11 @@ export default {
           },
         },
       },
-      range: [1650, 1828],
+      range: [1652, 1828],
       loc: {
         start: {
-          line: 56,
-          column: 20,
+          line: 58,
+          column: 0,
         },
         end: {
           line: 62,
@@ -713,11 +713,11 @@ export default {
         {
           type: "String",
           sval: "user_order_summary_update",
-          range: [1829, 2212],
+          range: [1863, 2212],
           loc: {
             start: {
-              line: 62,
-              column: 41,
+              line: 65,
+              column: 0,
             },
             end: {
               line: 78,
@@ -836,11 +836,11 @@ export default {
           },
         },
       ],
-      range: [1829, 2212],
+      range: [1863, 2212],
       loc: {
         start: {
-          line: 62,
-          column: 41,
+          line: 65,
+          column: 0,
         },
         end: {
           line: 78,
@@ -889,11 +889,11 @@ export default {
         {
           type: "String",
           sval: "user_order_summary_update",
-          range: [2213, 2378],
+          range: [2215, 2378],
           loc: {
             start: {
-              line: 78,
-              column: 20,
+              line: 80,
+              column: 0,
             },
             end: {
               line: 83,
@@ -905,11 +905,11 @@ export default {
       row: true,
       timing: 64,
       events: 16,
-      range: [2213, 2378],
+      range: [2215, 2378],
       loc: {
         start: {
-          line: 78,
-          column: 20,
+          line: 80,
+          column: 0,
         },
         end: {
           line: 83,

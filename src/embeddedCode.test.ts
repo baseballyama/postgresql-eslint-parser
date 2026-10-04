@@ -43,6 +43,15 @@ CREATE FUNCTION third() RETURNS text AS $$ return "z"; $$ LANGUAGE plv8;
     expect(extractEmbeddedCode(ast)).toEqual([]);
   });
 
+  it("finds E'' escape-string bodies right after the prefix", () => {
+    const sql = `CREATE FUNCTION e() RETURNS int AS E'return 1;' LANGUAGE plv8;`;
+    const { ast } = parseForESLint(sql);
+    const [body] = extractEmbeddedCode(ast);
+    expect(body?.quoteStyle).toBe("single");
+    expect(body?.source).toBe("return 1;");
+    expect(sql.slice(body!.range[0], body!.range[1])).toBe("return 1;");
+  });
+
   it("handles dollar-quote tags", () => {
     const sql = `CREATE FUNCTION t() RETURNS int AS $body$ return 1; $body$ LANGUAGE plv8;`;
     const { ast } = parseForESLint(sql);

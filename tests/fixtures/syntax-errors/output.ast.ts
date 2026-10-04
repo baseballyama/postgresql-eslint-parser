@@ -29,6 +29,11 @@ export default {
       },
       error: 'syntax error at or near "AND"',
       raw: "-- This SQL has intentional syntax errors for testing\nSELECT * FROM users WHERE id = AND name = 'test'; ",
+      errorPosition: {
+        index: 85,
+        line: 2,
+        column: 31,
+      },
     },
   ],
   tokens: [

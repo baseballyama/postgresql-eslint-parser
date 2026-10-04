@@ -21,10 +21,10 @@ export default {
         {
           type: "String",
           sval: "plv8_test",
-          range: [0, 156],
+          range: [34, 156],
           loc: {
             start: {
-              line: 1,
+              line: 2,
               column: 0,
             },
             end: {
@@ -206,10 +206,10 @@ export default {
           },
         },
       ],
-      range: [0, 156],
+      range: [34, 156],
       loc: {
         start: {
-          line: 1,
+          line: 2,
           column: 0,
         },
         end: {
@@ -242,11 +242,11 @@ export default {
         {
           type: "String",
           sval: "json_manipulate",
-          range: [157, 396],
+          range: [159, 396],
           loc: {
             start: {
-              line: 4,
-              column: 34,
+              line: 6,
+              column: 0,
             },
             end: {
               line: 12,
@@ -443,11 +443,11 @@ export default {
           },
         },
       ],
-      range: [157, 396],
+      range: [159, 396],
       loc: {
         start: {
-          line: 4,
-          column: 34,
+          line: 6,
+          column: 0,
         },
         end: {
           line: 12,
@@ -480,11 +480,11 @@ export default {
         {
           type: "String",
           sval: "calculate_distance",
-          range: [397, 1048],
+          range: [399, 1048],
           loc: {
             start: {
-              line: 12,
-              column: 17,
+              line: 14,
+              column: 0,
             },
             end: {
               line: 32,
@@ -926,11 +926,11 @@ export default {
           },
         },
       ],
-      range: [397, 1048],
+      range: [399, 1048],
       loc: {
         start: {
-          line: 12,
-          column: 17,
+          line: 14,
+          column: 0,
         },
         end: {
           line: 32,
@@ -963,11 +963,11 @@ export default {
         {
           type: "String",
           sval: "get_user_stats",
-          range: [1049, 1582],
+          range: [1080, 1582],
           loc: {
             start: {
-              line: 32,
-              column: 34,
+              line: 35,
+              column: 0,
             },
             end: {
               line: 49,
@@ -1101,11 +1101,11 @@ export default {
           },
         },
       ],
-      range: [1049, 1582],
+      range: [1080, 1582],
       loc: {
         start: {
-          line: 32,
-          column: 34,
+          line: 35,
+          column: 0,
         },
         end: {
           line: 49,
@@ -1138,11 +1138,11 @@ export default {
         {
           type: "String",
           sval: "audit_trigger",
-          range: [1583, 2013],
+          range: [1610, 2013],
           loc: {
             start: {
-              line: 49,
-              column: 17,
+              line: 52,
+              column: 0,
             },
             end: {
               line: 68,
@@ -1261,11 +1261,11 @@ export default {
           },
         },
       ],
-      range: [1583, 2013],
+      range: [1610, 2013],
       loc: {
         start: {
-          line: 49,
-          column: 17,
+          line: 52,
+          column: 0,
         },
         end: {
           line: 68,

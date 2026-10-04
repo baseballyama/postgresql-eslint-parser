@@ -1,5 +1,6 @@
 import type { Program, SourceLocation } from "./ast.ts";
-import type { ESLintToken, RawPostgreSQLAst } from "./types.ts";
+import { isWhitespace } from "./tokenize.ts";
+import type { ESLintComment, ESLintToken, RawPostgreSQLAst } from "./types.ts";
 import { createByteToCharOffset, type LineMap } from "./utils.ts";
 
 const specialKeys = ["parent", "type", "range", "loc"];
@@ -17,14 +18,20 @@ const isArray = (value: unknown): value is unknown[] => {
   return Array.isArray(value);
 };
 
+// A positional parameter (`$1`) has no token, so a node anchored on one would
+// otherwise be zero-width. Cover the parameter text instead.
+const POSITIONAL_PARAMETER = /\$\d+/y;
+
 const createLocationFromPosition = (
   position: number,
   lineMap: LineMap,
 ): Location => {
-  const { line, column } = lineMap.getPosition(position);
+  POSITIONAL_PARAMETER.lastIndex = position;
+  const match = POSITIONAL_PARAMETER.exec(lineMap.code);
+  const endPosition = position + (match?.[0].length ?? 0);
   return {
-    start: { position, line, column },
-    end: { position, line, column },
+    start: { position, ...lineMap.getPosition(position) },
+    end: { position: endPosition, ...lineMap.getPosition(endPosition) },
   };
 };
 
@@ -195,12 +202,12 @@ const buildAddLocation = (
         });
         updateCurrentMinMax(locationInfo, locationInfo);
       } else {
-        const { line, column } = lineMap.getPosition(location);
-        setNodeLocation(node, [location, location], {
-          start: { line, column },
-          end: { line, column },
-        });
         const locationObj = createLocationFromPosition(location, lineMap);
+        const { start, end } = locationObj;
+        setNodeLocation(node, [start.position, end.position], {
+          start: { line: start.line, column: start.column },
+          end: { line: end.line, column: end.column },
+        });
         updateCurrentMinMax(locationObj, locationObj);
       }
     }
@@ -512,11 +519,46 @@ const resolveAliasRanges = (
   }
 };
 
+interface Trivia {
+  code: string;
+  commentByStart: Map<number, ESLintComment>;
+  commentByEnd: Map<number, ESLintComment>;
+}
+
+// Shrinks [start, end) past leading / trailing whitespace and comments.
+const trimTrivia = (
+  start: number,
+  end: number,
+  { code, commentByStart, commentByEnd }: Trivia,
+): [number, number] => {
+  let s = start;
+  let e = end;
+  for (;;) {
+    while (s < e && isWhitespace(code[s]!)) s++;
+    const comment = commentByStart.get(s);
+    if (comment === undefined || s >= e) break;
+    s = comment.range[1];
+  }
+  for (;;) {
+    while (e > s && isWhitespace(code[e - 1]!)) e--;
+    const comment = commentByEnd.get(e);
+    if (comment === undefined || e <= s) break;
+    e = comment.range[0];
+  }
+  return [s, e];
+};
+
 export const manipulate = (
   pgAst: RawPostgreSQLAst,
   tokens: ESLintToken[],
+  comments: ESLintComment[],
   lineMap: LineMap,
 ): Program["body"] => {
+  const trivia: Trivia = {
+    code: lineMap.code,
+    commentByStart: new Map(comments.map((c) => [c.range[0], c])),
+    commentByEnd: new Map(comments.map((c) => [c.range[1], c])),
+  };
   const startEndMap = buildStartEndMap(tokens);
   const result: unknown[] = [];
   const byteToChar = createByteToCharOffset(lineMap.code);
@@ -541,12 +583,21 @@ export const manipulate = (
     // and every downstream rule reports against `line 1, column 0`.
     const stmtLocation =
       typeof stmt.stmt_location === "number" ? stmt.stmt_location : 0;
-    if (stmt.stmt_len > 0) {
-      const startChar = byteToChar(stmtLocation);
-      const endChar = byteToChar(stmtLocation + stmt.stmt_len);
-      const startPos = lineMap.getPosition(startChar);
-      const endPos = lineMap.getPosition(endChar);
-      stmtNode["range"] = [startChar, endChar];
+    // `stmt_len` is likewise omitted when it is 0, which libpg-query uses
+    // for "runs to the end of the input" (a last statement without `;`).
+    const stmtLen = stmt.stmt_len ?? 0;
+    const startChar = byteToChar(stmtLocation);
+    const endChar =
+      stmtLen > 0 ? byteToChar(stmtLocation + stmtLen) : lineMap.code.length;
+    // `stmt_location` points just past the previous `;` and `stmt_len`
+    // runs up to the next one, so the span also holds the whitespace and
+    // comments around the statement. Trim them so reports (and
+    // `eslint-disable-next-line` directives) land where the statement is.
+    const [start, end] = trimTrivia(startChar, endChar, trivia);
+    if (start < end) {
+      const startPos = lineMap.getPosition(start);
+      const endPos = lineMap.getPosition(end);
+      stmtNode["range"] = [start, end];
       stmtNode["loc"] = {
         start: { line: startPos.line, column: startPos.column },
         end: { line: endPos.line, column: endPos.column },
