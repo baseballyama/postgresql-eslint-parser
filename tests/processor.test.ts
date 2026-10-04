@@ -2,7 +2,11 @@ import { type ESLint, Linter, type Rule } from "eslint";
 import { describe, expect, it } from "vitest";
 
 import { parseForESLint } from "../src/parse.ts";
-import { createPlProcessor, type ProcessorMessage } from "../src/processor.ts";
+import {
+  createPlProcessor,
+  type PlProcessor,
+  type ProcessorMessage,
+} from "../src/processor.ts";
 
 // The type annotations below are part of the test: `pnpm type:check` fails if
 // the processor cannot be used where ESLint expects one, without a cast or a
@@ -97,5 +101,32 @@ describe("createPlProcessor as an ESLint processor", () => {
     expect(output).toEqual([
       { line: 1, column: 46, endLine: 1, endColumn: 47, custom: "kept" },
     ]);
+  });
+});
+
+// The published `PlProcessor` and `ProcessorMessage` types must keep
+// accepting code written against them.
+describe("PlProcessor as published", () => {
+  it("accepts a hand-written ProcessorMessage postprocess", () => {
+    const postprocess = (lists: ProcessorMessage[][]): ProcessorMessage[] =>
+      lists.flat();
+    const custom: PlProcessor = {
+      meta: { name: "custom", version: "1" },
+      supportsAutofix: false,
+      preprocess: (text, filename) => [{ text, filename }],
+      postprocess,
+    };
+    expect(custom.postprocess([[{ line: 1 }]], "a.sql")).toEqual([{ line: 1 }]);
+  });
+
+  it("keeps postprocess's parameter type", () => {
+    const lists: Parameters<PlProcessor["postprocess"]>[0] = [
+      [{ line: 1, custom: "kept" }],
+    ];
+    const processor: PlProcessor = createPlProcessor({
+      languages: { plv8: ".js" },
+    });
+    // No preprocess ran for this file, so there is nothing to translate.
+    expect(processor.postprocess(lists, "unknown.sql")).toEqual([]);
   });
 });
