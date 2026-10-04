@@ -69,7 +69,7 @@ export const createByteToCharOffset = (code: string): ByteToCharOffset => {
 // computes `SourceCode#lines` and `getLocFromIndex` with this pattern, so any
 // other definition makes node `loc` disagree with what ESLint (and inline
 // `eslint-disable-line` directives) consider the same line.
-const LINE_BREAK_PATTERN = /\r\n|[\r\n  ]/gu;
+const LINE_BREAK_PATTERN = /\r\n|[\r\n\u2028\u2029]/gu;
 
 export const createLineMap = (code: string): LineMap => {
   const lineStartOffsets = [0];
