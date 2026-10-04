@@ -4,5 +4,3 @@ packages:
 allowBuilds:
   "@launchql/protobufjs": true
   esbuild: true
-onlyBuiltDependencies:
-  - libpg-query
