@@ -19,18 +19,23 @@ jobs:
           node-version: 24
       - name: Regenerate and dedupe the lockfile
         run: |
-          # Resolve only versions older than 72 hours (npm:unpublishSafe), so
-          # eslint stays on 10.11.0 until 10.12.0 leaves the unpublish window.
-          # @types/node 26.6.4 is already locked on main (#265), so it is
-          # excluded from the check rather than downgraded here.
-          AGE="--config.minimum-release-age=4320 --config.minimum-release-age-exclude=@types/node"
-          pnpm install --no-frozen-lockfile $AGE
-          pnpm dedupe $AGE
+          # Resolve eslint to 10.11.0 by pinning it for one install, then put
+          # back the committed range ^10.11.0. pnpm keeps a locked version that
+          # still satisfies the range, so the lockfile stays on 10.11.0.
+          cp package.json "$RUNNER_TEMP/package.json"
+          node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));p.devDependencies.eslint="10.11.0";require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'
+          pnpm install --no-frozen-lockfile
+          cp "$RUNNER_TEMP/package.json" package.json
+          git diff --exit-code -- package.json
+          pnpm install --no-frozen-lockfile
+          pnpm dedupe
           pnpm dedupe --check
+          pnpm install --frozen-lockfile
           git diff --stat -- pnpm-lock.yaml
           grep -A2 -E "^      '(@libpg-query/parser|eslint)':" pnpm-lock.yaml
           grep -E "^  eslint@" pnpm-lock.yaml
           grep -qE "^  eslint@10\.11\.0:" pnpm-lock.yaml
+          ! grep -qE "^  eslint@10\.12" pnpm-lock.yaml
       - uses: actions/upload-artifact@v7
         with:
           name: pr264-lockfile
