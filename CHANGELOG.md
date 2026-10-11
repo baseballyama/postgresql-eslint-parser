@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.6.1
+
+### Patch Changes
+
+- [#278](https://github.com/baseballyama/postgresql-eslint-parser/pull/278) [`53d4c2b`](https://github.com/baseballyama/postgresql-eslint-parser/commit/53d4c2b871db3e35d5853b69c0ccdc3618a66918) Thanks [@baseballyama](https://github.com/baseballyama)! - chore: bump `@libpg-query/parser` to `^17.6.10`
+
 ## 0.6.0
 
 ### Minor Changes
