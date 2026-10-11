@@ -67,7 +67,7 @@
     "oxlint": "^1.86.0",
     "prettier": "^3.9.9",
     "publint": "^0.3.25",
-    "rolldown": "1.2.12",
+    "rolldown": "1.2.13",
     "typescript": "^7.0.2",
     "vite": "^8.3.2",
     "vitest": "^5.0.3"
