@@ -1,5 +1,11 @@
 # postgresql-eslint-parser
 
+## 0.6.2
+
+### Patch Changes
+
+- [#294](https://github.com/baseballyama/postgresql-eslint-parser/pull/294) [`c33d9e7`](https://github.com/baseballyama/postgresql-eslint-parser/commit/c33d9e773926e655837406f0f503fecee0468991) Thanks [@baseballyama](https://github.com/baseballyama)! - chore: update development dependencies (the published bundle is now built with `rolldown` 1.2.15)
+
 ## 0.6.1
 
 ### Patch Changes
