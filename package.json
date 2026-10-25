@@ -30,7 +30,7 @@
   "publishConfig": {
     "provenance": true
   },
-  "packageManager": "pnpm@12.14.0",
+  "packageManager": "pnpm@12.15.0",
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=10.14.0"
@@ -61,16 +61,16 @@
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
     "@types/node": "^26.6.5",
-    "@vitest/coverage-v8": "^5.0.3",
-    "eslint": "^10.12.0",
-    "knip": "^6.41.0",
-    "oxlint": "^1.87.0",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^10.13.0",
+    "knip": "^6.42.1",
+    "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
     "rolldown": "1.2.15",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4",
-    "vitest": "^5.0.3"
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@libpg-query/parser": "^17.6.10"
