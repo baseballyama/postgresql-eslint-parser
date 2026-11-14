@@ -73,6 +73,6 @@
     "vitest": "^5.0.5"
   },
   "dependencies": {
-    "@libpg-query/parser": "^17.6.10"
+    "@libpg-query/parser": "^18.0.0"
   }
 }
