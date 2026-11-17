@@ -29,7 +29,7 @@
     "@codemirror/state": "^6.7.6",
     "@codemirror/view": "^6.43.15",
     "@lezer/highlight": "^1.2.5",
-    "@libpg-query/parser": "^17.6.10",
+    "@libpg-query/parser": "^18.0.0",
     "shiki": "^4.5.0"
   }
 }
