@@ -66,3 +66,28 @@ export const assertLoaderExports = (letters: Record<string, string>): void => {
     );
   }
 };
+
+const INVOKE_PREFIX = "invoke_";
+
+// Emscripten emits one `invoke_<signature>` import per indirect-call
+// signature that may longjmp, and the set changes between builds: 17.x
+// imports `invoke_iiiiii`, 18.0 drops it and adds `invoke_viiiii`. Binding
+// whatever the shim declares keeps the loader working across rebuilds, while
+// an import that is neither a trampoline nor a known stub fails at load time.
+export const bindImports = <F>(
+  letters: Record<string, string>,
+  stubs: Record<string, F>,
+  makeInvoke: (signature: string) => F,
+): Record<string, F> => {
+  const out: Record<string, F> = {};
+  for (const [symbol, letter] of Object.entries(letters)) {
+    const fn = symbol.startsWith(INVOKE_PREFIX)
+      ? makeInvoke(symbol.slice(INVOKE_PREFIX.length))
+      : stubs[symbol];
+    if (fn === undefined) {
+      throw new Error(`Unsupported libpg-query import symbol: ${symbol}`);
+    }
+    out[letter] = fn;
+  }
+  return out;
+};

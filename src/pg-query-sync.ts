@@ -14,6 +14,7 @@ import { dirname, join } from "node:path";
 
 import {
   assertLoaderExports,
+  bindImports,
   parseExportLetters,
   parseImportLetters,
 } from "./emscripten-shim.ts";
@@ -36,14 +37,6 @@ const shimSource = readFileSync(shimPath, "utf8");
 const importLetterBySymbol = parseImportLetters(shimSource);
 const exportLetterBySymbol = parseExportLetters(shimSource);
 assertLoaderExports(exportLetterBySymbol);
-
-function importLetter(symbol: string): string {
-  const letter = importLetterBySymbol[symbol];
-  if (!letter) {
-    throw new Error(`Unknown libpg-query import symbol: ${symbol}`);
-  }
-  return letter;
-}
 
 function exportLetter(symbol: string): string {
   const letter = exportLetterBySymbol[symbol];
@@ -139,143 +132,32 @@ function stringToUTF8(str: string, outPtr: number, maxBytes: number): void {
 }
 
 // ---------------------------------------------------------------------------
-// Emscripten invoke_* trampolines (setjmp / longjmp support)
+// Emscripten invoke_<signature> trampolines (setjmp / longjmp support)
 //
 // Pattern: save the stack, call the indirect function via the WASM table.
 // If the callee does longjmp (throws Infinity), catch it, restore the
 // stack and signal via _setThrew.  All other exceptions propagate.
 // ---------------------------------------------------------------------------
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function invoke_i(index: number): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)();
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type WasmFn = (...args: any[]) => any;
+
+// The first signature letter is the return type; `j` (i64) returns a BigInt.
+function makeInvoke(signature: string): WasmFn {
+  const longjmpResult = signature.startsWith("j") ? 0n : undefined;
+  return (index: number, ...args: unknown[]) => {
+    const sp = stackSave();
+    try {
+      return getTableEntry(index)(...args);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      stackRestore(sp);
+      if (e !== e + 0) throw e;
+      setThrew(1, 0);
+      return longjmpResult;
+    }
+  };
 }
-function invoke_ii(index: number, a1: any): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_iii(index: number, a1: any, a2: any): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1, a2);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_iiii(index: number, a1: any, a2: any, a3: any): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1, a2, a3);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_iiiii(index: number, a1: any, a2: any, a3: any, a4: any): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1, a2, a3, a4);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_iiiiii(
-  index: number,
-  a1: any,
-  a2: any,
-  a3: any,
-  a4: any,
-  a5: any,
-): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1, a2, a3, a4, a5);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_v(index: number): void {
-  const sp = stackSave();
-  try {
-    getTableEntry(index)();
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_vi(index: number, a1: any): void {
-  const sp = stackSave();
-  try {
-    getTableEntry(index)(a1);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_vii(index: number, a1: any, a2: any): void {
-  const sp = stackSave();
-  try {
-    getTableEntry(index)(a1, a2);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_viii(index: number, a1: any, a2: any, a3: any): void {
-  const sp = stackSave();
-  try {
-    getTableEntry(index)(a1, a2, a3);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_viiii(index: number, a1: any, a2: any, a3: any, a4: any): void {
-  const sp = stackSave();
-  try {
-    getTableEntry(index)(a1, a2, a3, a4);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-  }
-}
-function invoke_ji(index: number, a1: any): any {
-  const sp = stackSave();
-  try {
-    return getTableEntry(index)(a1);
-  } catch (e: any) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    setThrew(1, 0);
-    return 0n;
-  }
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // ---------------------------------------------------------------------------
 // Minimal Emscripten system-call stubs
@@ -375,35 +257,18 @@ function fdWrite(
 // are resolved from the shim so a rebuild of `@libpg-query/parser` that
 // reshuffles them does not silently corrupt memory.
 // ---------------------------------------------------------------------------
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type WasmFn = (...args: any[]) => any;
-const envImports: Record<string, WasmFn> = {};
-const importBindings: Array<[string, WasmFn]> = [
-  ["invoke_i", invoke_i],
-  ["invoke_ii", invoke_ii],
-  ["invoke_iii", invoke_iii],
-  ["invoke_iiii", invoke_iiii],
-  ["invoke_iiiii", invoke_iiiii],
-  ["invoke_iiiiii", invoke_iiiiii],
-  ["invoke_v", invoke_v],
-  ["invoke_vi", invoke_vi],
-  ["invoke_vii", invoke_vii],
-  ["invoke_viii", invoke_viii],
-  ["invoke_viiii", invoke_viiii],
-  ["invoke_ji", invoke_ji],
-  ["___assert_fail", assertFail],
-  ["__abort_js", abortJs],
-  ["__emscripten_throw_longjmp", emscriptenThrowLongjmp],
-  ["_emscripten_resize_heap", emscriptenResizeHeap],
-  ["_exit", exitFn],
-  ["_fd_close", fdClose],
-  ["_fd_read", fdRead],
-  ["_fd_seek", fdSeek],
-  ["_fd_write", fdWrite],
-];
-for (const [symbol, fn] of importBindings) {
-  envImports[importLetter(symbol)] = fn;
-}
+const stubs: Record<string, WasmFn> = {
+  ___assert_fail: assertFail,
+  __abort_js: abortJs,
+  __emscripten_throw_longjmp: emscriptenThrowLongjmp,
+  _emscripten_resize_heap: emscriptenResizeHeap,
+  _exit: exitFn,
+  _fd_close: fdClose,
+  _fd_read: fdRead,
+  _fd_seek: fdSeek,
+  _fd_write: fdWrite,
+};
+const envImports = bindImports(importLetterBySymbol, stubs, makeInvoke);
 const wasmImports = { a: envImports };
 
 // ---------------------------------------------------------------------------
