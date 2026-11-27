@@ -432,17 +432,32 @@ describe("top-level statement ranges", () => {
   });
 });
 
-// Positional parameters have no token type yet (an open design question):
-// the tokenizer skips the `$` and lexes the digits as a Numeric. Nodes
-// anchored on a parameter still cover its text, like nodes anchored on a
-// token do. Update the token expectations when `$n` gets a token.
+// A positional parameter is one `Parameter` token covering `$n`, the same
+// range as its `ParamRef`, so a rule can find the token at the node.
 describe("positional parameters", () => {
-  it("emits no token for the `$`", () => {
+  it("emits `$n` as one Parameter token", () => {
     expect(tokensOf("SELECT $1 + 1")).toEqual([
       ["Keyword", "SELECT", 0, 6],
-      ["Numeric", "1", 8, 9],
+      ["Parameter", "$1", 7, 9],
       ["Operator", "+", 10, 11],
       ["Numeric", "1", 12, 13],
+    ]);
+  });
+
+  it("ends the parameter at its last digit, like libpg-query", () => {
+    // libpg-query reads `$12a` as `$12` aliased `a`.
+    const code = "SELECT $12a, $1_0";
+    expect(tokensOf(code)).toEqual([
+      ["Keyword", "SELECT", 0, 6],
+      ["Parameter", "$12", 7, 10],
+      ["Identifier", "a", 10, 11],
+      ["Punctuator", ",", 11, 12],
+      ["Parameter", "$1", 13, 15],
+      ["Identifier", "_0", 15, 17],
+    ]);
+    expect(locatedOf(code, "ParamRef")).toEqual([
+      { range: [7, 10], loc: { start: at(1, 7), end: at(1, 10) } },
+      { range: [13, 15], loc: { start: at(1, 13), end: at(1, 15) } },
     ]);
   });
 

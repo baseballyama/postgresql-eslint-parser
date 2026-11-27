@@ -460,8 +460,7 @@ export const tokenizeSQL = (
 
     // dollar-quoted string literal: $$...$$ or $tag$...$tag$
     // The tag, if present, follows unquoted-identifier rules: it must
-    // start with a letter or underscore. `$1`, `$2`, ... are positional
-    // parameters and are intentionally not handled here.
+    // start with a letter or underscore.
     if (char === "$") {
       let j = i + 1;
       if (j < length && isIdentStart(code[j]!)) {
@@ -495,8 +494,22 @@ export const tokenizeSQL = (
         });
         continue;
       }
-      // Not a dollar-quote opening — fall through to the unsupported-char
-      // branch so `$1` etc. are skipped exactly as before.
+      // A positional parameter: `$` and its digits, the range libpg-query
+      // gives `ParamRef`. What follows is a token of its own, so `$1a` is
+      // `$1` aliased `a`.
+      if (/\d/.test(code[i + 1] ?? "")) {
+        const start = i;
+        i++;
+        while (i < length && /\d/.test(code[i]!)) i++;
+        const value = code.slice(start, i);
+        const { range, loc } = calculateLocationFromOffset(
+          lineMap,
+          start,
+          value.length,
+        );
+        tokens.push({ type: "Parameter", value, range, loc });
+        continue;
+      }
     }
 
     // numeric literal
