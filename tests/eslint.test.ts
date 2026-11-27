@@ -69,6 +69,8 @@ describe("inline directives", () => {
 });
 
 describe("nodes anchored on a positional parameter", () => {
+  const code = "SELECT $1 + 1;\nSELECT a FROM t WHERE id = $2;";
+
   it("report at the parameter and expose its text", () => {
     const reportParams: Rule.RuleModule = {
       create(context) {
@@ -79,10 +81,30 @@ describe("nodes anchored on a positional parameter", () => {
         };
       },
     };
-    const code = "SELECT $1 + 1;\nSELECT a FROM t WHERE id = $2;";
     expect(summarize(lintSql(code, { params: reportParams }))).toEqual([
       [1, 8, 1, 10, "$1"],
       [2, 28, 2, 30, "$2"],
+    ]);
+  });
+
+  it("start at the parameter's token", () => {
+    const reportTokenAtStart: Rule.RuleModule = {
+      create(context) {
+        return {
+          ParamRef(node: Rule.Node) {
+            const token = context.sourceCode.getTokenByRangeStart(
+              node.range![0],
+            );
+            context.report({ node, message: `${token?.type} ${token?.value}` });
+          },
+        };
+      },
+    };
+    expect(
+      summarize(lintSql(code, { tokenAtStart: reportTokenAtStart })),
+    ).toEqual([
+      [1, 8, 1, 10, "Parameter $1"],
+      [2, 28, 2, 30, "Parameter $2"],
     ]);
   });
 });
