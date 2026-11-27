@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   assertLoaderExports,
+  bindImports,
   parseExportLetters,
   parseImportLetters,
 } from "./emscripten-shim.ts";
@@ -32,6 +33,10 @@ const SHIM_17_8_0 = [
   `function assignWasmExports(wasmExports){_malloc=Module["_malloc"]=wasmExports["y"];_free=Module["_free"]=wasmExports["A"];_wasm_parse_query_raw=Module["_wasm_parse_query_raw"]=wasmExports["B"];_wasm_free_parse_result=Module["_wasm_free_parse_result"]=wasmExports["C"];_setThrew=wasmExports["K"];__emscripten_stack_restore=wasmExports["L"];_emscripten_stack_get_current=wasmExports["M"];memory=wasmMemory=wasmExports["v"];__indirect_function_table=wasmTable=wasmExports["z"]}`,
   `var wasmImports={c:___assert_fail,u:__abort_js,p:__emscripten_throw_longjmp,q:_emscripten_resize_heap,o:_exit,t:_fd_close,r:_fd_read,s:_fd_seek,m:_fd_write,h:invoke_i,b:invoke_ii,a:invoke_iii,d:invoke_iiii,g:invoke_iiiii,l:invoke_iiiiii,n:invoke_ji,e:invoke_v,f:invoke_vi,j:invoke_vii,k:invoke_viii,i:invoke_viiii}`,
 ].join("");
+
+// 18.0.0 drops `invoke_iiiiii` and adds `invoke_viiiii` and
+// `invoke_viiiiiiiiiiiii`.
+const IMPORTS_18_0_0 = `var wasmImports={c:___assert_fail,u:__abort_js,p:__emscripten_throw_longjmp,q:_emscripten_resize_heap,n:_exit,t:_fd_close,r:_fd_read,s:_fd_seek,l:_fd_write,g:invoke_i,b:invoke_ii,a:invoke_iii,d:invoke_iiii,k:invoke_iiiii,m:invoke_ji,f:invoke_v,e:invoke_vi,i:invoke_vii,j:invoke_viii,h:invoke_viiii,v:invoke_viiiii,o:invoke_viiiiiiiiiiiii}`;
 
 // The symbols `pg-query-sync.ts` asks for.
 const pickLoaderExports = (letters: Record<string, string>) => ({
@@ -131,5 +136,41 @@ describe("parseImportLetters", () => {
     expect(() => parseImportLetters("var x={}")).toThrow(
       "Could not locate wasmImports in libpg-query.js",
     );
+  });
+});
+
+describe("bindImports", () => {
+  const STUBS = [
+    "___assert_fail",
+    "__abort_js",
+    "__emscripten_throw_longjmp",
+    "_emscripten_resize_heap",
+    "_exit",
+    "_fd_close",
+    "_fd_read",
+    "_fd_seek",
+    "_fd_write",
+  ];
+  const stubs = Object.fromEntries(STUBS.map((s) => [s, s]));
+  const makeInvoke = (signature: string) => `invoke(${signature})`;
+
+  it.each([
+    ["17.8.0", SHIM_17_8_0, { l: "invoke(iiiiii)", n: "invoke(ji)" }],
+    [
+      "18.0.0",
+      IMPORTS_18_0_0,
+      { v: "invoke(viiiii)", o: "invoke(viiiiiiiiiiiii)", m: "invoke(ji)" },
+    ],
+  ])("binds every import %s declares", (_, shim, expected) => {
+    const letters = parseImportLetters(shim);
+    const env = bindImports(letters, stubs, makeInvoke);
+    expect(Object.keys(env).sort()).toEqual(Object.values(letters).sort());
+    expect(env).toMatchObject({ c: "___assert_fail", ...expected });
+  });
+
+  it("fails loudly on an import it has no stub for", () => {
+    expect(() =>
+      bindImports({ _clock_time_get: "a" }, stubs, makeInvoke),
+    ).toThrow("Unsupported libpg-query import symbol: _clock_time_get");
   });
 });

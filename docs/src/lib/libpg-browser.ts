@@ -8,41 +8,20 @@
  * already does for Node, fetching the WASM through a Vite-bundled asset URL.
  *
  * Letter-to-symbol mappings for imports/exports are derived at runtime from the
- * Emscripten shim source so an upstream WASM rebuild does not silently corrupt
- * memory layouts.
+ * Emscripten shim source, with the same parsing the Node loader uses, so an
+ * upstream WASM rebuild does not silently corrupt memory layouts.
  */
 import shimSource from "@libpg-query/parser/wasm/libpg-query.js?raw";
 import wasmUrl from "@libpg-query/parser/wasm/libpg-query.wasm?url";
 
-const parseImportLetters = (src: string): Record<string, string> => {
-  const match = src.match(/wasmImports\s*=\s*\{([^}]*)\}/);
-  if (!match) throw new Error("Could not locate wasmImports in libpg-query.js");
-  const out: Record<string, string> = {};
-  for (const part of match[1]!.split(",")) {
-    const m = part.match(/^\s*([A-Za-z]+)\s*:\s*([A-Za-z0-9_$]+)\s*$/);
-    if (m) out[m[2]!] = m[1]!;
-  }
-  return out;
-};
-
-const parseExportLetters = (src: string): Record<string, string> => {
-  const out: Record<string, string> = {};
-  const assignRe =
-    /([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*wasmExports\["([A-Za-z])"\]/g;
-  for (let m; (m = assignRe.exec(src));) out[m[1]!] = m[2]!;
-  const ctorMatch = src.match(/wasmExports\["([A-Za-z])"\]\s*\(\s*\)/);
-  if (ctorMatch) out["__wasm_call_ctors"] = ctorMatch[1]!;
-  return out;
-};
+import {
+  bindImports,
+  parseExportLetters,
+  parseImportLetters,
+} from "$parser/emscripten-shim.ts";
 
 const importLetterBySymbol = parseImportLetters(shimSource);
 const exportLetterBySymbol = parseExportLetters(shimSource);
-
-const importLetter = (symbol: string): string => {
-  const letter = importLetterBySymbol[symbol];
-  if (!letter) throw new Error(`Unknown libpg-query import symbol: ${symbol}`);
-  return letter;
-};
 
 const exportLetter = (symbol: string): string => {
   const letter = exportLetterBySymbol[symbol];
@@ -125,33 +104,25 @@ const stringToUTF8 = (str: string, outPtr: number, maxBytes: number): void => {
   HEAPU8[outIdx] = 0;
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const mkInvoke = (returnsBigInt = false) =>
-  function (index: number, ...args: any[]): any {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type WasmFn = (...args: any[]) => any;
+
+// The first signature letter is the return type; `j` (i64) returns a BigInt.
+const makeInvoke = (signature: string): WasmFn => {
+  const longjmpResult = signature.startsWith("j") ? 0n : undefined;
+  return (index: number, ...args: unknown[]) => {
     const sp = stackSave();
     try {
       return getTableEntry(index)(...args);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       stackRestore(sp);
       if (e !== e + 0) throw e;
       setThrew(1, 0);
-      if (returnsBigInt) return 0n;
+      return longjmpResult;
     }
   };
-
-const invoke_i = mkInvoke();
-const invoke_ii = mkInvoke();
-const invoke_iii = mkInvoke();
-const invoke_iiii = mkInvoke();
-const invoke_iiiii = mkInvoke();
-const invoke_iiiiii = mkInvoke();
-const invoke_v = mkInvoke();
-const invoke_vi = mkInvoke();
-const invoke_vii = mkInvoke();
-const invoke_viii = mkInvoke();
-const invoke_viiii = mkInvoke();
-const invoke_ji = mkInvoke(true);
-/* eslint-enable @typescript-eslint/no-explicit-any */
+};
 
 const assertFail = (
   condition: number,
@@ -228,36 +199,16 @@ const fdWrite = (
   return 0;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type WasmFn = (...args: any[]) => any;
-
-const buildEnvImports = (): Record<string, WasmFn> => {
-  const env: Record<string, WasmFn> = {};
-  const bindings: Array<[string, WasmFn]> = [
-    ["invoke_i", invoke_i],
-    ["invoke_ii", invoke_ii],
-    ["invoke_iii", invoke_iii],
-    ["invoke_iiii", invoke_iiii],
-    ["invoke_iiiii", invoke_iiiii],
-    ["invoke_iiiiii", invoke_iiiiii],
-    ["invoke_v", invoke_v],
-    ["invoke_vi", invoke_vi],
-    ["invoke_vii", invoke_vii],
-    ["invoke_viii", invoke_viii],
-    ["invoke_viiii", invoke_viiii],
-    ["invoke_ji", invoke_ji],
-    ["___assert_fail", assertFail],
-    ["__abort_js", abortJs],
-    ["__emscripten_throw_longjmp", emscriptenThrowLongjmp],
-    ["_emscripten_resize_heap", emscriptenResizeHeap],
-    ["_exit", exitFn],
-    ["_fd_close", fdClose],
-    ["_fd_read", fdRead],
-    ["_fd_seek", fdSeek],
-    ["_fd_write", fdWrite],
-  ];
-  for (const [symbol, fn] of bindings) env[importLetter(symbol)] = fn;
-  return env;
+const stubs: Record<string, WasmFn> = {
+  ___assert_fail: assertFail,
+  __abort_js: abortJs,
+  __emscripten_throw_longjmp: emscriptenThrowLongjmp,
+  _emscripten_resize_heap: emscriptenResizeHeap,
+  _exit: exitFn,
+  _fd_close: fdClose,
+  _fd_read: fdRead,
+  _fd_seek: fdSeek,
+  _fd_write: fdWrite,
 };
 
 let readyPromise: Promise<void> | null = null;
@@ -267,7 +218,9 @@ const initWasm = async (): Promise<void> => {
   if (!response.ok) {
     throw new Error(`Failed to fetch libpg-query.wasm: ${response.status}`);
   }
-  const wasmImports = { a: buildEnvImports() };
+  const wasmImports = {
+    a: bindImports(importLetterBySymbol, stubs, makeInvoke),
+  };
 
   let instance: WebAssembly.Instance;
   if (typeof WebAssembly.instantiateStreaming === "function") {
