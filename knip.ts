@@ -3,7 +3,6 @@ import type { KnipConfig } from "knip/dist";
 const config = {
   workspaces: {
     ".": {
-      entry: ["rolldown.config.js"],
       project: ["src/**/*.{js,ts}", "tests/**/*.{js,ts}"],
       oxlint: {},
       vitest: {},
@@ -20,9 +19,6 @@ const config = {
       paths: {
         "$parser/*": ["../src/*"],
       },
-      // app.d.ts is consumed by SvelteKit's type pipeline, not by any module
-      // import — keep it from being flagged as unused.
-      ignore: ["src/app.d.ts"],
     },
   },
 } as const satisfies KnipConfig;
