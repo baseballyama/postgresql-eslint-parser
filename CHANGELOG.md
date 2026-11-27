@@ -1,5 +1,15 @@
 # postgresql-eslint-parser
 
+## 0.7.0
+
+### Minor Changes
+
+- [#334](https://github.com/baseballyama/postgresql-eslint-parser/pull/334) [`3b96253`](https://github.com/baseballyama/postgresql-eslint-parser/commit/3b96253fd6e1c6df7dca04e0408cca9d2f1508eb) Thanks [@abrahamguo](https://github.com/abrahamguo)! - Positional parameters (`$1`, `$12`, ...) are now one `Parameter` token covering the `$` and the digits, the same range as their `ParamRef`. Before, the `$` had no token and the digits were a `Numeric`, so `sourceCode.getTokenByRangeStart(node.range[0])` found nothing for a `ParamRef`, or for an expression starting with one. As libpg-query reads it, the parameter ends at its last digit: `$1a` is `$1` followed by the identifier `a`.
+
+### Patch Changes
+
+- [#335](https://github.com/baseballyama/postgresql-eslint-parser/pull/335) [`cfd8ada`](https://github.com/baseballyama/postgresql-eslint-parser/commit/cfd8ada702fefa6e4b2f41d03a11321ef0a4721e) Thanks [@baseballyama](https://github.com/baseballyama)! - The WASM loader now binds the `invoke_*` imports that the installed `@libpg-query/parser` declares, instead of a fixed list, so a rebuild that adds or drops one no longer fails at load time with "Unknown libpg-query import symbol".
+
 ## 0.6.2
 
 ### Patch Changes
